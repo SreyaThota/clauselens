@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_08_consulting_msa_no_volume",
+  "title": "Strategic Consulting Master Services Agreement (No Volume Commitment)",
+  "filename": "synthetic_08_consulting_msa_no_volume.pdf",
+  "category": "Consulting",
+  "description": "Consulting engagement without volume commitment, capped at trailing 12 months fees, Massachusetts law.",
+  "tags": [
+    "consulting",
+    "no-volume",
+    "fees-paid-cap"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "thirty (30) days",
+      "normalized": 30,
+      "quote": "Invoices shall be paid within thirty (30) days from the invoice issuance date.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "firm and fixed",
+      "normalized": "fixed",
+      "quote": "Professional fees are firm and fixed for the 24 months initial term.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "24 months",
+      "normalized": "24 months",
+      "quote": "The duration of this agreement is 24 months commencing July 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "shall not automatically renew",
+      "normalized": "false",
+      "quote": "This Agreement shall not automatically renew and expires automatically at the end of the term.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "30 days",
+      "normalized": 30,
+      "quote": "Either party may terminate this agreement upon written notice of at least 30 days.",
+      "page": 3,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "fees paid in the preceding twelve months",
+      "normalized": "fees paid in the preceding twelve months",
+      "quote": "Aggregate liability arising from any SOW shall not exceed fees paid in the preceding twelve months.",
+      "page": 3,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "Commonwealth of Massachusetts",
+      "normalized": "Massachusetts",
+      "quote": "This Agreement shall be governed by the laws of the Commonwealth of Massachusetts.",
+      "page": 3,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": null,
+      "normalized": "none found",
+      "quote": "Client makes no volume commitment or promise of work volume under this Agreement.",
+      "page": 2,
+      "status": "not_found"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_04_hardware_procurement_volume",
+  "title": "Hardware & Component Supply Master Agreement",
+  "filename": "synthetic_04_hardware_procurement_volume.pdf",
+  "category": "Hardware",
+  "description": "Multi-page manufacturing and hardware procurement contract with firm fixed pricing and high volume commitment.",
+  "tags": [
+    "hardware",
+    "procurement",
+    "volume-heavy"
+  ],
+  "num_pages": 4,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 45 calendar days",
+      "normalized": 45,
+      "quote": "Payment shall be due under payment terms of Net 45 calendar days after receipt of goods.",
+      "page": 3,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "firm and fixed",
+      "normalized": "fixed",
+      "quote": "Unit prices are firm and fixed for the entire 48-month duration with no price increases.",
+      "page": 3,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "48 months",
+      "normalized": "48 months",
+      "quote": "The initial term of this Agreement shall be 48 months from the Effective Date.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "shall not automatically renew",
+      "normalized": "false",
+      "quote": "This Agreement shall not automatically renew upon expiration of the initial term.",
+      "page": 3,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "60 days",
+      "normalized": 60,
+      "quote": "Either party may terminate for convenience upon written notice of at least 60 days.",
+      "page": 4,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "$5,000,000 USD",
+      "normalized": "$5,000,000 USD",
+      "quote": "Each party's total aggregate liability under this agreement shall not exceed $5,000,000 USD.",
+      "page": 4,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "State of California",
+      "normalized": "California",
+      "quote": "This Agreement shall be governed by the laws of the State of California, without regard to conflicts principles.",
+      "page": 4,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "10,000 accelerator units per calendar year",
+      "normalized": "10,000 accelerator units per calendar year",
+      "quote": "Buyer guarantees a minimum volume commitment of 10,000 accelerator units per calendar year.",
+      "page": 2,
+      "status": "verified"
+    }
+  }
+}

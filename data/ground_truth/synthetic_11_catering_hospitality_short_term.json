@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_11_catering_hospitality_short_term",
+  "title": "Corporate Catering & Food Services (Short Term, Net 14)",
+  "filename": "synthetic_11_catering_hospitality_short_term.pdf",
+  "category": "Hospitality",
+  "description": "Short-term food services contract with Net 14 payment terms, Colorado governing law, and 15 days termination notice.",
+  "tags": [
+    "short-term",
+    "catering",
+    "net-14"
+  ],
+  "num_pages": 2,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "14 days",
+      "normalized": 14,
+      "quote": "Caterer invoices weekly, and all invoices shall be paid within 14 days of receipt.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "firm and fixed",
+      "normalized": "fixed",
+      "quote": "Menu pricing is firm and fixed for the entire 6-month term with no price increases.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "6 months",
+      "normalized": "6 months",
+      "quote": "The initial term of this Agreement shall be 6 months commencing October 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "shall not automatically renew",
+      "normalized": "false",
+      "quote": "This contract shall not automatically renew and terminates upon conclusion of the 6-month term.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "15 days",
+      "normalized": 15,
+      "quote": "Host may cancel event services upon written notice of at least 15 days.",
+      "page": 2,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "$100,000 USD",
+      "normalized": "$100,000 USD",
+      "quote": "Caterer's aggregate liability shall not exceed $100,000 USD for any food safety or property claims.",
+      "page": 2,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "State of Colorado",
+      "normalized": "Colorado",
+      "quote": "This agreement is governed by the laws of the State of Colorado.",
+      "page": 2,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "500 meal covers per week",
+      "normalized": "500 meal covers per week",
+      "quote": "Host guarantees a minimum volume commitment of 500 meal covers per week.",
+      "page": 1,
+      "status": "verified"
+    }
+  }
+}

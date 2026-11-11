@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_02_cloud_saas_index_linked",
+  "title": "Enterprise Cloud SaaS Subscription Agreement",
+  "filename": "synthetic_02_cloud_saas_index_linked.pdf",
+  "category": "SaaS",
+  "description": "Cloud software subscription with index-linked price adjustments, 90 days termination notice, and New York governing law.",
+  "tags": [
+    "index-linked",
+    "SaaS",
+    "high-liability"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "sixty (60) days",
+      "normalized": 60,
+      "quote": "Invoices shall be paid within sixty (60) days of receipt by Subscriber's accounts payable department.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "Consumer Price Index (CPI)",
+      "normalized": "index-linked",
+      "quote": "After the first year, annual subscription charges are subject to an index-linked adjustment pegged to the Consumer Price Index (CPI), capped at 5% annually.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "24 months",
+      "normalized": "24 months",
+      "quote": "This subscription has an initial term of 24 months commencing on March 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "consecutive 12-month periods",
+      "normalized": "true (12 months)",
+      "quote": "The subscription shall automatically renew for consecutive 12-month periods unless terminated in accordance with Section 4.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "ninety (90) days",
+      "normalized": 90,
+      "quote": "Either party may elect non-renewal or termination upon ninety (90) days prior written notice before the expiration of the current term.",
+      "page": 3,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "$2,500,000 USD",
+      "normalized": "$2,500,000 USD",
+      "quote": "The total aggregate liability of either party for all claims arising out of this Agreement shall not exceed $2,500,000 USD.",
+      "page": 3,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "State of New York",
+      "normalized": "New York",
+      "quote": "This Agreement is governed by the laws of the State of New York, excluding its conflicts of law rules.",
+      "page": 3,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "$120,000 USD per contract year",
+      "normalized": "$120,000 USD per contract year",
+      "quote": "Subscriber agrees to maintain a minimum spend of $120,000 USD per contract year across all operational subsidiaries.",
+      "page": 2,
+      "status": "verified"
+    }
+  }
+}

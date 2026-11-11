@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_03_german_logistics_freight",
+  "title": "Cross-Border Logistics Framework Agreement (German-style phrasing)",
+  "filename": "synthetic_03_german_logistics_freight.pdf",
+  "category": "Logistics",
+  "description": "Logistics agreement featuring German commercial phrasing ('Zahlungsziel 45 Tage', Verbraucherpreisindex, German law).",
+  "tags": [
+    "German",
+    "multilingual",
+    "logistics"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Zahlungsziel 45 Tage",
+      "normalized": 45,
+      "quote": "Rechnungen unterliegen einem Zahlungsziel 45 Tage nach Rechnungseingang without deduction.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "Verbraucherpreisindex",
+      "normalized": "index-linked",
+      "quote": "Die Frachttarife sind index-linked and adjusted annually based on the German Verbraucherpreisindex inflation metric.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "36 months",
+      "normalized": "36 months",
+      "quote": "Der Vertrag hat eine initial term of 36 months effective from April 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "shall not automatically renew",
+      "normalized": "false",
+      "quote": "The contract shall not automatically renew and terminates automatically upon term expiry.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "30 days",
+      "normalized": 30,
+      "quote": "Ordentliche Kündigung is permitted upon written notice of at least 30 days.",
+      "page": 3,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "500,000 EUR",
+      "normalized": "500,000 EUR",
+      "quote": "The total aggregate liability shall not exceed 500,000 EUR under all freight orders.",
+      "page": 3,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "Germany",
+      "normalized": "Germany",
+      "quote": "This contract is governed by and construed under the laws of Germany (Bundesrepublik Deutschland).",
+      "page": 3,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "5,000 standard freight pallets",
+      "normalized": "5,000 standard freight pallets",
+      "quote": "Der Auftraggeber commits to purchase at least 5,000 standard freight pallets per calendar year.",
+      "page": 2,
+      "status": "verified"
+    }
+  }
+}

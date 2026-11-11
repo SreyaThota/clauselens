@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_12_security_services_missing_adjustment",
+  "title": "On-Site Physical Security Services (Missing Price Adjustment Clause)",
+  "filename": "synthetic_12_security_services_missing_adjustment.pdf",
+  "category": "Security",
+  "description": "Security guarding agreement that is silent on price adjustment, with Georgia governing law and 45 days termination notice.",
+  "tags": [
+    "security",
+    "silent-adjustment",
+    "services"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 30 days",
+      "normalized": 30,
+      "quote": "Client will settle all charges under payment terms of Net 30 days from invoice receipt.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": null,
+      "normalized": "none found",
+      "quote": null,
+      "page": null,
+      "status": "not_found"
+    },
+    "contract_term": {
+      "raw": "24 months",
+      "normalized": "24 months",
+      "quote": "The initial term of this Agreement shall be 24 months beginning November 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "successive 12-month periods",
+      "normalized": "true (12 months)",
+      "quote": "The contract will automatically renew for successive 12-month periods.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "45 days",
+      "normalized": 45,
+      "quote": "Either party may terminate this agreement upon written notice of at least 45 days.",
+      "page": 3,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "$2,000,000 USD",
+      "normalized": "$2,000,000 USD",
+      "quote": "Aggregate liability under this contract shall not exceed $2,000,000 USD.",
+      "page": 3,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "State of Georgia",
+      "normalized": "Georgia",
+      "quote": "This agreement is governed by the laws of the State of Georgia.",
+      "page": 3,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "1,200 patrol hours per month",
+      "normalized": "1,200 patrol hours per month",
+      "quote": "Client agrees to a minimum volume commitment of 1,200 patrol hours per month.",
+      "page": 2,
+      "status": "verified"
+    }
+  }
+}

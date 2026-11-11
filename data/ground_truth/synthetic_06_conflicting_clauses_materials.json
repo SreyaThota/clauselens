@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_06_conflicting_clauses_materials",
+  "title": "Raw Materials Supply Contract (Conflicting Liability Clauses)",
+  "filename": "synthetic_06_conflicting_clauses_materials.pdf",
+  "category": "Manufacturing",
+  "description": "Chemical supply agreement with deliberately conflicting liability clauses between Section 5 and Section 9.",
+  "tags": [
+    "conflict",
+    "conflicting-clauses",
+    "needs-review"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 60 days",
+      "normalized": 60,
+      "quote": "Payment shall be completed under Net 60 days from bill of lading issuance.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "subject to renegotiation",
+      "normalized": "renegotiable",
+      "quote": "Commodity raw material prices are subject to renegotiation every six months based on feedstocks.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "36 months",
+      "normalized": "36 months",
+      "quote": "The contract duration of 36 months begins May 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "shall not automatically renew",
+      "normalized": "false",
+      "quote": "The contract shall not automatically renew and terminates upon expiration.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "90 days",
+      "normalized": 90,
+      "quote": "Either party may cancel with written notice of at least 90 days.",
+      "page": 3,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "conflicting: $500,000 USD vs unlimited",
+      "normalized": "uncapped",
+      "quote": "Notwithstanding any provision to the contrary in Section 3.1, Seller liability is unlimited and uncapped liability applies for breach of delivery or product recalls.",
+      "page": 3,
+      "status": "needs_review"
+    },
+    "governing_law": {
+      "raw": "State of Texas",
+      "normalized": "Texas",
+      "quote": "This agreement is governed by the laws of the State of Texas.",
+      "page": 3,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "250 metric tons of material per calendar month",
+      "normalized": "250 metric tons of material per calendar month",
+      "quote": "Purchaser commits to purchase at least 250 metric tons of material per calendar month.",
+      "page": 2,
+      "status": "verified"
+    }
+  }
+}

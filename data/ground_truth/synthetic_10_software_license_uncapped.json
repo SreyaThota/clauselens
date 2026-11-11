@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_10_software_license_uncapped",
+  "title": "Core Banking Software License (Uncapped Liability)",
+  "filename": "synthetic_10_software_license_uncapped.pdf",
+  "category": "Banking Software",
+  "description": "Enterprise software license with an explicit uncapped liability clause and 120 days termination notice.",
+  "tags": [
+    "software",
+    "uncapped",
+    "banking"
+  ],
+  "num_pages": 4,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 60 days",
+      "normalized": 60,
+      "quote": "Payment shall be completed under Net 60 days from invoice generation.",
+      "page": 3,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "renegotiated annually",
+      "normalized": "renegotiable",
+      "quote": "Annual maintenance fees are subject to mutual agreement and renegotiated annually.",
+      "page": 3,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "60 months",
+      "normalized": "60 months",
+      "quote": "The initial term of this Agreement shall be 60 months starting September 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "successive 12-month periods",
+      "normalized": "true (12 months)",
+      "quote": "The maintenance tier will automatically renew for successive 12-month periods.",
+      "page": 2,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "120 days",
+      "normalized": 120,
+      "quote": "Either party may terminate maintenance upon written notice of at least 120 days.",
+      "page": 3,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "uncapped liability",
+      "normalized": "uncapped",
+      "quote": "Licensor agrees that aggregate liability is unlimited and uncapped liability applies for security breaches or ledger loss.",
+      "page": 4,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "State of New York",
+      "normalized": "New York",
+      "quote": "This Agreement is governed by the laws of the State of New York.",
+      "page": 4,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": null,
+      "normalized": "none found",
+      "quote": "No volume commitment is required under this site-wide deployment model.",
+      "page": 2,
+      "status": "not_found"
+    }
+  }
+}

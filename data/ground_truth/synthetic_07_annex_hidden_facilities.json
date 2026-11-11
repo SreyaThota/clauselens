@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_07_annex_hidden_facilities",
+  "title": "Integrated Facilities Management Agreement (Terms in Annex)",
+  "filename": "synthetic_07_annex_hidden_facilities.pdf",
+  "category": "Facilities",
+  "description": "Facilities maintenance agreement where key commercial payment and commitment terms are located in Annex Schedule A.",
+  "tags": [
+    "annex",
+    "hidden-terms",
+    "facilities"
+  ],
+  "num_pages": 4,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 45 calendar days",
+      "normalized": 45,
+      "quote": "All maintenance fees are subject to payment terms of Net 45 calendar days after invoice approval.",
+      "page": 4,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "firm and fixed",
+      "normalized": "fixed",
+      "quote": "Facility hourly labor rates are firm and fixed for the entire 3-year term.",
+      "page": 4,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "36 months",
+      "normalized": "36 months",
+      "quote": "The initial term of this Agreement shall be 36 months from execution date.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "successive 12-month periods",
+      "normalized": "true (12 months)",
+      "quote": "The contract will automatically renew for successive 12-month periods.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "60 days",
+      "normalized": 60,
+      "quote": "Either party may terminate with written notice of at least 60 days.",
+      "page": 2,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "$750,000 USD",
+      "normalized": "$750,000 USD",
+      "quote": "Total liability under this agreement shall not exceed $750,000 USD.",
+      "page": 2,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "State of Illinois",
+      "normalized": "Illinois",
+      "quote": "This agreement is governed by the laws of the State of Illinois.",
+      "page": 2,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "$350,000 USD per contract year",
+      "normalized": "$350,000 USD per contract year",
+      "quote": "Owner commits to a minimum spend of $350,000 USD per contract year for corporate campus maintenance.",
+      "page": 4,
+      "status": "verified"
+    }
+  }
+}

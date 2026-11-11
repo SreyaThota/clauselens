@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_01_it_services_standard",
+  "title": "Master IT Managed Services Agreement",
+  "filename": "synthetic_01_it_services_standard.pdf",
+  "category": "IT & Software",
+  "description": "Standard multi-year IT infrastructure and managed services contract with fixed pricing and Delaware governing law.",
+  "tags": [
+    "standard",
+    "IT",
+    "fixed-price"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 30 days",
+      "normalized": 30,
+      "quote": "Customer shall satisfy all undisputed invoices under payment terms of Net 30 days from the invoice date.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "firm and fixed",
+      "normalized": "fixed",
+      "quote": "The recurring subscription fees are firm and fixed for the initial term of thirty-six (36) months with no adjustment.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "36 months",
+      "normalized": "36 months",
+      "quote": "The initial term of this Agreement shall be 36 months, commencing on February 1, 2024 and ending on January 31, 2027.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "successive 12-month periods",
+      "normalized": "true (12 months)",
+      "quote": "This Agreement shall automatically renew for successive 12-month periods unless either party provides written notice of non-renewal.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "60 days",
+      "normalized": 60,
+      "quote": "Either party may terminate this Agreement without cause upon providing written notice of at least 60 days.",
+      "page": 2,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "$1,000,000 USD",
+      "normalized": "$1,000,000 USD",
+      "quote": "Except for gross negligence or willful misconduct, each party's aggregate liability shall not exceed $1,000,000 USD under this Agreement.",
+      "page": 3,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "State of Delaware",
+      "normalized": "Delaware",
+      "quote": "This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without regard to conflict of laws principles.",
+      "page": 3,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "100 enterprise server nodes",
+      "normalized": "100 enterprise server nodes",
+      "quote": "Customer guarantees a minimum annual volume commitment of 100 enterprise server nodes throughout each contract year.",
+      "page": 3,
+      "status": "verified"
+    }
+  }
+}

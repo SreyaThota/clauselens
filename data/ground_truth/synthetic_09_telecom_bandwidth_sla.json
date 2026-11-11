@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_09_telecom_bandwidth_sla",
+  "title": "Enterprise Dedicated Bandwidth & Fiber Agreement",
+  "filename": "synthetic_09_telecom_bandwidth_sla.pdf",
+  "category": "Telecom",
+  "description": "Telecom transport agreement with index-linked adjustments, 90 days termination notice, Washington law.",
+  "tags": [
+    "telecom",
+    "index-linked",
+    "SLA"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 30 days",
+      "normalized": 30,
+      "quote": "Customer will remit payment under Net 30 days terms from invoice dispatch.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "Producer Price Index (PPI)",
+      "normalized": "index-linked",
+      "quote": "After the first 12 months, circuit MRC rates are index-linked to the Producer Price Index (PPI).",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "36 months",
+      "normalized": "36 months",
+      "quote": "The initial term of this Agreement shall be 36 months starting August 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "consecutive 12-month periods",
+      "normalized": "true (12 months)",
+      "quote": "The contract will automatically renew for consecutive 12-month periods.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "90 days",
+      "normalized": 90,
+      "quote": "Disconnection for convenience requires written notice of at least 90 days prior to effective date.",
+      "page": 3,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "$3,000,000 USD",
+      "normalized": "$3,000,000 USD",
+      "quote": "Carrier's total aggregate liability for circuit interruption shall not exceed $3,000,000 USD.",
+      "page": 3,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "State of Washington",
+      "normalized": "Washington",
+      "quote": "This agreement is governed by the laws of the State of Washington.",
+      "page": 3,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "10 Gbps dedicated continuous throughput",
+      "normalized": "10 Gbps dedicated continuous throughput",
+      "quote": "Customer commits to purchase at least 10 Gbps dedicated continuous throughput across the network.",
+      "page": 2,
+      "status": "verified"
+    }
+  }
+}

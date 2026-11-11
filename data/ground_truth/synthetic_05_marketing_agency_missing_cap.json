@@ -1,0 +1,71 @@
+{
+  "id": "synthetic_05_marketing_agency_missing_cap",
+  "title": "Creative Services & Marketing Retainer Agreement (Missing Liability Cap)",
+  "filename": "synthetic_05_marketing_agency_missing_cap.pdf",
+  "category": "Marketing",
+  "description": "Short marketing retainer where the liability cap is completely omitted/silent and prices are renegotiable.",
+  "tags": [
+    "missing-field",
+    "silent-cap",
+    "renegotiable"
+  ],
+  "num_pages": 2,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 30 days",
+      "normalized": 30,
+      "quote": "Client will pay all invoices under payment terms of Net 30 days from date of presentation.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "renegotiated annually by mutual agreement",
+      "normalized": "renegotiable",
+      "quote": "Retainer pricing is renegotiated annually by mutual agreement prior to renewal.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "12 months",
+      "normalized": "12 months",
+      "quote": "The duration of this agreement is an initial term of 12 months starting June 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "successive 12-month periods",
+      "normalized": "true (12 months)",
+      "quote": "This Agreement will automatically renew for successive 12-month periods unless canceled.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "30 days",
+      "normalized": 30,
+      "quote": "Either party may cancel the retainer upon written notice of at least 30 days.",
+      "page": 2,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": null,
+      "normalized": "none found",
+      "quote": null,
+      "page": null,
+      "status": "not_found"
+    },
+    "governing_law": {
+      "raw": "England and Wales",
+      "normalized": "England and Wales",
+      "quote": "This agreement is governed by the laws of England and Wales.",
+      "page": 2,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": null,
+      "normalized": "none found",
+      "quote": "Client has not made any volume commitment or guaranteed project minimums under this retainer.",
+      "page": 1,
+      "status": "not_found"
+    }
+  }
+}
