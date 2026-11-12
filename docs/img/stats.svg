@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 160" width="900" height="160" fill="none">
+  <!-- Tile 1: Accuracy -->
+  <g transform="translate(0, 0)">
+    <rect width="280" height="160" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="24" y="42" fill="#64748B" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" letter-spacing="0.5">OVERALL ACCURACY</text>
+    <text x="24" y="100" fill="#0D9488" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="48" font-weight="800">86.8%</text>
+    <text x="24" y="132" fill="#64748B" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="500">144 hand-written ground truth fields</text>
+  </g>
+
+  <!-- Tile 2: Grounding -->
+  <g transform="translate(310, 0)">
+    <rect width="280" height="160" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="24" y="42" fill="#64748B" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" letter-spacing="0.5">GROUNDING RATE</text>
+    <text x="24" y="100" fill="#0D9488" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="48" font-weight="800">100%</text>
+    <text x="24" y="132" fill="#64748B" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="500">RapidFuzz ratio ≥ 0.90 verbatim</text>
+  </g>
+
+  <!-- Tile 3: Flagged for review -->
+  <g transform="translate(620, 0)">
+    <rect width="280" height="160" rx="14" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+    <text x="24" y="42" fill="#64748B" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" letter-spacing="0.5">FLAGGED FOR REVIEW</text>
+    <text x="24" y="100" fill="#D97706" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="48" font-weight="800">16.7%</text>
+    <text x="24" y="132" fill="#64748B" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="500">Doubtful or suspicious clauses</text>
+  </g>
+</svg>

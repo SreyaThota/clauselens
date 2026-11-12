@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 220" width="1000" height="220" fill="none">
+  <rect width="1000" height="220" rx="16" fill="#0F172A"/>
+  <g transform="translate(60, 48)">
+    <rect width="56" height="56" rx="14" fill="#0D9488"/>
+    <path d="M28 14L40 20V29C40 37.5 34.5 44 28 45.5C21.5 44 16 37.5 16 29V20L28 14Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M22 29L26 33L34 23" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="136" y="88" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="42" font-weight="800" letter-spacing="-1">ClauseLens</text>
+  <text x="136" y="128" fill="#0D9488" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="600">Contract terms you can verify</text>
+  <text x="136" y="160" fill="#94A3B8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="400">Extracts 8 commercial terms. Checks every one against the page it came from.</text>
+</svg>
