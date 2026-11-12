@@ -1,53 +1,57 @@
-![ClauseLens](docs/img/banner.svg)
+# ClauseLens
 
-Extracts 8 commercial terms from supplier contracts and verifies each value against the exact source page quote.
+Extracts 8 commercial terms from supplier contracts and checks each one against the page it came from.
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-0D9488?style=for-the-badge)](https://sreyathota.github.io/clauselens/)
-[![Evaluation](https://img.shields.io/badge/Evaluation-0F172A?style=for-the-badge)](https://sreyathota.github.io/clauselens/eval/)
+![ClauseLens Trust Demo](docs/img/demo.gif)
 
-![Evaluation Metrics](docs/img/stats.svg)
+## What it does
 
-## How it works
+- **Extract**: Parses 8 commercial terms (payment terms, liability cap, governing law, term, renewal, notice, price, volume).
+- **Verify**: Checks extracted values against the source page using RapidFuzz verbatim quote matching (ratio ≥ 0.90).
+- **Human review**: Automatically flags ungrounded, contradictory, or suspicious extractions for reviewer approval.
 
-![Verification Pipeline](docs/img/pipeline.svg)
+## Evaluation Stats
 
-1. **Upload PDF**: Parse page text and layout structures with PyMuPDF.
-2. **Extract 8 terms**: Parse commercial fields into typed schemas.
-3. **Verify against page**: Match source quotes verbatim using RapidFuzz (ratio ≥ 0.90).
-4. **Human review**: Route ambiguous or ungrounded clauses for one-click approval.
+| Accuracy | Grounding | Flagged for Review | Dataset |
+| :---: | :---: | :---: | :---: |
+| **86.8%** | **100.0%** | **16.7%** | 18 synthetic contracts (144 fields) |
 
-## See it
+Precision = TP / (TP + FP) is 100.0% on not-found predictions; recall is 44.4%.
 
-| Home & Contract Picker | Trust Demo & Needs Review | Evaluation Dashboard |
-| :---: | :---: | :---: |
-| [![Home](docs/img/home.png)](https://sreyathota.github.io/clauselens/) | [![Trust Demo](docs/img/trust-demo.png)](https://sreyathota.github.io/clauselens/results/synthetic_06_conflicting_clauses_materials/) | [![Evaluation](docs/img/eval.png)](https://sreyathota.github.io/clauselens/eval/) |
-| Select from 18 pre-evaluated contracts | Verbatim quote highlight and review badge | Full accuracy, latency, and cost metrics |
+## Screens
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/img/01-home.png" alt="Home Screen" />
+      <p align="center"><b>Home</b>: Select from 18 pre-evaluated supplier contracts.</p>
+    </td>
+    <td width="50%">
+      <img src="docs/img/02-trust-demo.png" alt="Trust Demo Screen" />
+      <p align="center"><b>Trust Demo</b>: Verbatim quote citation and one-click reviewer approval.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/img/03-eval.png" alt="Evaluation Dashboard" />
+      <p align="center"><b>Evaluation</b>: Benchmark metrics and transparent failure cases.</p>
+    </td>
+    <td width="50%">
+      <img src="docs/img/04-mobile.png" alt="Mobile View" />
+      <p align="center"><b>Mobile View</b>: Responsive 390px layout for review on any device.</p>
+    </td>
+  </tr>
+</table>
 
 ## Where it fails
 
-| Contract | Field | Expected | Got | Why |
+| Contract | Field | Expected | Extracted | Root Cause |
 | :--- | :--- | :--- | :--- | :--- |
 | `synthetic_13` | `liability_cap` | uncapped for gross negligence | 500,000 EUR | Override clause ignored |
 | `synthetic_14` | `payment_terms` | 60 | none found | Annex terms unread by body extractor |
 | `synthetic_15` | `governing_law` | Germany | England and Wales | Jurisdiction clause differed from law |
 | `synthetic_16` | `volume_commitment` | between 4,000 and 6,000 | none found | Words and numeric range not handled |
 | `synthetic_17` | `auto_renewal` | conditional opt-in | none found | Conditional renewal carve-out unhandled |
-
-## Results
-
-Figures from `eval/results/latest.json` across 18 contracts (144 fields).
-
-| Field | Accuracy | Grounding | Review Rate |
-| :--- | :---: | :---: | :---: |
-| `payment_terms` | 100.0% | 100.0% | 0.0% |
-| `price_adjustment` | 100.0% | 100.0% | 5.6% |
-| `contract_term` | 72.2% | 100.0% | 27.8% |
-| `auto_renewal` | 88.9% | 100.0% | 11.1% |
-| `termination_notice` | 83.3% | 100.0% | 16.7% |
-| `liability_cap` | 83.3% | 100.0% | 22.2% |
-| `governing_law` | 77.8% | 100.0% | 22.2% |
-| `volume_commitment` | 88.9% | 100.0% | 27.8% |
-| **Overall** | **86.8%** | **100.0%** | **16.7%** |
 
 ## Limits
 
