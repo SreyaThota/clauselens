@@ -1,4 +1,7 @@
 {
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "354548f5caf7d311a265688a81c42a8004b094d8349d4cfec1d3b41bf6666667",
   "id": "synthetic_04_hardware_procurement_volume",
   "title": "Hardware & Component Supply Master Agreement",
   "filename": "synthetic_04_hardware_procurement_volume.pdf",

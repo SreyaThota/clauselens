@@ -1,4 +1,7 @@
 {
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "b7edc8a2c222dc179bf8fbb61046cc4255cec88ed15863786c02f3629f771858",
   "id": "synthetic_01_it_services_standard",
   "title": "Master IT Managed Services Agreement",
   "filename": "synthetic_01_it_services_standard.pdf",

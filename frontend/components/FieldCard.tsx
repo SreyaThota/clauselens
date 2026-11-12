@@ -34,18 +34,18 @@ const FIELD_LABELS: Record<string, { label: string; desc: string }> = {
 };
 
 export default function FieldCard({ field, isSelected, onSelect, onUpdateField }: FieldCardProps) {
-  const [expanded, setExpanded] = useState<boolean>(isSelected);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editValue, setEditValue] = useState<string>(String(field.normalized ?? ''));
+  const isVerified = field.status === 'verified';
+  const isNeedsReview = field.status === 'needs_review';
+  const isNotFound = field.status === 'not_found';
 
   const meta = FIELD_LABELS[field.field_name] || {
     label: field.field_name,
     desc: 'Contract commercial term'
   };
 
-  const isVerified = field.status === 'verified';
-  const isNeedsReview = field.status === 'needs_review';
-  const isNotFound = field.status === 'not_found';
+  const [expanded, setExpanded] = useState<boolean>(isSelected || isNeedsReview);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editValue, setEditValue] = useState<string>(String(field.normalized ?? ''));
 
   const handleApprove = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -81,8 +81,8 @@ export default function FieldCard({ field, isSelected, onSelect, onUpdateField }
     }
     if (isNeedsReview) {
       return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 animate-pulse">
-          <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-300 animate-pulse">
+          <AlertTriangle className="h-3.5 w-3.5 text-rose-600" />
           Needs Review
         </span>
       );
@@ -203,8 +203,8 @@ export default function FieldCard({ field, isSelected, onSelect, onUpdateField }
 
         {/* Warning Callout for Needs Review */}
         {isNeedsReview && field.review_reason && (
-          <div className="mt-3 p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-800 flex items-start gap-2">
-            <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+          <div className="mt-3 p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-900 flex items-start gap-2">
+            <AlertTriangle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
             <div>
               <span className="font-bold">Human Review Flag: </span>
               <span>{field.review_reason}</span>
@@ -250,7 +250,7 @@ export default function FieldCard({ field, isSelected, onSelect, onUpdateField }
                   className="flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 transition"
                 >
                   <Edit2 className="h-3.5 w-3.5" />
-                  Edit Value
+                  Correct / Edit Value
                 </button>
               </div>
             )}

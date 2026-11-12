@@ -1,0 +1,74 @@
+{
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "34a948771897e4fe515eba367d833e0f6a58e512d6dbccfcece902f3870bcf0a",
+  "id": "synthetic_18_sparse_letter_agreement_missing_fields",
+  "title": "Short-Form Facilities Support Letter Agreement",
+  "filename": "synthetic_18_sparse_letter_agreement_missing_fields.pdf",
+  "category": "Facilities & Maintenance",
+  "description": "Short-form facilities letter agreement deliberately missing 4 of the 8 fields (no price adjustment, no auto-renewal, no liability cap, no volume commitment).",
+  "tags": [
+    "hard",
+    "sparse",
+    "missing-fields"
+  ],
+  "num_pages": 2,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 30 days",
+      "normalized": 30,
+      "quote": "Invoices for services rendered shall be paid under payment terms of Net 30 days from Client's receipt of invoice.",
+      "page": 1,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": null,
+      "normalized": "none found",
+      "quote": null,
+      "page": null,
+      "status": "not_found"
+    },
+    "contract_term": {
+      "raw": "12 months",
+      "normalized": "12 months",
+      "quote": "The duration of this Letter Agreement shall be exactly 12 months commencing on January 1, 2025 and expiring automatically on December 31, 2025.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": null,
+      "normalized": "none found",
+      "quote": null,
+      "page": null,
+      "status": "not_found"
+    },
+    "termination_notice": {
+      "raw": "30 days",
+      "normalized": 30,
+      "quote": "Either party may terminate this letter agreement at any time upon giving 30 days prior written notice.",
+      "page": 2,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": null,
+      "normalized": "none found",
+      "quote": null,
+      "page": null,
+      "status": "not_found"
+    },
+    "governing_law": {
+      "raw": "State of New York",
+      "normalized": "New York",
+      "quote": "This Agreement shall be construed and governed in all respects by the laws of the State of New York.",
+      "page": 2,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": null,
+      "normalized": "none found",
+      "quote": null,
+      "page": null,
+      "status": "not_found"
+    }
+  }
+}

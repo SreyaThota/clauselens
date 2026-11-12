@@ -1,10 +1,11 @@
 """
-Generates 12 realistic synthetic supplier contracts as PDFs using ReportLab,
-and saves the corresponding ground truth JSON files in data/ground_truth/.
+Generates 18 realistic synthetic supplier contracts as PDFs using ReportLab,
+and saves the corresponding hand-verified, frozen ground truth JSON files in data/ground_truth/.
 All documents are clearly marked as synthetic in file names and contents.
 """
 import os
 import json
+import hashlib
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -536,6 +537,280 @@ CONTRACT_SPECS = [
             "governing_law": {"raw": "State of Georgia", "normalized": "Georgia", "quote": "This agreement is governed by the laws of the State of Georgia.", "page": 3, "status": "verified"},
             "volume_commitment": {"raw": "1,200 patrol hours per month", "normalized": "1,200 patrol hours per month", "quote": "Client agrees to a minimum volume commitment of 1,200 patrol hours per month.", "page": 2, "status": "verified"}
         }
+    },
+    {
+        "id": "synthetic_13_contradictory_cap_equipment",
+        "title": "Industrial Heavy Machinery Master Lease Agreement",
+        "filename": "synthetic_13_contradictory_cap_equipment.pdf",
+        "category": "Industrial & Heavy Equipment",
+        "description": "Machinery lease featuring a standard 250,000 EUR liability cap in Section 4.1 contradicted by an uncapped gross negligence override in Section 8.4.",
+        "tags": ["hard", "contradictory-cap", "heavy-equipment"],
+        "pages_content": [
+            [
+                ("INDUSTRIAL HEAVY MACHINERY MASTER LEASE AGREEMENT", "title"),
+                ("CONFIDENTIAL SYNTHETIC CONTRACT - CLAUSELENS BENCHMARK DATASET", "subtitle"),
+                ("This Master Equipment Lease Agreement ('Agreement') is made effective April 1, 2024, by and between Atlas Heavy Machinery AG ('Lessor') and Vantage Infrastructure Corp ('Lessee').", "body"),
+                ("ARTICLE 1: LEASE TERM & OPERATIONAL SCOPE", "h2"),
+                ("1.1 Equipment Lease Term. The initial duration of this Lease shall endure for a period of 36 months from the effective date.", "body"),
+                ("1.2 Auto-Renewal. This Agreement shall automatically renew for successive 12-month periods unless either party delivers written notice of non-renewal.", "body"),
+                ("1.3 Delivery & Commissioning. Lessor shall deliver certified hydraulic earthmoving equipment to designated staging sites in accordance with Schedule A.", "body"),
+            ],
+            [
+                ("ARTICLE 2: RENTAL FEES, INVOICING & ADJUSTMENTS", "h2"),
+                ("2.1 Rental Fees and Invoicing. Lessor shall invoice monthly. Lessee shall satisfy all undisputed lease invoices under payment terms of Net 45 days from receipt.", "body"),
+                ("2.2 Price Adjustment. Monthly equipment rental rates are firm and fixed for the initial term with no escalation or indexation.", "body"),
+                ("ARTICLE 3: CANCELLATION & EARLY TERMINATION", "h2"),
+                ("3.1 Termination for Convenience. Lessee may terminate this Agreement without cause upon providing written notice of at least 60 days.", "body"),
+                ("ARTICLE 4: STANDARD LIMITATION OF LIABILITY", "h2"),
+                ("4.1 Liability Cap. Subject to Article 8, each party's total aggregate liability arising under or in connection with this Agreement shall not exceed 250,000 EUR.", "body"),
+            ],
+            [
+                ("ARTICLE 5: MINIMUM USAGE COMMITMENT", "h2"),
+                ("5.1 Volume Commitment. Lessee covenants to maintain a minimum volume commitment of 25 heavy hydraulic excavators per quarter during active operations.", "body"),
+                ("ARTICLE 6: GOVERNING LAW", "h2"),
+                ("6.1 Governing Law. This Agreement and any dispute or controversy arising out of it shall be governed by the laws of Switzerland.", "body"),
+                ("ARTICLE 7: INDEMNIFICATION", "h2"),
+                ("7.1 Third Party Indemnity. Each party agrees to defend, indemnify, and hold harmless the other from third-party property damage caused by gross negligence.", "body"),
+                ("ARTICLE 8: OVERRIDING LIABILITIES AND EXCEPTIONS", "h2"),
+                ("8.4 Uncapped Liabilities Override. Notwithstanding Section 4.1 or any other limitation in this Agreement, each party's liability for gross negligence, willful misconduct, and environmental contamination shall be entirely uncapped.", "body"),
+            ]
+        ],
+        "ground_truth": {
+            "payment_terms": {"raw": "Net 45 days", "normalized": 45, "quote": "Lessee shall satisfy all undisputed lease invoices under payment terms of Net 45 days from receipt.", "page": 2, "status": "verified"},
+            "price_adjustment": {"raw": "firm and fixed", "normalized": "fixed", "quote": "Monthly equipment rental rates are firm and fixed for the initial term with no escalation or indexation.", "page": 2, "status": "verified"},
+            "contract_term": {"raw": "36 months", "normalized": "36 months", "quote": "The initial duration of this Lease shall endure for a period of 36 months from the effective date.", "page": 1, "status": "verified"},
+            "auto_renewal": {"raw": "successive 12-month periods", "normalized": "true (12 months)", "quote": "This Agreement shall automatically renew for successive 12-month periods unless either party delivers written notice of non-renewal.", "page": 1, "status": "verified"},
+            "termination_notice": {"raw": "60 days", "normalized": 60, "quote": "Lessee may terminate this Agreement without cause upon providing written notice of at least 60 days.", "page": 2, "status": "verified"},
+            "liability_cap": {"raw": "250,000 EUR in Section 4.1, uncapped for gross negligence in Section 8.4", "normalized": "uncapped for gross negligence", "quote": "Notwithstanding Section 4.1 or any other limitation in this Agreement, each party's liability for gross negligence, willful misconduct, and environmental contamination shall be entirely uncapped.", "page": 3, "status": "needs_review"},
+            "governing_law": {"raw": "laws of Switzerland", "normalized": "Switzerland", "quote": "This Agreement and any dispute or controversy arising out of it shall be governed by the laws of Switzerland.", "page": 3, "status": "verified"},
+            "volume_commitment": {"raw": "25 heavy hydraulic excavators per quarter", "normalized": "25 heavy hydraulic excavators per quarter", "quote": "Lessee covenants to maintain a minimum volume commitment of 25 heavy hydraulic excavators per quarter during active operations.", "page": 3, "status": "verified"}
+        }
+    },
+    {
+        "id": "synthetic_14_annex_only_payment_terms",
+        "title": "IT Engineering & Consulting Services Framework",
+        "filename": "synthetic_14_annex_only_payment_terms.pdf",
+        "category": "Professional Services",
+        "description": "IT engineering agreement where main agreement body is silent on payment terms, which are stipulated exclusively in Annex B on Page 3.",
+        "tags": ["hard", "annex-only", "silent-main-body"],
+        "pages_content": [
+            [
+                ("IT ENGINEERING & CONSULTING SERVICES FRAMEWORK", "title"),
+                ("CONFIDENTIAL SYNTHETIC CONTRACT - CLAUSELENS BENCHMARK DATASET", "subtitle"),
+                ("This Consulting Framework Agreement ('Agreement') is entered into by Turing Systems LLC ('Consultant') and Apex Operations Inc ('Client').", "body"),
+                ("SECTION 1: APPOINTMENT AND TERM", "h2"),
+                ("1.1 Engagement. Client engages Consultant to deliver cloud infrastructure architecture and specialized site reliability engineering services.", "body"),
+                ("1.2 Contract Term. The initial term of this Framework Agreement shall be 12 months, commencing January 1, 2025.", "body"),
+                ("1.3 Auto-Renewal. This Agreement shall automatically renew for additional 12-month terms unless either party gives written notice of termination.", "body"),
+                ("SECTION 2: TERMINATION PROCEDURE", "h2"),
+                ("2.1 Termination for Convenience. Either party may terminate this Agreement without cause upon at least 30 days prior written notice.", "body"),
+            ],
+            [
+                ("SECTION 3: PROFESSIONAL FEES & WORK COMMITMENT", "h2"),
+                ("3.1 Rates and Pricing. Engineering fees are invoiced monthly against logged milestone hours. Rates are fixed for the initial term.", "body"),
+                ("3.2 Invoice Delivery. Consultant will deliver electronic invoices to accounts payable by the 5th day of each billing cycle. [Payment settlement timelines are governed exclusively by Annex B.]", "body"),
+                ("3.3 Volume Commitment. Client commits to a minimum volume commitment of 200 billable engineering hours per month across active development sprints.", "body"),
+                ("SECTION 4: LIABILITY LIMITATIONS & JURISDICTION", "h2"),
+                ("4.1 Liability Cap. The total cumulative liability of Consultant under this Agreement shall not exceed $750,000 USD.", "body"),
+                ("4.2 Governing Law. This Agreement shall be construed and governed in accordance with the laws of the State of Washington.", "body"),
+            ],
+            [
+                ("ANNEX B: COMMERCIAL PAYMENT SCHEDULE AND SETTLEMENT", "title"),
+                ("EXHIBIT TO IT ENGINEERING FRAMEWORK AGREEMENT", "subtitle"),
+                ("SECTION B.1: INVOICE SETTLEMENT PERIOD", "h2"),
+                ("B.1.1 Payment Terms. As referenced in Section 3.2 of the Master Terms, Client shall satisfy all undisputed invoices under payment terms of Net 45 days from the invoice issuance date.", "body"),
+                ("B.1.2 Disputed Invoices. Client must notify Consultant in writing within 15 calendar days of receiving an invoice if any line item is disputed in good faith.", "body"),
+                ("SECTION B.2: DEFAULT INTEREST & LATE CHARGES", "h2"),
+                ("B.2.1 Late Penalties. Overdue amounts shall accrue interest at a rate of 1.0% per month or the statutory legal maximum, whichever is lower.", "body"),
+                ("IN WITNESS WHEREOF, the authorized officers have signed Annex B as an integral schedule to the Agreement.", "body"),
+            ]
+        ],
+        "ground_truth": {
+            "payment_terms": {"raw": "Net 45 days", "normalized": 45, "quote": "Client shall satisfy all undisputed invoices under payment terms of Net 45 days from the invoice issuance date.", "page": 3, "status": "verified"},
+            "price_adjustment": {"raw": "fixed", "normalized": "fixed", "quote": "Rates are fixed for the initial term.", "page": 2, "status": "verified"},
+            "contract_term": {"raw": "12 months", "normalized": "12 months", "quote": "The initial term of this Framework Agreement shall be 12 months, commencing January 1, 2025.", "page": 1, "status": "verified"},
+            "auto_renewal": {"raw": "additional 12-month terms", "normalized": "true (12 months)", "quote": "This Agreement shall automatically renew for additional 12-month terms unless either party gives written notice of termination.", "page": 1, "status": "verified"},
+            "termination_notice": {"raw": "30 days", "normalized": 30, "quote": "Either party may terminate this Agreement without cause upon at least 30 days prior written notice.", "page": 1, "status": "verified"},
+            "liability_cap": {"raw": "$750,000 USD", "normalized": "750,000 USD", "quote": "The total cumulative liability of Consultant under this Agreement shall not exceed $750,000 USD.", "page": 2, "status": "verified"},
+            "governing_law": {"raw": "State of Washington", "normalized": "Washington", "quote": "This Agreement shall be construed and governed in accordance with the laws of the State of Washington.", "page": 2, "status": "verified"},
+            "volume_commitment": {"raw": "200 billable engineering hours per month", "normalized": "200 billable engineering hours per month", "quote": "Client commits to a minimum volume commitment of 200 billable engineering hours per month across active development sprints.", "page": 2, "status": "verified"}
+        }
+    },
+    {
+        "id": "synthetic_15_split_governing_law_diff_jurisdiction",
+        "title": "Cross-Border Maritime Freight & Bulk Cargo Charter",
+        "filename": "synthetic_15_split_governing_law_diff_jurisdiction.pdf",
+        "category": "Maritime & Shipping",
+        "description": "Maritime charter with governing law split across two sentences (German law), while designating exclusive dispute forum in the courts of London, England.",
+        "tags": ["hard", "split-clause", "conflicting-jurisdiction"],
+        "pages_content": [
+            [
+                ("CROSS-BORDER MARITIME FREIGHT & BULK CARGO CHARTER", "title"),
+                ("CONFIDENTIAL SYNTHETIC CONTRACT - CLAUSELENS BENCHMARK DATASET", "subtitle"),
+                ("This Charter Agreement is entered into by and between Nordik Carriers AS ('Owner') and Continental Grain Trading B.V. ('Charterer').", "body"),
+                ("CLAUSE 1: CHARTER DURATION & EXTENSIONS", "h2"),
+                ("1.1 Charter Term. The vessel charter duration shall be 24 months commencing May 1, 2024.", "body"),
+                ("1.2 Automatic Extension. This charter shall automatically renew for successive 12-month periods unless notice of redelivery is provided.", "body"),
+                ("CLAUSE 2: FREIGHT RATES & PAYMENT TERMS", "h2"),
+                ("2.1 Freight Settlement. Charterer shall satisfy all ocean freight invoices under payment terms of Net 30 days from presentation of bill of lading.", "body"),
+            ],
+            [
+                ("CLAUSE 3: BUNKER ADJUSTMENT & VOLUME", "h2"),
+                ("3.1 Price Escalation. Base freight rates are linked to the Platts Marine Bunker Fuel Index and subject to index-linked quarterly adjustments.", "body"),
+                ("3.2 Volume Commitment. Charterer guarantees a minimum volume commitment of 500,000 metric tons of bulk grain annually across designated voyages.", "body"),
+                ("CLAUSE 4: VESSEL CANCELLATION & REDELIVERY", "h2"),
+                ("4.1 Redelivery Notice. Either party may terminate this vessel charter upon giving written notice of at least 90 days.", "body"),
+                ("CLAUSE 5: CARGO LOSS & LIABILITY LIMITATION", "h2"),
+                ("5.1 Liability Cap. The aggregate liability of Owner for cargo loss or vessel delay shall not exceed 1,500,000 EUR.", "body"),
+            ],
+            [
+                ("CLAUSE 6: DISPUTE RESOLUTION AND SEPARATE LEGAL FORUM", "h2"),
+                ("6.1 Applicable Law. This Charter Agreement and any non-contractual obligations shall be governed by. It is expressly agreed that the governing law shall be the laws of Germany.", "body"),
+                ("6.2 Exclusive Forum. Irrespective of the substantive governing law designated in Section 6.1, the High Court of Justice in London, England shall have exclusive jurisdiction to adjudicate any claims.", "body"),
+                ("CLAUSE 7: MISCELLANEOUS", "h2"),
+                ("7.1 Force Majeure. Neither party shall be liable for failure to perform due to war, piracy, or maritime embargoes.", "body"),
+                ("IN WITNESS WHEREOF, the parties hereto have caused this Charter to be executed.", "body"),
+            ]
+        ],
+        "ground_truth": {
+            "payment_terms": {"raw": "Net 30 days", "normalized": 30, "quote": "Charterer shall satisfy all ocean freight invoices under payment terms of Net 30 days from presentation of bill of lading.", "page": 1, "status": "verified"},
+            "price_adjustment": {"raw": "index-linked", "normalized": "index-linked", "quote": "Base freight rates are linked to the Platts Marine Bunker Fuel Index and subject to index-linked quarterly adjustments.", "page": 2, "status": "verified"},
+            "contract_term": {"raw": "24 months", "normalized": "24 months", "quote": "The vessel charter duration shall be 24 months commencing May 1, 2024.", "page": 1, "status": "verified"},
+            "auto_renewal": {"raw": "successive 12-month periods", "normalized": "true (12 months)", "quote": "This charter shall automatically renew for successive 12-month periods unless notice of redelivery is provided.", "page": 1, "status": "verified"},
+            "termination_notice": {"raw": "90 days", "normalized": 90, "quote": "Either party may terminate this vessel charter upon giving written notice of at least 90 days.", "page": 2, "status": "verified"},
+            "liability_cap": {"raw": "1,500,000 EUR", "normalized": "1,500,000 EUR", "quote": "The aggregate liability of Owner for cargo loss or vessel delay shall not exceed 1,500,000 EUR.", "page": 2, "status": "verified"},
+            "governing_law": {"raw": "laws of Germany", "normalized": "Germany", "quote": "It is expressly agreed that the governing law shall be the laws of Germany.", "page": 3, "status": "verified"},
+            "volume_commitment": {"raw": "500,000 metric tons of bulk grain annually", "normalized": "500,000 metric tons of bulk grain annually", "quote": "Charterer guarantees a minimum volume commitment of 500,000 metric tons of bulk grain annually across designated voyages.", "page": 2, "status": "verified"}
+        }
+    },
+    {
+        "id": "synthetic_16_volume_words_and_range",
+        "title": "Specialty Chemical Drums Supply and Offtake Master Agreement",
+        "filename": "synthetic_16_volume_words_and_range.pdf",
+        "category": "Chemicals & Manufacturing",
+        "description": "Supply contract specifying volume commitments both in words ('five thousand units') and as a production range ('between 4.000 and 6.000 drums').",
+        "tags": ["hard", "volume-words", "range-volume"],
+        "pages_content": [
+            [
+                ("SPECIALTY CHEMICAL DRUMS SUPPLY AND OFFTAKE MASTER AGREEMENT", "title"),
+                ("CONFIDENTIAL SYNTHETIC CONTRACT - CLAUSELENS BENCHMARK DATASET", "subtitle"),
+                ("Between ChemVanguard GmbH ('Manufacturer') and Solvix Industrial Products Ltd ('Buyer').", "body"),
+                ("SECTION 1: TERM AND DURATION", "h2"),
+                ("1.1 Initial Term. This Agreement shall endure for an initial duration of 36 months starting October 1, 2024.", "body"),
+                ("1.2 Auto-Renewal. The Agreement shall automatically renew for successive 12-month periods unless either party gives written notice.", "body"),
+                ("SECTION 2: TERMINATION PROCEDURE", "h2"),
+                ("2.1 Convenience Termination. Either party may terminate upon providing written notice of at least 60 days.", "body"),
+            ],
+            [
+                ("SECTION 3: PRODUCTION CAPACITY & VOLUME TARGETS", "h2"),
+                ("3.1 Baseline Quota in Words. Buyer hereby covenants to an annual baseline volume commitment written as five thousand units of certified composite chemical drums.", "body"),
+                ("3.2 Operational Batch Range. For quarterly production allocation schedules, deliveries shall be maintained between 4.000 and 6.000 drums per calendar quarter.", "body"),
+                ("SECTION 4: PRICING AND PAYMENT", "h2"),
+                ("4.1 Invoicing and Payment Terms. Buyer shall pay all validated invoices under payment terms of Net 60 days from shipping date.", "body"),
+                ("4.2 Price Adjustment. Unit prices are subject to an index-linked adjustment pegged to the European Chemical Producer Price Index annually.", "body"),
+            ],
+            [
+                ("SECTION 5: WARRANTY AND LIABILITY LIMITATION", "h2"),
+                ("5.1 Liability Cap. The total cumulative liability of Manufacturer shall not exceed 1,200,000 EUR for all defect claims.", "body"),
+                ("SECTION 6: APPLICABLE LAW", "h2"),
+                ("6.1 Governing Law. This Agreement is governed in its entirety by the substantive laws of Germany.", "body"),
+                ("The authorized officers have executed this Agreement.", "body"),
+            ]
+        ],
+        "ground_truth": {
+            "payment_terms": {"raw": "Net 60 days", "normalized": 60, "quote": "Buyer shall pay all validated invoices under payment terms of Net 60 days from shipping date.", "page": 2, "status": "verified"},
+            "price_adjustment": {"raw": "index-linked", "normalized": "index-linked", "quote": "Unit prices are subject to an index-linked adjustment pegged to the European Chemical Producer Price Index annually.", "page": 2, "status": "verified"},
+            "contract_term": {"raw": "36 months", "normalized": "36 months", "quote": "This Agreement shall endure for an initial duration of 36 months starting October 1, 2024.", "page": 1, "status": "verified"},
+            "auto_renewal": {"raw": "successive 12-month periods", "normalized": "true (12 months)", "quote": "The Agreement shall automatically renew for successive 12-month periods unless either party gives written notice.", "page": 1, "status": "verified"},
+            "termination_notice": {"raw": "60 days", "normalized": 60, "quote": "Either party may terminate upon providing written notice of at least 60 days.", "page": 1, "status": "verified"},
+            "liability_cap": {"raw": "1,200,000 EUR", "normalized": "1,200,000 EUR", "quote": "The total cumulative liability of Manufacturer shall not exceed 1,200,000 EUR for all defect claims.", "page": 3, "status": "verified"},
+            "governing_law": {"raw": "laws of Germany", "normalized": "Germany", "quote": "This Agreement is governed in its entirety by the substantive laws of Germany.", "page": 3, "status": "verified"},
+            "volume_commitment": {"raw": "five thousand units (between 4.000 and 6.000 drums per quarter)", "normalized": "between 4,000 and 6,000 drums per quarter", "quote": "Buyer hereby covenants to an annual baseline volume commitment written as five thousand units of certified composite chemical drums.", "page": 2, "status": "verified"}
+        }
+    },
+    {
+        "id": "synthetic_17_conditional_auto_renewal",
+        "title": "Cloud SOC & Managed Cybersecurity Enterprise Agreement",
+        "filename": "synthetic_17_conditional_auto_renewal.pdf",
+        "category": "Cybersecurity",
+        "description": "Enterprise security agreement featuring conditional auto-renewal (renews unless 90 days notice, except in the first term where opt-in is required).",
+        "tags": ["hard", "conditional-renewal", "cybersecurity"],
+        "pages_content": [
+            [
+                ("CLOUD SOC & MANAGED CYBERSECURITY ENTERPRISE AGREEMENT", "title"),
+                ("CONFIDENTIAL SYNTHETIC CONTRACT - CLAUSELENS BENCHMARK DATASET", "subtitle"),
+                ("By and between CyberSentinel Defence Inc ('Provider') and First National FinTech Corp ('Subscriber').", "body"),
+                ("SECTION 1: TERM & CONDITIONAL RENEWAL", "h2"),
+                ("1.1 Initial Subscription Term. The initial term of this cybersecurity agreement shall be 24 months beginning July 1, 2024.", "body"),
+                ("1.2 Conditional Auto-Renewal. This agreement automatically renews for successive 12-month periods unless notice of termination is delivered 90 days before expiration, except that in the first term auto-renewal shall not apply without affirmative written opt-in by Subscriber.", "body"),
+                ("SECTION 2: TERMINATION NOTICE", "h2"),
+                ("2.1 Termination for Convenience. Either party may terminate this Agreement without cause upon providing 90 days prior written notice.", "body"),
+            ],
+            [
+                ("SECTION 3: FEES, INVOICES & FIXED PRICING", "h2"),
+                ("3.1 Invoicing Schedule. Provider bills enterprise platform licenses annually in advance. Invoices must be paid under payment terms of Net 30 days from billing date.", "body"),
+                ("3.2 Fixed Subscription Fees. Platform licensing fees are firm and fixed for the initial term with zero escalation.", "body"),
+                ("SECTION 4: SECURITY CAPACITY COMMITMENTS", "h2"),
+                ("4.1 Volume Commitment. Subscriber agrees to maintain a volume commitment of 5,000 endpoint security licenses across its IT fleet.", "body"),
+            ],
+            [
+                ("SECTION 5: INDEMNITY AND LIABILITY LIMITS", "h2"),
+                ("5.1 Liability Cap. The total aggregate liability of Provider arising out of this Agreement shall not exceed $3,000,000 USD.", "body"),
+                ("SECTION 6: GOVERNING LAW", "h2"),
+                ("6.1 Governing Law. This Agreement is governed by and construed under the laws of the State of California.", "body"),
+                ("Executed by authorized signatories on the date first written above.", "body"),
+            ]
+        ],
+        "ground_truth": {
+            "payment_terms": {"raw": "Net 30 days", "normalized": 30, "quote": "Invoices must be paid under payment terms of Net 30 days from billing date.", "page": 2, "status": "verified"},
+            "price_adjustment": {"raw": "firm and fixed", "normalized": "fixed", "quote": "Platform licensing fees are firm and fixed for the initial term with zero escalation.", "page": 2, "status": "verified"},
+            "contract_term": {"raw": "24 months", "normalized": "24 months", "quote": "The initial term of this cybersecurity agreement shall be 24 months beginning July 1, 2024.", "page": 1, "status": "verified"},
+            "auto_renewal": {"raw": "automatically renews unless notice given 90 days before, except in the first term", "normalized": "conditional (opt-in required for first term, then 12 months)", "quote": "This agreement automatically renews for successive 12-month periods unless notice of termination is delivered 90 days before expiration, except that in the first term auto-renewal shall not apply without affirmative written opt-in by Subscriber.", "page": 1, "status": "needs_review"},
+            "termination_notice": {"raw": "90 days", "normalized": 90, "quote": "Either party may terminate this Agreement without cause upon providing 90 days prior written notice.", "page": 1, "status": "verified"},
+            "liability_cap": {"raw": "$3,000,000 USD", "normalized": "3,000,000 USD", "quote": "The total aggregate liability of Provider arising out of this Agreement shall not exceed $3,000,000 USD.", "page": 3, "status": "verified"},
+            "governing_law": {"raw": "State of California", "normalized": "California", "quote": "This Agreement is governed by and construed under the laws of the State of California.", "page": 3, "status": "verified"},
+            "volume_commitment": {"raw": "5,000 endpoint security licenses", "normalized": "5,000 endpoint security licenses", "quote": "Subscriber agrees to maintain a volume commitment of 5,000 endpoint security licenses across its IT fleet.", "page": 2, "status": "verified"}
+        }
+    },
+    {
+        "id": "synthetic_18_sparse_letter_agreement_missing_fields",
+        "title": "Short-Form Facilities Support Letter Agreement",
+        "filename": "synthetic_18_sparse_letter_agreement_missing_fields.pdf",
+        "category": "Facilities & Maintenance",
+        "description": "Short-form facilities letter agreement deliberately missing 4 of the 8 fields (no price adjustment, no auto-renewal, no liability cap, no volume commitment).",
+        "tags": ["hard", "sparse", "missing-fields"],
+        "pages_content": [
+            [
+                ("SHORT-FORM FACILITIES SUPPORT LETTER AGREEMENT", "title"),
+                ("CONFIDENTIAL SYNTHETIC CONTRACT - CLAUSELENS BENCHMARK DATASET", "subtitle"),
+                ("This Letter Agreement ('Agreement') sets forth the terms between Metro Facilities LLC ('Provider') and Beacon Real Estate Holdings ('Client').", "body"),
+                ("1. SCOPE OF SERVICES", "h2"),
+                ("Provider shall perform on-demand janitorial maintenance and routine HVAC filter replacements as requested by Client facility managers.", "body"),
+                ("2. TERM AND DURATION", "h2"),
+                ("The duration of this Letter Agreement shall be exactly 12 months commencing on January 1, 2025 and expiring automatically on December 31, 2025.", "body"),
+                ("3. INVOICING AND SETTLEMENT", "h2"),
+                ("Invoices for services rendered shall be paid under payment terms of Net 30 days from Client's receipt of invoice.", "body"),
+            ],
+            [
+                ("4. CANCELLATION NOTICE", "h2"),
+                ("Either party may terminate this letter agreement at any time upon giving 30 days prior written notice.", "body"),
+                ("5. GOVERNING JURISDICTION", "h2"),
+                ("This Agreement shall be construed and governed in all respects by the laws of the State of New York.", "body"),
+                ("6. GENERAL ACKNOWLEDGMENTS", "h2"),
+                ("The parties acknowledge that this short-form letter contains the entire agreement between the parties with respect to facilities maintenance.", "body"),
+                ("AGREED AND ACCEPTED by authorized representatives.", "body"),
+            ]
+        ],
+        "ground_truth": {
+            "payment_terms": {"raw": "Net 30 days", "normalized": 30, "quote": "Invoices for services rendered shall be paid under payment terms of Net 30 days from Client's receipt of invoice.", "page": 1, "status": "verified"},
+            "price_adjustment": {"raw": None, "normalized": "none found", "quote": None, "page": None, "status": "not_found"},
+            "contract_term": {"raw": "12 months", "normalized": "12 months", "quote": "The duration of this Letter Agreement shall be exactly 12 months commencing on January 1, 2025 and expiring automatically on December 31, 2025.", "page": 1, "status": "verified"},
+            "auto_renewal": {"raw": None, "normalized": "none found", "quote": None, "page": None, "status": "not_found"},
+            "termination_notice": {"raw": "30 days", "normalized": 30, "quote": "Either party may terminate this letter agreement at any time upon giving 30 days prior written notice.", "page": 2, "status": "verified"},
+            "liability_cap": {"raw": None, "normalized": "none found", "quote": None, "page": None, "status": "not_found"},
+            "governing_law": {"raw": "State of New York", "normalized": "New York", "quote": "This Agreement shall be construed and governed in all respects by the laws of the State of New York.", "page": 2, "status": "verified"},
+            "volume_commitment": {"raw": None, "normalized": "none found", "quote": None, "page": None, "status": "not_found"}
+        }
     }
 ]
 
@@ -632,8 +907,13 @@ def main():
         build_pdf(spec, pdf_path)
         print(f"Generated PDF: {pdf_path}")
         
-        # Save Ground Truth
+        # Save Frozen Ground Truth
+        gt_bytes = json.dumps(spec["ground_truth"], sort_keys=True).encode("utf-8")
+        gt_checksum = hashlib.sha256(gt_bytes).hexdigest()
         gt_data = {
+            "_frozen": True,
+            "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+            "_sha256": gt_checksum,
             "id": spec["id"],
             "title": spec["title"],
             "filename": spec["filename"],
@@ -645,9 +925,9 @@ def main():
         }
         with open(gt_path, "w", encoding="utf-8") as f:
             json.dump(gt_data, f, indent=2, ensure_ascii=False)
-        print(f"Saved Ground Truth: {gt_path}")
+        print(f"Saved Ground Truth: {gt_path} [frozen sha256:{gt_checksum[:8]}]")
         
-    print("Done generating all 12 synthetic contracts!")
+    print(f"Done generating all {len(CONTRACT_SPECS)} synthetic contracts!")
 
 if __name__ == "__main__":
     main()

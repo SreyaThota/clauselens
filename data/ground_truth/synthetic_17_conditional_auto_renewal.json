@@ -1,0 +1,74 @@
+{
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "52e8b8818af624b5127744bc240604cf9629773e25a7d25b9c51cc95bef5f2a9",
+  "id": "synthetic_17_conditional_auto_renewal",
+  "title": "Cloud SOC & Managed Cybersecurity Enterprise Agreement",
+  "filename": "synthetic_17_conditional_auto_renewal.pdf",
+  "category": "Cybersecurity",
+  "description": "Enterprise security agreement featuring conditional auto-renewal (renews unless 90 days notice, except in the first term where opt-in is required).",
+  "tags": [
+    "hard",
+    "conditional-renewal",
+    "cybersecurity"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 30 days",
+      "normalized": 30,
+      "quote": "Invoices must be paid under payment terms of Net 30 days from billing date.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "firm and fixed",
+      "normalized": "fixed",
+      "quote": "Platform licensing fees are firm and fixed for the initial term with zero escalation.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "24 months",
+      "normalized": "24 months",
+      "quote": "The initial term of this cybersecurity agreement shall be 24 months beginning July 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "automatically renews unless notice given 90 days before, except in the first term",
+      "normalized": "conditional (opt-in required for first term, then 12 months)",
+      "quote": "This agreement automatically renews for successive 12-month periods unless notice of termination is delivered 90 days before expiration, except that in the first term auto-renewal shall not apply without affirmative written opt-in by Subscriber.",
+      "page": 1,
+      "status": "needs_review"
+    },
+    "termination_notice": {
+      "raw": "90 days",
+      "normalized": 90,
+      "quote": "Either party may terminate this Agreement without cause upon providing 90 days prior written notice.",
+      "page": 1,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "$3,000,000 USD",
+      "normalized": "3,000,000 USD",
+      "quote": "The total aggregate liability of Provider arising out of this Agreement shall not exceed $3,000,000 USD.",
+      "page": 3,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "State of California",
+      "normalized": "California",
+      "quote": "This Agreement is governed by and construed under the laws of the State of California.",
+      "page": 3,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "5,000 endpoint security licenses",
+      "normalized": "5,000 endpoint security licenses",
+      "quote": "Subscriber agrees to maintain a volume commitment of 5,000 endpoint security licenses across its IT fleet.",
+      "page": 2,
+      "status": "verified"
+    }
+  }
+}

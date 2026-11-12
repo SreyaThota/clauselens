@@ -1,188 +1,145 @@
 # ClauseLens: Contract Terms You Can Verify
 
-Procurement, finance, and legal teams routinely lose hundreds of thousands of dollars to ambiguous supplier contracts, missed price escalations, and auto-renewing commitments because reviewing multi-page agreements is manual, error-prone, and slow. While generative AI models can extract commercial values, procurement teams cannot trust opaque AI outputs that hallucinate non-existent clauses or misattribute critical liabilities. **ClauseLens** bridges this trust deficit with an end-to-end verifiable extraction pipeline: it extracts key commercial terms from supplier contracts (PDF), proves every extracted value with an automated code-level verbatim grounding check against the exact source page, flags uncertain or conflicting clauses for human review, and transparently reports its real evaluation accuracy across a benchmark of 12 synthetic contracts.
+ClauseLens is an open-source commercial contract intelligence system that automatically extracts 8 high-stakes commercial terms from supplier PDF agreements, including payment terms, liability caps, price adjustments, volume commitments, and auto-renewals. Every extraction is backed by an automated code-level RapidFuzz grounding check against the exact cited page, capping ungrounded confidence at ≤ 0.40 and routing discrepancies to an actionable human review queue with transparent evaluation benchmarks.
 
 ---
 
-## Results View & Interactive Interface
+## Visual Walkthrough & Key Interfaces
 
-ClauseLens pairs an interactive document reader on the left with verified field cards, confidence metrics, and commercial negotiation levers on the right:
+### 1. Home Document Selector & 20-Second Trust Demo (`/`)
 
 ```
-+---------------------------------------------------------------------------------------------------------+
-| [Shield] ClauseLens v1.0   Extractor   Evaluation Benchmark   [• Demo Mode Ready] [Eval Dashboard]      |
-+---------------------------------------------------------------------------------------------------------+
-| [<-] synthetic_01_it_services_standard.pdf  [Verified: 8/8]  [Review: 0]  [None: 0]  [2.9ms]  [$0.0000] |
-+-----------------------------------------------------+---------------------------------------------------+
-| DOCUMENT READER (Page 2 of 3)                       | EXTRACTED COMMERCIAL TERMS                        |
-|                                                     |                                                   |
-| SECTION 3: FEES, INVOICING, AND PAYMENT             | [Payment Terms]                    [Verified ✓]   |
-|                                                     | Normalized: 30 days                  Conf: 95%    |
-| 3.1 Invoices. Supplier shall invoice Customer       | -----------------------------------------------   |
-| monthly in advance for standard fees.               | Quote: "Customer shall satisfy all undisputed...  |
-|                                                     | Citation: Page 2 (Grounding: 1.00 Exact)          |
-| 3.2 Payment Terms. >>Customer shall satisfy all<<   |                                                   |
-| >>undisputed invoices under payment terms of Net<<  | [Liability Cap]                    [Verified ✓]   |
-| >>30 days from the invoice date.<<                  | Normalized: 1,000,000 USD            Conf: 92%    |
-|                                                     |                                                   |
-| 3.3 Price Adjustment. The recurring subscription    | [Commercial Negotiation Levers]                   |
-| fees are firm and fixed for thirty-six (36) months. | • Working Capital: Current Net 30. Suggest Net 60 |
-|                                                     | • Price Collar: Cap index-linked price increases  |
-+-----------------------------------------------------+---------------------------------------------------+
++-------------------------------------------------------------------------------------------------------------+
+| [Shield] ClauseLens v1.0         Extractor         Evaluation Benchmark       [• Demo Mode Ready]   [/eval] |
++-------------------------------------------------------------------------------------------------------------+
+| Drop your supplier contract PDF here                                                                        |
+| [ Select PDF File ]                                                                                         |
+|                                                                                                             |
+| [🚀 20s Trust Demo] Conflicting Clauses: See red "Needs Review" flag, confidence <= 40%, and 1-click verify |
+| [Launch Demo ->]                                                                                            |
+|                                                                                                             |
+| SAMPLE EVALUATION DATASET (18 Synthetic Contracts)                                                          |
+| +------------------------------------+ +------------------------------------+ +---------------------------+ |
+| | Master IT Managed Services         | | Heavy Machinery Lease              | | Chemical Drums Offtake    | |
+| | IT & Software • 3 Pages            | | Heavy Equipment • 3 Pages          | | Manufacturing • 3 Pages   | |
+| | [8 Verified] [0 Review]            | | [7 Verified] [0 Review]            | | [5 Verified] [0 Review]   | |
+| +------------------------------------+ +------------------------------------+ +---------------------------+ |
++-------------------------------------------------------------------------------------------------------------+
+```
+
+### 2. Document Reader & Trust Layer with Needs Review Flag (`/results/synthetic_06_conflicting_clauses_materials`)
+
+```
++-------------------------------------------------------------------------------------------------------------+
+| [<- Back] synthetic_06_conflicting_clauses_materials.pdf  [Verified: 7/8]  [Needs Review: 1]  [6.15ms]  [$0]|
++-----------------------------------------------------+-------------------------------------------------------+
+| DOCUMENT VIEWER (Page 3 of 3)                       | EXTRACTED COMMERCIAL TERMS                            |
+|                                                     |                                                       |
+| SECTION 5: SPECIAL PROVISIONS & OVERRIDES           | [Liability Cap]                     [Needs Review ⚠]  |
+|                                                     | Normalized: uncapped                      Conf: 38%   |
+| 5.1 Breach Liability Override.                      | [====================>................]               |
+| >>Notwithstanding any provision to the contrary in  | ----------------------------------------------------- |
+| Section 3.1, Seller liability is unlimited and      | [!] Human Review Flag: Conflicting clauses across p2  |
+| uncapped liability applies for breach of delivery   |     and p3 ($500,000 USD cap vs unlimited breach).    |
+| or product recalls.<<                               | Exact Quote (Page 3):                                 |
+|                                                     | "Notwithstanding any provision to the contrary in...  |
+|                                                     | Citation: Page 3 (Grounding Verified: 1.00 Exact)     |
+|                                                     |                                                       |
+|                                                     | [ ✓ Approve Term ]     [ ✎ Correct / Edit Value ]     |
+|                                                     |                                                       |
+|                                                     | [Commercial Negotiation Levers]                       |
+|                                                     | • High Risk: Uncapped breach liability detected       |
++-----------------------------------------------------+-------------------------------------------------------+
+```
+
+### 3. Evaluation & Verification Benchmark Dashboard (`/eval`)
+
+```
++-------------------------------------------------------------------------------------------------------------+
+| Evaluation Benchmark • 18 Synthetic Contracts • Real Measured Execution                                     |
+| "Synthetic contracts, 18 documents. Results show the pipeline end to end, not that extraction is solved."  |
++-------------------------------------------------------------------------------------------------------------+
+| [ Accuracy ]    [ Grounding ]   [ NF Precision ]   [ NF Recall ]   [ Review Rate ]  [ Latency ]  [ Cost ]   |
+|    86.8%            99.1%            33.3%            100.0%             0.7%         6.15 ms    $0.00000   |
++-------------------------------------------------------------------------------------------------------------+
+| PIPELINE COMPARISON                                                                                         |
+| Engine                       Accuracy  Grounding  NF Prec  NF Recall  Review  Latency  Cost/Doc  Status     |
+| Deterministic Baseline (Off)    86.8%      99.1%    33.3%     100.0%    0.7%   6.15ms  $0.00000  Evaluated  |
+| LLM Pipeline (Gemini/OpenAI)        —          —        —          —       —        —         —  not run*   |
+| *No API key configured in environment. Deterministic baseline evaluated across all 18 documents.            |
++-------------------------------------------------------------------------------------------------------------+
+| WHERE IT FAILS (Top Real Misses by Severity)                                                                |
+| • synthetic_13 (liability_cap): Expected 'uncapped for gross negligence', got '250,000 EUR' (override miss) |
+| • synthetic_16 (volume_commitment): Expected range '4,000 to 6,000', got 'none found' (word/range format)   |
+| • synthetic_15 (governing_law): Expected 'Germany', got 'none found' (split-clause & London court clash)    |
+| • synthetic_17 (auto_renewal): Expected 'conditional opt-in', got 'none found' (conditional carve-out)      |
++-------------------------------------------------------------------------------------------------------------+
 ```
 
 ---
 
-## Live Demo
+## Results
 
-- **Web Application:** `https://clauselens-demo.vercel.app` (or run locally via `docker-compose up`)
-- **Offline Demo Mode:** ClauseLens includes pre-cached results for all 12 benchmark contracts, ensuring zero external dependencies and guaranteed 100% uptime during live stakeholder presentations without an API key.
+Evaluation conducted against **18 hand-written, frozen synthetic contracts** (144 evaluated fields) in `data/ground_truth/*.json`. Each ground truth record contains a cryptographic SHA256 integrity checksum. Results are copied directly from `eval/results/latest.json`.
 
----
+*Model Under Test: Deterministic rule-based baseline (offline mode, no API key)*
 
-## Architecture Diagram
-
-```mermaid
-flowchart TD
-    A["Supplier Contract (PDF)"] --> B["PyMuPDF Extractor\n(Per-Page Text & Coordinates)"]
-    B --> C["Tagged Chunker\n([START PAGE N] Context)"]
-    C --> D["Provider-Agnostic LLM Wrapper\n(Gemini 2.0 / GPT-4o-mini / Baseline, Temp: 0)"]
-    D --> E["Pydantic v2 Schema Validation\n(1 Automatic Retry on Fail)"]
-    
-    subgraph TrustLayer["The Trust Layer (Code-Level Verification)"]
-        E --> F["RapidFuzz Grounding Check\n(Whitespace Normalization & Fuzzy Ratio ≥ 0.90)"]
-        F --> G{"Grounding Passed &\nConf ≥ 0.75?"}
-        G -- Yes --> H["Status: Verified (Green)"]
-        G -- "No / Mismatch / Conf < 0.75" --> I["Status: Needs Review (Amber)\nConf capped at ≤ 0.40"]
-        G -- "Term Missing / Silent" --> J["Status: Not Found (Grey)\nConf = 0.0"]
-    end
-
-    H --> K["Term Normalizer\n(Days, Currencies, Indices, Thousands Separators)"]
-    I --> K
-    J --> K
-    K --> L["Rule-Based Negotiation Levers"]
-    L --> M["FastAPI Output JSON & Next.js React UI"]
-```
-
----
-
-## Evaluation Benchmark & Transparent Failure Analysis
-
-The evaluation suite runs across **12 realistic synthetic supplier contracts** generated with ReportLab in `/data/contracts/`, benchmarked against ground truth in `/data/ground_truth/*.json`. All documents are marked as synthetic.
-
-### Quantitative Benchmark Results (`eval/results/latest.json`)
-
-*Model Under Test: Deterministic rule-based baseline (offline mode, no API key; switches to Gemini 2.0 Flash or GPT-4o-mini when API key is set)*
-
-| Field Name | Extraction Accuracy | Grounding Rate | Not-Found Precision | Not-Found Recall | Human Review Rate |
+| Field Name | Extraction Accuracy | Grounding Rate | Not-Found Precision | Not-Found Recall | Review Rate |
 |---|---|---|---|---|---|
 | `payment_terms` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
 | `price_adjustment` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
-| `contract_term` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
-| `auto_renewal` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
-| `termination_notice` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
-| `liability_cap` | **100.0%** | 90.9% | 100.0% | 100.0% | 8.3% |
-| `governing_law` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
-| `volume_commitment` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
-| **Overall Dataset** | **100.0%** | **98.9%** | **100.0%** | **100.0%** | **1.0%** |
+| `contract_term` | **72.2%** | 100.0% | 0.0% | 100.0% | 0.0% |
+| `auto_renewal` | **88.9%** | 100.0% | 33.3% | 100.0% | 0.0% |
+| `termination_notice` | **83.3%** | 100.0% | 0.0% | 100.0% | 0.0% |
+| `liability_cap` | **83.3%** | 92.9% | 50.0% | 100.0% | 5.6% |
+| `governing_law` | **77.8%** | 100.0% | 0.0% | 100.0% | 0.0% |
+| `volume_commitment` | **88.9%** | 100.0% | 66.7% | 100.0% | 0.0% |
+| **Overall Dataset** | **86.8%** | **99.1%** | **33.3%** | **100.0%** | **0.7%** |
 
-- **Average Latency:** 2.9 ms per multi-page document (real measured execution time)
-- **Average Cost:** $0.00000 USD per document (offline baseline execution; estimated tokens if LLM configured)
-- **Not-Found Precision:** 100.0% ($TP / [TP + FP]$)
+### Execution Metrics
+- **Total Evaluated Contracts:** 18 documents (144 commercial fields)
+- **Overall Normalization Accuracy:** 86.8%
+- **Verbatim Grounding Rate:** 99.1% (RapidFuzz ratio ≥ 0.90 against cited page)
+- **Not-Found Precision:** 33.3% ($TP / [TP + FP]$)
 - **Not-Found Recall:** 100.0% ($TP / [TP + FN]$)
+- **Human Review Flag Rate:** 0.7% (confidence < 0.75 or grounding mismatch)
+- **Average Measured Latency:** 6.15 ms per document
+- **Average Cost:** $0.00000 USD (offline execution)
+- **Real-LLM Step 4:** Skipped because neither `GEMINI_API_KEY` nor `OPENAI_API_KEY` is configured in the environment.
 
 ---
 
-### Top 3 Documented Failure Cases & Edge Conditions
+## Limitations
 
-1. **Contradictory Clauses Across Pages (`synthetic_06_conflicting_clauses_materials.pdf`)**
-   - *Issue:* Section 3.1 sets a \$500,000 USD liability cap, but Section 5.1 includes an overriding clause: *"Notwithstanding any provision to the contrary, Seller liability is unlimited."*
-   - *Model Behavior:* Extracted the conflicting clauses (`$500k cap vs unlimited breach`).
-   - *Mitigation & Defense:* The trust layer assigned confidence 0.62 (< 0.75 threshold), correctly triggering a `needs_review` flag so human procurement specialists verify competing terms.
+> **"Synthetic contracts, 18 documents. Results show the pipeline end to end, not that extraction is solved."**
 
-2. **Commercial Terms Hidden in Annex Exhibits (`synthetic_07_annex_hidden_facilities.pdf`)**
-   - *Issue:* The main 3-page agreement body is silent regarding payment terms and refers generally to Schedule A; the Net 45 term is located exclusively in Annex A on Page 4.
-   - *Model Behavior:* Models biased towards early clauses can report "none found" unless page chunking explicitly retains exhibit sections.
-   - *Mitigation & Defense:* PyMuPDF extractor formats explicit `[START PAGE N]` headers, preserving exhibit visibility across the context window.
-
-3. **Multilingual Parenthetical Jurisdictions (`synthetic_03_german_logistics_freight.pdf`)**
-   - *Issue:* Contract states *"laws of Germany (Bundesrepublik Deutschland)"* across a line break on Page 3.
-   - *Model Behavior:* Standard single-line regex or tokenizers fail when line breaks fragment parenthetical country names.
-   - *Mitigation & Defense:* Whitespace normalization is applied prior to pattern matching, stripping German annotations and standardizing to `Germany`.
+1. **Deterministic Rule-Based Baseline:** The primary evaluation engine relies on pattern matching, regex heuristics, and AST normalization. While fast (6.15 ms) and free ($0.00), it lacks hierarchical legal reasoning to resolve clause precedence across multiple sections.
+2. **Synthetic Data Boundaries:** While contracts 13 to 18 introduce contradictory overrides, annex schedules, split syntax, verbal numbers, and sparse documents, synthetic contracts cannot fully replicate the OCR degradation, scan artifacts, margin stamps, and idiosyncratic drafting of arbitrary real-world vendor contracts.
+3. **Where It Fails (Top Real Benchmark Misses):**
+   - **Contradictory Liability Cap Override (`synthetic_13`):** Section 4.1 specifies a 250,000 EUR cap, but Section 8.4 on page 3 states liability for gross negligence is uncapped. The baseline extracted `250,000 EUR`, ignoring the override clause.
+   - **Verbal Volume & Range (`synthetic_16`):** The volume commitment is phrased in words (*"five thousand units"*) with an operational batch range (*"between 4.000 and 6.000"*). The baseline digit pattern failed to parse both.
+   - **Split Governing Law & Separate Forum (`synthetic_15`):** The governing law clause is broken across two sentences (*"governed by. It is expressly agreed that the governing law shall be the laws of Germany"*), while the jurisdiction clause selects the High Court in London, England. The split syntax was missed.
+   - **Conditional Auto-Renewal (`synthetic_17`):** The clause renews automatically unless 90 days notice is given, *except* in the first term where affirmative opt-in is required. The baseline extractor collapsed the conditional exception into not found.
+   - **Informal & Sparse Letter Agreement (`synthetic_18`):** Unnumbered letter agreement structure missed standard section-based cues, resulting in omissions for duration and notice.
 
 ---
 
-## Design Decisions
+## Run It
 
-| Decision | Rationale |
-|---|---|
-| **Code-Level Grounding Check** | Generative models cannot self-verify their hallucinations. By enforcing a separate RapidFuzz string distance check (ratio ≥ 0.90 on normalized whitespace), ClauseLens guarantees that every cited quote physically exists on the specified PDF page. |
-| **Strict Not-Found Defense** | Procurement mistakes occur when models invent terms to be "helpful". Prompts and schemas explicitly treat `not_found` as a preferred and expected answer when contracts are silent on liability, renewals, or adjustments. |
-| **0.75 Human Review Threshold** | If confidence falls below 0.75 or the grounding check fails, the field is forcibly downgraded to `needs_review` with confidence capped at ≤ 0.40. Human reviewers retain final authority with one-click in-place approvals. |
-| **Provider-Agnostic LLM Layer** | Enterprise procurement requires flexibility. ClauseLens supports Google Gemini (e.g. `gemini-2.0-flash`) and OpenAI (`gpt-4o-mini`) via environment variables, using native structured JSON output and automatic retry mechanisms. |
+Run ClauseLens in 3 commands:
 
----
-
-## Limitations & Roadmap
-
-- **OCR for Scanned Documents:** Current pipeline utilizes PyMuPDF for native vector PDFs. Future iterations will integrate Tesseract or Google Cloud Vision OCR for legacy image-based scans.
-- **Multi-Document & Amendment Comparison:** Procurement teams frequently manage MSAs alongside multiple conflicting Statements of Work (SOWs) and addenda. A multi-document graph resolver is planned.
-- **ERP Integration:** Direct JSON export mappings to Coupa, SAP Ariba, and NetSuite vendor master records.
-- **Active Learning:** Learning reviewer edits to automatically tune organization-specific normalization dictionaries and clause precedence rules.
-
----
-
-## Local Setup & Quickstart
-
-### Prerequisites
-- Python 3.11+
-- Node.js 18+
-- Docker & Docker Compose (optional)
-
-### Option 1: Docker Compose (Recommended)
 ```bash
-# Clone the repository
-git clone https://github.com/SreyaThota/ClauseLens.git
-cd ClauseLens
+# 1. Install frontend and backend dependencies
+npm install --prefix frontend && python -m venv backend/venv && backend/venv/bin/pip install -r backend/requirements.txt
 
-# Start backend and frontend services
-docker-compose up --build
-```
-- Frontend: `http://localhost:3000`
-- Backend API Docs: `http://localhost:8000/docs`
+# 2. Run the evaluation benchmark across all 18 contracts
+backend/venv/bin/python eval/run_eval.py
 
-### Option 2: Local Development
-
-#### 1. Backend Setup
-```bash
-# Create and activate virtual environment
-python -m venv backend/venv
-source backend/venv/bin/activate  # On Windows: backend\venv\Scripts\activate
-
-# Install dependencies
-pip install -r backend/requirements.txt
-
-# Generate the 12 synthetic benchmark contracts and ground truth
-python data/generate_contracts.py
-
-# Run backend tests
-pytest -v backend/tests
-
-# Run evaluation benchmark
-python eval/run_eval.py
-
-# Start FastAPI backend
-uvicorn backend.app.main:app --reload --port 8000
+# 3. Start development servers (FastAPI backend + Next.js frontend)
+backend/venv/bin/python -m uvicorn backend.app.main:app --port 8000 & npm run dev --prefix frontend
 ```
 
-#### 2. Frontend Setup
-```bash
-cd frontend
+*(On Windows PowerShell, use `backend\venv\Scripts\pip install -r backend\requirements.txt` and `backend\venv\Scripts\python eval\run_eval.py`)*
 
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-```
-Visit `http://localhost:3000` to interact with ClauseLens.
+### Offline Demo Mode
+ClauseLens works completely offline out of the box with zero external API dependencies. All 18 benchmark contracts and evaluation reports are pre-compiled into `frontend/lib/mockData.ts`. Set `DEMO_MODE=true` or leave API keys unset to run instant zero-latency demonstrations. To benchmark against live models, export `GEMINI_API_KEY` or `OPENAI_API_KEY`.

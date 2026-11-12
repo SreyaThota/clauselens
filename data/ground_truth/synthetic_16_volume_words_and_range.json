@@ -1,0 +1,74 @@
+{
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "8ad180823cbb9ecfccbd43be37504736c99f7ef7581787e5cbdd13acde40641f",
+  "id": "synthetic_16_volume_words_and_range",
+  "title": "Specialty Chemical Drums Supply and Offtake Master Agreement",
+  "filename": "synthetic_16_volume_words_and_range.pdf",
+  "category": "Chemicals & Manufacturing",
+  "description": "Supply contract specifying volume commitments both in words ('five thousand units') and as a production range ('between 4.000 and 6.000 drums').",
+  "tags": [
+    "hard",
+    "volume-words",
+    "range-volume"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 60 days",
+      "normalized": 60,
+      "quote": "Buyer shall pay all validated invoices under payment terms of Net 60 days from shipping date.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "index-linked",
+      "normalized": "index-linked",
+      "quote": "Unit prices are subject to an index-linked adjustment pegged to the European Chemical Producer Price Index annually.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "36 months",
+      "normalized": "36 months",
+      "quote": "This Agreement shall endure for an initial duration of 36 months starting October 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "successive 12-month periods",
+      "normalized": "true (12 months)",
+      "quote": "The Agreement shall automatically renew for successive 12-month periods unless either party gives written notice.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "60 days",
+      "normalized": 60,
+      "quote": "Either party may terminate upon providing written notice of at least 60 days.",
+      "page": 1,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "1,200,000 EUR",
+      "normalized": "1,200,000 EUR",
+      "quote": "The total cumulative liability of Manufacturer shall not exceed 1,200,000 EUR for all defect claims.",
+      "page": 3,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "laws of Germany",
+      "normalized": "Germany",
+      "quote": "This Agreement is governed in its entirety by the substantive laws of Germany.",
+      "page": 3,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "five thousand units (between 4.000 and 6.000 drums per quarter)",
+      "normalized": "between 4,000 and 6,000 drums per quarter",
+      "quote": "Buyer hereby covenants to an annual baseline volume commitment written as five thousand units of certified composite chemical drums.",
+      "page": 2,
+      "status": "verified"
+    }
+  }
+}

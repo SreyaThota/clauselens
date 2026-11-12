@@ -1,0 +1,74 @@
+{
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "1d2695f091a759ac1a58419c6b365b14e070dabd68455a558b6e5347dd180b6a",
+  "id": "synthetic_14_annex_only_payment_terms",
+  "title": "IT Engineering & Consulting Services Framework",
+  "filename": "synthetic_14_annex_only_payment_terms.pdf",
+  "category": "Professional Services",
+  "description": "IT engineering agreement where main agreement body is silent on payment terms, which are stipulated exclusively in Annex B on Page 3.",
+  "tags": [
+    "hard",
+    "annex-only",
+    "silent-main-body"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 45 days",
+      "normalized": 45,
+      "quote": "Client shall satisfy all undisputed invoices under payment terms of Net 45 days from the invoice issuance date.",
+      "page": 3,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "fixed",
+      "normalized": "fixed",
+      "quote": "Rates are fixed for the initial term.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "12 months",
+      "normalized": "12 months",
+      "quote": "The initial term of this Framework Agreement shall be 12 months, commencing January 1, 2025.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "additional 12-month terms",
+      "normalized": "true (12 months)",
+      "quote": "This Agreement shall automatically renew for additional 12-month terms unless either party gives written notice of termination.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "30 days",
+      "normalized": 30,
+      "quote": "Either party may terminate this Agreement without cause upon at least 30 days prior written notice.",
+      "page": 1,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "$750,000 USD",
+      "normalized": "750,000 USD",
+      "quote": "The total cumulative liability of Consultant under this Agreement shall not exceed $750,000 USD.",
+      "page": 2,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "State of Washington",
+      "normalized": "Washington",
+      "quote": "This Agreement shall be construed and governed in accordance with the laws of the State of Washington.",
+      "page": 2,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "200 billable engineering hours per month",
+      "normalized": "200 billable engineering hours per month",
+      "quote": "Client commits to a minimum volume commitment of 200 billable engineering hours per month across active development sprints.",
+      "page": 2,
+      "status": "verified"
+    }
+  }
+}

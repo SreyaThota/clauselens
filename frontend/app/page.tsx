@@ -197,12 +197,30 @@ export default function HomePage() {
                 <h2 className="text-lg font-bold text-slate-900">Try a Sample Contract (Evaluation Dataset)</h2>
               </div>
               <p className="text-xs text-slate-500">
-                12 realistic synthetic supplier contracts demonstrating varying clauses, multilingual terms, and failure modes.
+                18 realistic synthetic supplier contracts demonstrating varying clauses, multilingual terms, and genuine failure modes.
               </p>
             </div>
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 self-start sm:self-auto">
-              12 Contracts • Instant Demo Mode
+              18 Contracts • Instant Demo Mode
             </span>
+          </div>
+
+          {/* Quick 20-second demo prompt */}
+          <div className="p-4 rounded-xl bg-linear-to-r from-rose-50 to-amber-50 border border-rose-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-start sm:items-center gap-2.5">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-rose-600 text-white shrink-0">
+                20s Trust Demo
+              </span>
+              <p className="text-xs text-slate-800">
+                <span className="font-bold">Conflicting Clauses Contract:</span> See red &quot;Needs Review&quot; flag (confidence ≤ 0.40), RapidFuzz verbatim grounding, and one-click approval.
+              </p>
+            </div>
+            <button
+              onClick={() => simulateStepProgression('synthetic_06_conflicting_clauses_materials')}
+              className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-rose-600 text-white hover:bg-rose-700 transition shrink-0 flex items-center gap-1 shadow-xs"
+            >
+              Launch Demo <ArrowRight className="h-3.5 w-3.5" />
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -210,7 +228,11 @@ export default function HomePage() {
               <div
                 key={sample.id}
                 onClick={() => simulateStepProgression(sample.id)}
-                className="group p-5 bg-white rounded-xl border border-slate-200 hover:border-indigo-400 hover:shadow-md transition cursor-pointer flex flex-col justify-between"
+                className={`group p-5 bg-white rounded-xl border transition cursor-pointer flex flex-col justify-between ${
+                  sample.id === 'synthetic_06_conflicting_clauses_materials'
+                    ? 'border-rose-300 ring-2 ring-rose-100 hover:border-rose-500 hover:shadow-md'
+                    : 'border-slate-200 hover:border-indigo-400 hover:shadow-md'
+                }`}
               >
                 <div>
                   <div className="flex items-start justify-between gap-2 mb-2">
@@ -235,8 +257,10 @@ export default function HomePage() {
                       <span
                         key={tag}
                         className={`text-[10px] font-medium px-2 py-0.5 rounded ${
-                          tag === 'needs-review' || tag === 'conflict'
-                            ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                          tag === 'needs-review' || tag === 'conflict' || tag === 'conflicting-clauses'
+                            ? 'bg-rose-50 text-rose-700 border border-rose-200'
+                            : tag === 'hard'
+                            ? 'bg-purple-50 text-purple-700 border border-purple-200 font-bold'
                             : tag === 'German' || tag === 'annex'
                             ? 'bg-indigo-50 text-indigo-700 border border-indigo-200'
                             : 'bg-slate-50 text-slate-600 border border-slate-200'
@@ -255,8 +279,8 @@ export default function HomePage() {
                       {sample.verified_count} Verified
                     </span>
                     {sample.needs_review_count > 0 && (
-                      <span className="flex items-center gap-1 text-amber-700 font-semibold text-[11px]">
-                        <AlertTriangle className="h-3 w-3" />
+                      <span className="flex items-center gap-1 text-rose-700 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded font-bold text-[11px]">
+                        <AlertTriangle className="h-3 w-3 text-rose-600" />
                         {sample.needs_review_count} Review
                       </span>
                     )}

@@ -1,0 +1,74 @@
+{
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "3469e3e265b2582b86ae542290062778697a906bc665041e273a9491ee6f7c73",
+  "id": "synthetic_13_contradictory_cap_equipment",
+  "title": "Industrial Heavy Machinery Master Lease Agreement",
+  "filename": "synthetic_13_contradictory_cap_equipment.pdf",
+  "category": "Industrial & Heavy Equipment",
+  "description": "Machinery lease featuring a standard 250,000 EUR liability cap in Section 4.1 contradicted by an uncapped gross negligence override in Section 8.4.",
+  "tags": [
+    "hard",
+    "contradictory-cap",
+    "heavy-equipment"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 45 days",
+      "normalized": 45,
+      "quote": "Lessee shall satisfy all undisputed lease invoices under payment terms of Net 45 days from receipt.",
+      "page": 2,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "firm and fixed",
+      "normalized": "fixed",
+      "quote": "Monthly equipment rental rates are firm and fixed for the initial term with no escalation or indexation.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "36 months",
+      "normalized": "36 months",
+      "quote": "The initial duration of this Lease shall endure for a period of 36 months from the effective date.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "successive 12-month periods",
+      "normalized": "true (12 months)",
+      "quote": "This Agreement shall automatically renew for successive 12-month periods unless either party delivers written notice of non-renewal.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "60 days",
+      "normalized": 60,
+      "quote": "Lessee may terminate this Agreement without cause upon providing written notice of at least 60 days.",
+      "page": 2,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "250,000 EUR in Section 4.1, uncapped for gross negligence in Section 8.4",
+      "normalized": "uncapped for gross negligence",
+      "quote": "Notwithstanding Section 4.1 or any other limitation in this Agreement, each party's liability for gross negligence, willful misconduct, and environmental contamination shall be entirely uncapped.",
+      "page": 3,
+      "status": "needs_review"
+    },
+    "governing_law": {
+      "raw": "laws of Switzerland",
+      "normalized": "Switzerland",
+      "quote": "This Agreement and any dispute or controversy arising out of it shall be governed by the laws of Switzerland.",
+      "page": 3,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "25 heavy hydraulic excavators per quarter",
+      "normalized": "25 heavy hydraulic excavators per quarter",
+      "quote": "Lessee covenants to maintain a minimum volume commitment of 25 heavy hydraulic excavators per quarter during active operations.",
+      "page": 3,
+      "status": "verified"
+    }
+  }
+}

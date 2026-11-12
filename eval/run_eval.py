@@ -66,8 +66,9 @@ def values_match(expected: Any, actual: Any) -> bool:
         return int(exp_clean) == int(act_clean)
 
     # Substring match if one contains the other (e.g. "5,000 standard freight pallets" vs "5,000 standard freight pallets per calendar year")
-    if exp_clean in act_clean or act_clean in exp_clean:
-        return True
+    if exp_clean != "none found" and act_clean != "none found":
+        if exp_clean in act_clean or act_clean in exp_clean:
+            return True
 
     return False
 
@@ -188,6 +189,7 @@ async def run_eval() -> EvaluationReport:
                 # Record real failure case
                 actual_failures.append({
                     "contract_name": pdf_filename,
+                    "contract_id": contract_id,
                     "field_name": name,
                     "expected": str(expected_norm),
                     "extracted": str(extracted.normalized)
@@ -235,69 +237,101 @@ async def run_eval() -> EvaluationReport:
             review_rate=rev
         )
 
-    # Generate the top 3 failure cases based on actual run data
+    # Helper function to generate honest, descriptive root cause explanations for real misses
+    def explain_failure(cid: str, field: str, exp: str, act: str) -> tuple[str, str, str]:
+        if "synthetic_13" in cid and field == "liability_cap":
+            return (
+                "Contradictory Cap Override",
+                "Section 8.4 uncapped gross negligence override ignored in favor of earlier Section 4.1 250,000 EUR cap.",
+                "Multi-clause precedence resolution requires hierarchical AST or LLM reasoning."
+            )
+        if "synthetic_14" in cid and field == "payment_terms":
+            return (
+                "Annex Isolation",
+                "Payment terms located exclusively in Annex B on Page 3; main agreement body was silent.",
+                "Cross-page reference chaining needed to map exhibit terms into master commercial terms."
+            )
+        if "synthetic_15" in cid and field == "governing_law":
+            return (
+                "Split-Clause & Forum Clash",
+                "Governing law clause split across two sentences; foreign court jurisdiction (London) conflicts with substantive law (Germany).",
+                "Decouple substantive governing law extraction from procedural court jurisdiction clauses."
+            )
+        if "synthetic_16" in cid and field == "volume_commitment":
+            return (
+                "Words & Numeric Range Not Handled",
+                "Volume commitment written in words ('five thousand units') with range ('between 4.000 and 6.000') unparsed by digit regex.",
+                "Expand normalizer with word-to-number dictionary and interval range [min, max] data types."
+            )
+        if "synthetic_17" in cid and field == "auto_renewal":
+            return (
+                "Conditional Renewal Carve-out",
+                "Conditional renewal clause ('except in first term opt-in') collapsed into boolean renewal by naive pattern.",
+                "Parse conditional qualifiers ('unless', 'except', 'opt-in') into structured renewal condition types."
+            )
+        if "synthetic_18" in cid:
+            if exp == "none found":
+                return (
+                    "Sparse Document False Positive",
+                    f"Field '{field}' is absent in short-form letter; baseline extractor predicted present.",
+                    "Enforce strict null hypothesis threshold when clause header is absent."
+                )
+            else:
+                return (
+                    "Sparse Format Clause Omission",
+                    f"Field '{field}' present in unnumbered letter agreement body, but missed by section-based extractor.",
+                    "Add support for informal letter agreements lacking formal numbered section headers."
+                )
+        if "synthetic_06" in cid and field == "liability_cap":
+            return (
+                "Contradictory Clauses",
+                "Conflicting liability caps across Section 3.1 ($500k) and Section 5.1 (unlimited breach).",
+                "Flagged for human review (confidence < 0.75). Reviewer resolves binding override."
+            )
+        if field == "contract_term" and act == "none found":
+            return (
+                "Duration Syntax Unmatched",
+                f"Contract term phrased as '{exp}' was not captured by standard duration patterns.",
+                "Broaden duration regex to capture informal and multi-word term definitions."
+            )
+        if field == "termination_notice" and act == "none found":
+            return (
+                "Notice Syntax Unmatched",
+                f"Termination notice of '{exp}' days was not captured by notice period patterns.",
+                "Broaden termination notice regex to match unnumbered or variant convenience clauses."
+            )
+        if field == "governing_law" and act == "none found":
+            return (
+                "Jurisdiction Pattern Unmatched",
+                f"Governing law '{exp}' was not captured by standard jurisdiction patterns.",
+                "Broaden governing law regex to cover informal clause phrasing and split sentences."
+            )
+        if field == "volume_commitment" and act == "none found":
+            return (
+                "Volume Syntax Unmatched",
+                f"Volume commitment '{exp}' unparsed by pattern matcher.",
+                "Expand volume matcher to parse verbal quantities and non-standard units."
+            )
+        return (
+            "Extraction Discrepancy",
+            f"Expected normalized '{exp}', but extracted '{act}'.",
+            "Refine pattern matcher or escalate ungrounded extraction to human review queue."
+        )
+
+    # Generate failure cases directly from real misses
     top_failures: List[FailureCase] = []
-    
-    # 1. Contradictory Clauses (synthetic_06)
-    top_failures.append(FailureCase(
-        id="FAIL-01",
-        contract_name="synthetic_06_conflicting_clauses_materials.pdf",
-        field_name="liability_cap",
-        expected="uncapped (overriding Section 3.1 $500,000 cap)",
-        extracted="conflicting clauses ($500k cap vs unlimited breach)",
-        category="Contradictory Clauses",
-        explanation=(
-            "Contract contains two mutually conflicting liability provisions across pages 2 and 3. Section 3.1 stipulates a "
-            "$500,000 USD cap, while Section 5.1 overrides it with uncapped liability. Because both clauses exist, single-pass "
-            "normalizers detect the clash and flag the field for human review."
-        ),
-        mitigation="Flagged for human review with confidence 0.62 (< 0.75 threshold). Reviewer approves the binding override."
-    ))
-
-    # 2. Terms in Annex (synthetic_07)
-    top_failures.append(FailureCase(
-        id="FAIL-02",
-        contract_name="synthetic_07_annex_hidden_facilities.pdf",
-        field_name="payment_terms",
-        expected="45 days (Net 45 calendar days, Annex A Page 4)",
-        extracted="Net 45 calendar days",
-        category="Hidden Terms in Annex",
-        explanation=(
-            "Key commercial payment terms are completely omitted from the main 3-page agreement and placed in Annex A on Page 4. "
-            "Models without full-document page chunking risk overlooking exhibit schedules."
-        ),
-        mitigation="Explicit [START PAGE N] chunking tags ensure annex exhibits receive equal attention as the main body."
-    ))
-
-    # 3. Multilingual Commercial Terminology (synthetic_03)
-    top_failures.append(FailureCase(
-        id="FAIL-03",
-        contract_name="synthetic_03_german_logistics_freight.pdf",
-        field_name="governing_law",
-        expected="Germany",
-        extracted="Germany",
-        category="Multilingual Jurisdictions",
-        explanation=(
-            "Contract states 'laws of Germany (Bundesrepublik Deutschland)' with line wrapping. Regex and tokenizers "
-            "frequently fail on multi-line parenthetical annotations unless whitespace is normalized before parsing."
-        ),
-        mitigation="Whitespace is normalized per sentence before pattern matching, stripping language annotations cleanly."
-    ))
-
-    # If any other real failure occurred in actual_failures, add/replace with the real examples
-    for af in actual_failures[:3]:
-        # Check if already in top_failures
-        if not any(f.contract_name == af["contract_name"] and f.field_name == af["field_name"] for f in top_failures):
-            top_failures.append(FailureCase(
-                id=f"FAIL-0{len(top_failures)+1}",
-                contract_name=af["contract_name"],
-                field_name=af["field_name"],
-                expected=af["expected"],
-                extracted=af["extracted"],
-                category="Edge Case Discrepancy",
-                explanation=f"Expected normalized value '{af['expected']}', but extracted '{af['extracted']}'.",
-                mitigation="Adjusted regex and normalizer patterns to accommodate alternate clause phrasings."
-            ))
+    for idx, af in enumerate(actual_failures):
+        cat, expl, mit = explain_failure(af["contract_id"], af["field_name"], af["expected"], af["extracted"])
+        top_failures.append(FailureCase(
+            id=f"FAIL-{idx+1:02d}",
+            contract_name=af["contract_name"],
+            field_name=af["field_name"],
+            expected=af["expected"],
+            extracted=af["extracted"],
+            category=cat,
+            explanation=expl,
+            mitigation=mit
+        ))
 
     report = EvaluationReport(
         timestamp=datetime.now(timezone.utc).isoformat(),
@@ -311,7 +345,7 @@ async def run_eval() -> EvaluationReport:
         avg_latency_ms=avg_latency,
         avg_cost_usd=avg_cost,
         per_field_metrics=per_field_metrics,
-        failure_cases=top_failures[:3]
+        failure_cases=top_failures
     )
 
     out_file = os.path.join(OUTPUT_DIR, "latest.json")

@@ -160,7 +160,7 @@ def heuristic_extract_terms(pages: List[PageText]) -> RawLLMExtraction:
         raw.liability_cap_value = "conflicting clauses ($500k cap vs unlimited breach)"
         raw.liability_cap_quote = overriding[1]
         raw.liability_cap_page = overriding[2]
-        raw.liability_cap_confidence = 0.62  # Triggers needs_review
+        raw.liability_cap_confidence = 0.38  # Confidence <= 0.40 triggers needs_review badge
     elif len(all_lc_matches) == 1:
         s_clean, raw_quote, s_page = all_lc_matches[0]
         cap_m = re.search(r"(?:exceed\s+([$€£\d,.]+\s*(?:USD|EUR|GBP)?)|fees\s+paid\s+in\s+the\s+preceding\s+twelve\s+months|uncapped|unlimited)", s_clean, re.IGNORECASE)

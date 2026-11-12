@@ -1,4 +1,7 @@
 {
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "b4c413e95e9693c8dae4a9878bdc6623adc809efe536c6da2a2ef819dc2416c7",
   "id": "synthetic_12_security_services_missing_adjustment",
   "title": "On-Site Physical Security Services (Missing Price Adjustment Clause)",
   "filename": "synthetic_12_security_services_missing_adjustment.pdf",

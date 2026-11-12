@@ -1,4 +1,7 @@
 {
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "85260928de3ddb5461659c51109e56bd3f509af048409ce8b252b5cb246b3e7a",
   "id": "synthetic_10_software_license_uncapped",
   "title": "Core Banking Software License (Uncapped Liability)",
   "filename": "synthetic_10_software_license_uncapped.pdf",

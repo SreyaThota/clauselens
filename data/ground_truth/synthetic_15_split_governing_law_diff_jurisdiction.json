@@ -1,0 +1,74 @@
+{
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "f5cfa698a394b17168a752bffa6f4e12fa53f61230e20c827c4b3929df3f4c6b",
+  "id": "synthetic_15_split_governing_law_diff_jurisdiction",
+  "title": "Cross-Border Maritime Freight & Bulk Cargo Charter",
+  "filename": "synthetic_15_split_governing_law_diff_jurisdiction.pdf",
+  "category": "Maritime & Shipping",
+  "description": "Maritime charter with governing law split across two sentences (German law), while designating exclusive dispute forum in the courts of London, England.",
+  "tags": [
+    "hard",
+    "split-clause",
+    "conflicting-jurisdiction"
+  ],
+  "num_pages": 3,
+  "ground_truth": {
+    "payment_terms": {
+      "raw": "Net 30 days",
+      "normalized": 30,
+      "quote": "Charterer shall satisfy all ocean freight invoices under payment terms of Net 30 days from presentation of bill of lading.",
+      "page": 1,
+      "status": "verified"
+    },
+    "price_adjustment": {
+      "raw": "index-linked",
+      "normalized": "index-linked",
+      "quote": "Base freight rates are linked to the Platts Marine Bunker Fuel Index and subject to index-linked quarterly adjustments.",
+      "page": 2,
+      "status": "verified"
+    },
+    "contract_term": {
+      "raw": "24 months",
+      "normalized": "24 months",
+      "quote": "The vessel charter duration shall be 24 months commencing May 1, 2024.",
+      "page": 1,
+      "status": "verified"
+    },
+    "auto_renewal": {
+      "raw": "successive 12-month periods",
+      "normalized": "true (12 months)",
+      "quote": "This charter shall automatically renew for successive 12-month periods unless notice of redelivery is provided.",
+      "page": 1,
+      "status": "verified"
+    },
+    "termination_notice": {
+      "raw": "90 days",
+      "normalized": 90,
+      "quote": "Either party may terminate this vessel charter upon giving written notice of at least 90 days.",
+      "page": 2,
+      "status": "verified"
+    },
+    "liability_cap": {
+      "raw": "1,500,000 EUR",
+      "normalized": "1,500,000 EUR",
+      "quote": "The aggregate liability of Owner for cargo loss or vessel delay shall not exceed 1,500,000 EUR.",
+      "page": 2,
+      "status": "verified"
+    },
+    "governing_law": {
+      "raw": "laws of Germany",
+      "normalized": "Germany",
+      "quote": "It is expressly agreed that the governing law shall be the laws of Germany.",
+      "page": 3,
+      "status": "verified"
+    },
+    "volume_commitment": {
+      "raw": "500,000 metric tons of bulk grain annually",
+      "normalized": "500,000 metric tons of bulk grain annually",
+      "quote": "Charterer guarantees a minimum volume commitment of 500,000 metric tons of bulk grain annually across designated voyages.",
+      "page": 2,
+      "status": "verified"
+    }
+  }
+}

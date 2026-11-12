@@ -94,6 +94,17 @@ export default function EvalDashboardPage() {
           </div>
         </div>
 
+        {/* Short Plain Disclaimer Note */}
+        <div className="p-4 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div>
+            <span className="font-bold text-slate-900">Evaluation Scope: </span>
+            <span>Synthetic contracts, 18 documents. Results show the pipeline end to end, not that extraction is solved.</span>
+          </div>
+          <span className="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded bg-white text-slate-600 border border-slate-200 shrink-0">
+            18 Contracts • 144 Ground-Truth Fields
+          </span>
+        </div>
+
         {/* Top Metric Stat Tiles */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
           <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
@@ -208,11 +219,80 @@ export default function EvalDashboardPage() {
           </div>
         </div>
 
+        {/* Baseline vs LLM Pipeline Comparison Table */}
+        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+          <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">Baseline vs. LLM Pipeline Comparison</h3>
+              <p className="text-xs text-slate-500">Benchmark comparison on identical 18-contract ground-truth evaluation set</p>
+            </div>
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 self-start sm:self-auto">
+              Pipeline Comparison
+            </span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                <tr>
+                  <th className="px-6 py-3">Extraction Engine</th>
+                  <th className="px-6 py-3">Overall Accuracy</th>
+                  <th className="px-6 py-3">Grounding Rate</th>
+                  <th className="px-6 py-3">Not-Found Precision</th>
+                  <th className="px-6 py-3">Not-Found Recall</th>
+                  <th className="px-6 py-3">Review Rate</th>
+                  <th className="px-6 py-3">Avg Latency</th>
+                  <th className="px-6 py-3">Cost / Doc</th>
+                  <th className="px-6 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-700">
+                <tr className="hover:bg-slate-50 transition">
+                  <td className="px-6 py-3.5">
+                    <span className="font-bold text-slate-900 block">Deterministic Rule-Based Baseline</span>
+                    <span className="text-[10px] text-slate-400">Offline Regex & AST Extractor</span>
+                  </td>
+                  <td className="px-6 py-3.5 font-bold text-slate-900">{report.overall_accuracy}%</td>
+                  <td className="px-6 py-3.5 font-semibold text-emerald-700">{report.grounding_rate}%</td>
+                  <td className="px-6 py-3.5 font-semibold text-blue-700">{report.not_found_precision}%</td>
+                  <td className="px-6 py-3.5 font-semibold text-indigo-700">{report.not_found_recall}%</td>
+                  <td className="px-6 py-3.5 font-semibold text-amber-700">{report.review_rate}%</td>
+                  <td className="px-6 py-3.5 font-mono text-slate-800">{report.avg_latency_ms} ms</td>
+                  <td className="px-6 py-3.5 font-mono text-slate-800">${report.avg_cost_usd.toFixed(5)}</td>
+                  <td className="px-6 py-3.5">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      Evaluated (18/18 docs)
+                    </span>
+                  </td>
+                </tr>
+                <tr className="hover:bg-slate-50 transition bg-slate-50/25">
+                  <td className="px-6 py-3.5">
+                    <span className="font-bold text-slate-700 block">LLM Pipeline</span>
+                    <span className="text-[10px] text-slate-400">Google Gemini / OpenAI (Structured Output)</span>
+                  </td>
+                  <td className="px-6 py-3.5 text-slate-400 font-mono italic">—</td>
+                  <td className="px-6 py-3.5 text-slate-400 font-mono italic">—</td>
+                  <td className="px-6 py-3.5 text-slate-400 font-mono italic">—</td>
+                  <td className="px-6 py-3.5 text-slate-400 font-mono italic">—</td>
+                  <td className="px-6 py-3.5 text-slate-400 font-mono italic">—</td>
+                  <td className="px-6 py-3.5 text-slate-400 font-mono italic">—</td>
+                  <td className="px-6 py-3.5 text-slate-400 font-mono italic">—</td>
+                  <td className="px-6 py-3.5">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500 border border-slate-200">
+                      not run (no API key configured)
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         {/* Detailed Metrics Table */}
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
           <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
             <h3 className="text-sm font-bold text-slate-900">Detailed Field Performance Breakdown</h3>
-            <span className="text-xs text-slate-500 font-medium">12 contracts • 96 field evaluations</span>
+            <span className="text-xs text-slate-500 font-medium">18 contracts • 144 field evaluations</span>
           </div>
 
           <div className="overflow-x-auto">
@@ -275,28 +355,76 @@ export default function EvalDashboardPage() {
           </div>
         </div>
 
-        {/* Known Failure Cases Section */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-indigo-600" />
-            <h2 className="text-lg font-bold text-slate-900">Documented Edge Cases & Failure Modes</h2>
+        {/* Where it fails Section */}
+        <div className="space-y-6">
+          <div>
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-rose-600" />
+              <h2 className="text-lg font-bold text-slate-900">Where it fails</h2>
+            </div>
+            <p className="text-xs text-slate-500 mt-1">
+              Real misses from the 18-contract benchmark evaluation. Demonstrates where the deterministic baseline reaches its architectural boundary.
+            </p>
           </div>
-          <p className="text-xs text-slate-500 -mt-2">
-            Actual documented failure cases and edge conditions derived from the evaluation dataset.
-          </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {report.failure_cases.map((fc) => (
+          {/* Top Real Misses by Severity Table */}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+            <div className="px-6 py-3.5 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-900">Top Real Misses by Severity ({report.failure_cases.length} Total Misses)</span>
+              <span className="text-[11px] font-semibold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
+                Unresolved Baseline Edge Cases
+              </span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                  <tr>
+                    <th className="px-4 py-3">Contract ID</th>
+                    <th className="px-4 py-3">Field</th>
+                    <th className="px-4 py-3">Expected Ground Truth</th>
+                    <th className="px-4 py-3">Extracted Value</th>
+                    <th className="px-6 py-3">Root Cause Reason</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-slate-700">
+                  {report.failure_cases.slice(0, 7).map((fc) => (
+                    <tr key={fc.id} className="hover:bg-slate-50 transition">
+                      <td className="px-4 py-3 font-mono font-bold text-slate-900 text-[11px]">
+                        {fc.contract_name.replace('.pdf', '')}
+                      </td>
+                      <td className="px-4 py-3 font-mono font-semibold text-indigo-700">
+                        {fc.field_name}
+                      </td>
+                      <td className="px-4 py-3 font-semibold text-slate-800">
+                        {fc.expected}
+                      </td>
+                      <td className="px-4 py-3 font-mono text-rose-700 font-bold">
+                        {fc.extracted}
+                      </td>
+                      <td className="px-6 py-3 text-slate-600 text-xs">
+                        <span className="font-bold text-slate-800">{fc.category}: </span>
+                        {fc.explanation}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Cards for Top Failure Modes */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {report.failure_cases.slice(0, 6).map((fc) => (
               <div
                 key={fc.id}
-                className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between"
+                className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between hover:border-slate-300 transition"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
                       {fc.id}
                     </span>
-                    <span className="text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
+                    <span className="text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
                       {fc.category}
                     </span>
                   </div>
@@ -312,11 +440,11 @@ export default function EvalDashboardPage() {
                     </div>
                     <div>
                       <span className="text-slate-400 font-medium">Expected: </span>
-                      <span className="text-slate-700 italic">{fc.expected}</span>
+                      <span className="text-slate-700 font-semibold">{fc.expected}</span>
                     </div>
                     <div>
                       <span className="text-slate-400 font-medium">Extracted: </span>
-                      <span className="text-slate-900 font-semibold">{fc.extracted}</span>
+                      <span className="text-rose-700 font-bold font-mono">{fc.extracted}</span>
                     </div>
                   </div>
 
@@ -326,7 +454,7 @@ export default function EvalDashboardPage() {
                 </div>
 
                 <div className="pt-3 border-t border-slate-100 text-[11px]">
-                  <span className="font-bold text-indigo-900">System Handling: </span>
+                  <span className="font-bold text-indigo-900">Engineering Mitigation: </span>
                   <span className="text-slate-600">{fc.mitigation}</span>
                 </div>
               </div>

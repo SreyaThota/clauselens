@@ -1,4 +1,7 @@
 {
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "742127681ed63ac83acf59c5e947b9d555ff31c849d73e9226812fcff7cb3a59",
   "id": "synthetic_09_telecom_bandwidth_sla",
   "title": "Enterprise Dedicated Bandwidth & Fiber Agreement",
   "filename": "synthetic_09_telecom_bandwidth_sla.pdf",

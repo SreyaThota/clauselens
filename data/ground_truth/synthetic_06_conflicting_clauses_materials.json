@@ -1,4 +1,7 @@
 {
+  "_frozen": true,
+  "_freeze_comment": "FROZEN GROUND TRUTH - Hand-verified from contract text. Do not modify to fit extraction results.",
+  "_sha256": "d62b4748a4724bc9893fb1152de5cd52c294d07123533d7a91dd1b76b9194c99",
   "id": "synthetic_06_conflicting_clauses_materials",
   "title": "Raw Materials Supply Contract (Conflicting Liability Clauses)",
   "filename": "synthetic_06_conflicting_clauses_materials.pdf",
