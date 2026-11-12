@@ -231,3 +231,4 @@ export default function ResultsClient({ contractId }: ResultsClientProps) {
     </div>
   );
 }
+
