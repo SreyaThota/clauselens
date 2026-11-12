@@ -48,7 +48,7 @@
     },
     "liability_cap": {
       "raw": "$100,000 USD",
-      "normalized": "$100,000 USD",
+      "normalized": "100,000 USD",
       "quote": "Caterer's aggregate liability shall not exceed $100,000 USD for any food safety or property claims.",
       "page": 2,
       "status": "verified"

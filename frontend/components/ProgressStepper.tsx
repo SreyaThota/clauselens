@@ -76,3 +76,4 @@ export default function ProgressStepper({ currentStep, statusText }: ProgressSte
     </div>
   );
 }
+

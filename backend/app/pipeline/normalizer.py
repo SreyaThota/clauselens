@@ -38,7 +38,6 @@ def extract_days_from_text(text: Optional[str]) -> Optional[int]:
     net_match = re.search(r"(?:net|within|after)?\s*(\d+)\s*(?:calendar\s+days|business\s+days|days|tage)?", text, re.IGNORECASE)
     if net_match and net_match.group(1):
         digits = int(net_match.group(1))
-        # ensure it looks like a day range, e.g. 1 to 365
         if 1 <= digits <= 365:
             return digits
 
@@ -83,7 +82,6 @@ def normalize_contract_term(value: Optional[str]) -> str:
         return "none found"
         
     val = value.strip()
-    # If mentions months / years
     year_match = re.search(r"(\d+)\s*(?:year|yr|jahre)", val, re.IGNORECASE)
     if year_match:
         years = int(year_match.group(1))
@@ -109,7 +107,6 @@ def normalize_auto_renewal(value: Optional[str]) -> str:
     if any(k in lower for k in ["auto", "renew", "consecutive", "successive", "extended for", "verlängert", "true"]):
         if any(ann in lower for ann in ["annual", "annually", "each year", "jährlich", "1 year", "1-year"]):
             return "true (12 months)"
-        # Look for renewal period
         period_match = re.search(r"(\d+)[-\s]*(?:month|year|yr|jahre|monate)", lower)
         if period_match:
             period_str = period_match.group(0)
@@ -131,7 +128,6 @@ def normalize_termination_notice(value: Optional[str]) -> Optional[Union[int, st
     if days is not None:
         return days
         
-    # Check for months e.g. "3 months notice" -> 90 days
     m_match = re.search(r"(\d+)\s*(?:month|monat)", value, re.IGNORECASE)
     if m_match:
         return int(m_match.group(1)) * 30
@@ -140,23 +136,40 @@ def normalize_termination_notice(value: Optional[str]) -> Optional[Union[int, st
 
 def normalize_liability_cap(value: Optional[str]) -> str:
     """
-    Normalizes to amount + currency, or 'uncapped' / 'none found'.
+    Normalizes liability_cap to 'amount + currency' (e.g. '500,000 EUR', '1,000,000 USD'),
+    or 'uncapped' / 'none found'.
     """
-    if not value or value.lower() in ("none", "none found", "not specified", "n/a", "not_found"):
+    if not value or value.lower() in ("none", "none found", "not specified", "n/a", "not_found", "silent"):
         return "none found"
         
-    lower = value.lower()
+    lower = value.lower().strip()
     if any(k in lower for k in ["uncapped", "unlimited", "no limitation", "no cap", "unbeschränkt"]):
         return "uncapped"
         
-    # Check currency amounts e.g. "$1,000,000", "€500,000", "USD 2,000,000"
-    amount_match = re.search(r"([$€£]|USD|EUR|GBP)?\s*([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]+)?|\d+(?:\.\d+)?)\s*(?:million|m|k)?\s*(USD|EUR|GBP)?", value, re.IGNORECASE)
-    if amount_match and len(amount_match.group(0).strip()) > 1:
-        return value.strip()
-        
     if "fees paid" in lower or "charges paid" in lower:
         return value.strip()
-        
+
+    # Determine currency
+    currency = "USD"
+    if "eur" in lower or "€" in lower:
+        currency = "EUR"
+    elif "gbp" in lower or "£" in lower:
+        currency = "GBP"
+    elif "usd" in lower or "$" in lower:
+        currency = "USD"
+
+    # Match numbers with thousands separators like 1,000,000 or 500,000 or 500.000
+    # Group 1: Number with thousands separators
+    num_match = re.search(r"(\d{1,3}(?:[.,]\d{3})+(?:\.\d+)?|\d+)", value)
+    if num_match:
+        raw_num = num_match.group(1)
+        # Normalize European dot separator to standard comma: 500.000 -> 500,000
+        if "." in raw_num and "," not in raw_num:
+            parts = raw_num.split(".")
+            if len(parts) > 1 and all(len(p) == 3 for p in parts[1:]):
+                raw_num = ",".join(parts)
+        return f"{raw_num} {currency}"
+
     return value.strip()
 
 def normalize_governing_law(value: Optional[str]) -> str:
@@ -170,15 +183,78 @@ def normalize_governing_law(value: Optional[str]) -> str:
     # Strip common boilerplate
     cleaned = re.sub(r"^(?:laws? of(?: the state of)?|state of|commonwealth of)\s*", "", val, flags=re.IGNORECASE).strip()
     cleaned = re.sub(r"[\.,;]+$", "", cleaned)
+    # Strip German translation annotations e.g. "Germany (Bundesrepublik Deutschland)" -> "Germany"
+    cleaned = re.sub(r"\s*\(.*?\)\s*", "", cleaned).strip()
     return cleaned if cleaned else val
+
+def parse_volume_number(text: str) -> Optional[float]:
+    """
+    Parses a numeric volume from string with comma or dot thousands separators.
+    e.g. '5,000' -> 5000.0, '5.000' -> 5000.0, '10,000 units' -> 10000.0
+    """
+    if not text:
+        return None
+    m = re.search(r"(\d{1,3}(?:[.,]\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)", text)
+    if not m:
+        return None
+    raw = m.group(1)
+    # Check if dot is thousands separator (e.g. 5.000 or 10.000)
+    if "." in raw and "," not in raw:
+        parts = raw.split(".")
+        if len(parts) > 1 and all(len(p) == 3 for p in parts[1:]):
+            return float("".join(parts))
+    # Comma thousands separator (e.g. 5,000)
+    clean_str = raw.replace(",", "")
+    try:
+        return float(clean_str)
+    except ValueError:
+        return None
 
 def normalize_volume_commitment(value: Optional[str]) -> str:
     """
-    Normalizes to minimum quantity/spend, or 'none found'.
+    Normalizes to minimum quantity or spend, or 'none found'.
+    Correctly handles thousands separators ('5,000', '5.000').
     """
-    if not value or value.lower() in ("none", "none found", "not specified", "n/a", "not_found", "no commitment", "no minimum"):
+    if not value or str(value).lower() in (
+        "none", "none found", "not specified", "n/a", "not_found",
+        "no commitment", "no minimum", "no volume commitment"
+    ):
         return "none found"
-    return value.strip()
+        
+    val = str(value).strip()
+    lower = val.lower()
+    
+    if any(k in lower for k in [
+        "no volume commitment",
+        "makes no volume commitment",
+        "not made any volume commitment",
+        "no commitment is required"
+    ]):
+        return "none found"
+
+    # Standardize thousands separator with dots e.g. '5.000' -> '5,000', '10.000' -> '10,000'
+    def replace_dot_thousands(match: re.Match) -> str:
+        s = match.group(0)
+        parts = s.split(".")
+        if len(parts) > 1 and all(len(p) == 3 for p in parts[1:]):
+            return ",".join(parts)
+        return s
+
+    val = re.sub(r"\b\d{1,3}(?:\.\d{3})+\b", replace_dot_thousands, val)
+    
+    # Strip leading phrases like "minimum annual volume commitment of", "commits to purchase at least"
+    val = re.sub(
+        r"^(?:customer\s+guarantees\s+a\s+|buyer\s+guarantees\s+a\s+|der\s+auftraggeber\s+commits\s+to\s+purchase\s+at\s+least\s+|purchaser\s+commits\s+to\s+purchase\s+at\s+least\s+|commits\s+to\s+purchase\s+at\s+least\s+|minimum\s+(?:annual\s+)?volume\s+commitment\s+of\s+|minimum\s+spend\s+of\s+|host\s+guarantees\s+a\s+minimum\s+volume\s+commitment\s+of\s+|client\s+agrees\s+to\s+a\s+minimum\s+volume\s+commitment\s+of\s+)",
+        "",
+        val,
+        flags=re.IGNORECASE
+    ).strip()
+
+    # Strip trailing clause padding like "throughout each contract year." or "for corporate campus maintenance."
+    val = re.sub(r"\s+(?:throughout|for\s+corporate|across\s+all)\s+.*$", "", val, flags=re.IGNORECASE).strip()
+    val = re.sub(r"[\.,;]+$", "", val).strip()
+
+    return val if val else "none found"
 
 def normalize_field_value(field_name: str, raw_value: Optional[str]) -> Optional[Union[str, int, float, bool]]:
     if raw_value is None or str(raw_value).strip().lower() in ("none", "none found", "not_found", "n/a", "null"):

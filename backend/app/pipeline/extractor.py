@@ -28,3 +28,4 @@ def extract_text_from_pdf_file(filepath: str) -> Tuple[List[PageText], int]:
     with open(filepath, "rb") as f:
         data = f.read()
     return extract_text_from_pdf_bytes(data)
+

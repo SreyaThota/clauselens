@@ -68,6 +68,7 @@ export interface FieldEvalMetric {
   accuracy: number;
   grounding_rate: number;
   not_found_precision: number;
+  not_found_recall: number;
   review_rate: number;
 }
 
@@ -85,12 +86,15 @@ export interface FailureCase {
 export interface EvaluationReport {
   timestamp: string;
   total_contracts: number;
+  model_used: string;
   overall_accuracy: number;
   grounding_rate: number;
   not_found_precision: number;
+  not_found_recall: number;
   review_rate: number;
   avg_latency_ms: number;
   avg_cost_usd: number;
   per_field_metrics: Record<string, FieldEvalMetric>;
   failure_cases: FailureCase[];
 }
+

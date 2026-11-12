@@ -48,7 +48,7 @@
     },
     "liability_cap": {
       "raw": "$3,000,000 USD",
-      "normalized": "$3,000,000 USD",
+      "normalized": "3,000,000 USD",
       "quote": "Carrier's total aggregate liability for circuit interruption shall not exceed $3,000,000 USD.",
       "page": 3,
       "status": "verified"

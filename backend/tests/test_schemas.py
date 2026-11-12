@@ -52,3 +52,4 @@ async def test_run_extraction_pipeline_end_to_end():
     assert result.fields["payment_terms"].status == "verified"
     assert result.fields["payment_terms"].normalized == 30
     assert len(result.negotiation_levers) >= 1
+

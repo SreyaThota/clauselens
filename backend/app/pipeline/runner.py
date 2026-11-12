@@ -34,7 +34,9 @@ def process_raw_extraction(
     elapsed_ms: float,
     contract_id: str = "contract",
     filename: str = "contract.pdf",
-    demo_mode: bool = False
+    demo_mode: bool = False,
+    model_name: str = "rule-based baseline",
+    actual_cost: Optional[float] = None
 ) -> ExtractionResult:
     """
     Applies the Trust Layer (grounding verification, review rules, normalization)
@@ -88,8 +90,8 @@ def process_raw_extraction(
         review_reason = None
 
         if not is_grounded:
-            # TRUST LAYER RULE 1:
-            # If grounding check fails, force status = needs_review and confidence <= 0.40
+            # STRICT TRUST LAYER RULE 1:
+            # If grounding check fails, status MUST be needs_review and confidence <= 0.40
             status = "needs_review"
             final_confidence = min(model_conf, 0.40)
             review_reason = warning_msg or f"Grounding check failed (match score {match_score:.2f} < 0.90)."
@@ -119,8 +121,15 @@ def process_raw_extraction(
             review_reason=review_reason
         )
 
-    # Cost calculation: estimate $0.0003 per 1K tokens
-    estimated_cost = round((tokens_used / 1000.0) * 0.00035, 5)
+    # Cost calculation: honest reporting
+    if actual_cost is not None:
+        estimated_cost = actual_cost
+    elif demo_mode or model_name.startswith("rule-based") or model_name.startswith("Deterministic"):
+        estimated_cost = 0.0  # Real cost of offline rule-based execution is $0.00
+    else:
+        # Gemini 2.0 Flash pricing: ~$0.0001 / 1K in, $0.0004 / 1K out
+        estimated_cost = round((tokens_used / 1000.0) * 0.00035, 5)
+
     overall_conf = round(confidence_sum / max(1, (verified_count + needs_review_count)), 2)
 
     summary = ExtractionSummary(
@@ -129,7 +138,7 @@ def process_raw_extraction(
         not_found_count=not_found_count,
         total_fields=len(FIELD_NAMES),
         overall_confidence=overall_conf,
-        processing_time_ms=round(elapsed_ms, 1),
+        processing_time_ms=round(elapsed_ms, 2),
         estimated_cost_usd=estimated_cost,
         tokens_used=tokens_used
     )
@@ -151,7 +160,8 @@ def process_raw_extraction(
 async def run_extraction_pipeline(
     pdf_bytes: bytes,
     filename: str = "uploaded_contract.pdf",
-    contract_id: str = "contract"
+    contract_id: str = "contract",
+    force_llm: bool = False
 ) -> ExtractionResult:
     """
     Full end-to-end extraction pipeline:
@@ -165,17 +175,21 @@ async def run_extraction_pipeline(
     # Step 2: Format pages with page tags
     formatted_text = format_pages_for_llm(pages)
 
-    # Check if demo mode is active or no API key is available
-    is_demo = os.getenv("DEMO_MODE", "false").lower() in ("true", "1")
+    # Check if real LLM API key is present
     has_api_key = bool(os.getenv("GEMINI_API_KEY") or os.getenv("OPENAI_API_KEY"))
+    is_demo_requested = os.getenv("DEMO_MODE", "false").lower() in ("true", "1") and not force_llm
 
-    tokens_used = 1200
-    if not has_api_key or is_demo:
-        # High fidelity fallback extraction for demo mode
-        from .demo_fallback import heuristic_extract_terms
-        raw = heuristic_extract_terms(pages)
-        tokens_used = sum(len(p.text.split()) for p in pages) + 350
-        elapsed_ms = (time.perf_counter() - start_time) * 1000.0 + 450.0  # realistic simulated latency
+    # If force_llm or (has_api_key and not is_demo_requested), call the real LLM
+    if has_api_key and (force_llm or not is_demo_requested):
+        provider = os.getenv("LLM_PROVIDER", "gemini")
+        model = os.getenv("LLM_MODEL", "gemini-2.0-flash" if provider == "gemini" else "gpt-4o-mini")
+        raw, tokens_used = await extract_terms_with_llm(formatted_text)
+        elapsed_ms = (time.perf_counter() - start_time) * 1000.0
+        
+        # Real pricing
+        cost_per_1k = 0.00035 if "gemini" in model.lower() else 0.0005
+        actual_cost = round((tokens_used / 1000.0) * cost_per_1k, 5)
+
         return process_raw_extraction(
             raw=raw,
             pages=pages,
@@ -183,14 +197,17 @@ async def run_extraction_pipeline(
             elapsed_ms=elapsed_ms,
             contract_id=contract_id,
             filename=filename,
-            demo_mode=True
+            demo_mode=False,
+            model_name=f"{provider}/{model}",
+            actual_cost=actual_cost
         )
 
-    # Step 3: LLM Extraction with Pydantic structured output
-    raw, tokens_used = await extract_terms_with_llm(formatted_text)
-    elapsed_ms = (time.perf_counter() - start_time) * 1000.0
+    # Fallback / baseline execution (deterministic, measured execution time, $0.00 cost)
+    from .demo_fallback import heuristic_extract_terms
+    raw = heuristic_extract_terms(pages)
+    tokens_used = sum(len(p.text.split()) for p in pages)
+    elapsed_ms = (time.perf_counter() - start_time) * 1000.0  # Real measured latency
 
-    # Step 4: Trust layer grounding check & normalization
     return process_raw_extraction(
         raw=raw,
         pages=pages,
@@ -198,5 +215,7 @@ async def run_extraction_pipeline(
         elapsed_ms=elapsed_ms,
         contract_id=contract_id,
         filename=filename,
-        demo_mode=False
+        demo_mode=True,
+        model_name="Deterministic rule-based baseline (offline)",
+        actual_cost=0.0
     )

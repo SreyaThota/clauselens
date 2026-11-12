@@ -15,3 +15,4 @@ def test_extract_text_from_pdf():
     assert "MASTER IT MANAGED SERVICES AGREEMENT" in pages[0].text
     assert "Net 30 days" in pages[1].text
     assert "Delaware" in pages[2].text
+

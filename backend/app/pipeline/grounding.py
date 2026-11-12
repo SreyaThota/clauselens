@@ -82,3 +82,4 @@ def verify_field_grounding(
         )
         
     return False, best_score, None, f"Source quote could not be verified in the document (best match {best_score:.2f} < {threshold})."
+

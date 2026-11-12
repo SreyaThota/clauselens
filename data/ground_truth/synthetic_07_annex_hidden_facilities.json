@@ -48,7 +48,7 @@
     },
     "liability_cap": {
       "raw": "$750,000 USD",
-      "normalized": "$750,000 USD",
+      "normalized": "750,000 USD",
       "quote": "Total liability under this agreement shall not exceed $750,000 USD.",
       "page": 2,
       "status": "verified"

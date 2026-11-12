@@ -152,3 +152,4 @@ async def get_evaluation_metrics():
         data = json.load(f)
 
     return data
+

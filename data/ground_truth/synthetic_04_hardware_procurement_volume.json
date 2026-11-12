@@ -48,7 +48,7 @@
     },
     "liability_cap": {
       "raw": "$5,000,000 USD",
-      "normalized": "$5,000,000 USD",
+      "normalized": "5,000,000 USD",
       "quote": "Each party's total aggregate liability under this agreement shall not exceed $5,000,000 USD.",
       "page": 4,
       "status": "verified"

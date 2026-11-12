@@ -109,6 +109,7 @@ class FieldEvalMetric(BaseModel):
     accuracy: float
     grounding_rate: float
     not_found_precision: float
+    not_found_recall: float
     review_rate: float
 
 class FailureCase(BaseModel):
@@ -124,11 +125,14 @@ class FailureCase(BaseModel):
 class EvaluationReport(BaseModel):
     timestamp: str
     total_contracts: int
+    model_used: str = "Deterministic rule-based baseline (offline mode)"
     overall_accuracy: float
     grounding_rate: float
     not_found_precision: float
+    not_found_recall: float
     review_rate: float
     avg_latency_ms: float
     avg_cost_usd: float
     per_field_metrics: Dict[str, FieldEvalMetric]
     failure_cases: List[FailureCase]
+

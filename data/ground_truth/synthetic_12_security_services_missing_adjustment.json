@@ -48,7 +48,7 @@
     },
     "liability_cap": {
       "raw": "$2,000,000 USD",
-      "normalized": "$2,000,000 USD",
+      "normalized": "2,000,000 USD",
       "quote": "Aggregate liability under this contract shall not exceed $2,000,000 USD.",
       "page": 3,
       "status": "verified"

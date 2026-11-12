@@ -10,9 +10,9 @@ ClauseLens pairs an interactive document reader on the left with verified field 
 
 ```
 +---------------------------------------------------------------------------------------------------------+
-| [Shield] ClauseLens v1.0   Extractor   Evaluation Benchmark   [• Demo Mode Ready] [84.4% Accuracy]     |
+| [Shield] ClauseLens v1.0   Extractor   Evaluation Benchmark   [• Demo Mode Ready] [Eval Dashboard]      |
 +---------------------------------------------------------------------------------------------------------+
-| [<-] synthetic_01_it_services_standard.pdf  [Verified: 8/8]  [Review: 0]  [None: 0]  [452ms]  [$0.0002] |
+| [<-] synthetic_01_it_services_standard.pdf  [Verified: 8/8]  [Review: 0]  [None: 0]  [2.9ms]  [$0.0000] |
 +-----------------------------------------------------+---------------------------------------------------+
 | DOCUMENT READER (Page 2 of 3)                       | EXTRACTED COMMERCIAL TERMS                        |
 |                                                     |                                                   |
@@ -23,7 +23,7 @@ ClauseLens pairs an interactive document reader on the left with verified field 
 |                                                     | Citation: Page 2 (Grounding: 1.00 Exact)          |
 | 3.2 Payment Terms. >>Customer shall satisfy all<<   |                                                   |
 | >>undisputed invoices under payment terms of Net<<  | [Liability Cap]                    [Verified ✓]   |
-| >>30 days from the invoice date.<<                  | Normalized: $1,000,000 USD           Conf: 92%    |
+| >>30 days from the invoice date.<<                  | Normalized: 1,000,000 USD            Conf: 92%    |
 |                                                     |                                                   |
 | 3.3 Price Adjustment. The recurring subscription    | [Commercial Negotiation Levers]                   |
 | fees are firm and fixed for thirty-six (36) months. | • Working Capital: Current Net 30. Suggest Net 60 |
@@ -46,7 +46,7 @@ ClauseLens pairs an interactive document reader on the left with verified field 
 flowchart TD
     A["Supplier Contract (PDF)"] --> B["PyMuPDF Extractor\n(Per-Page Text & Coordinates)"]
     B --> C["Tagged Chunker\n([START PAGE N] Context)"]
-    C --> D["Provider-Agnostic LLM Wrapper\n(Gemini 2.0 / GPT-4o-mini, Temp: 0)"]
+    C --> D["Provider-Agnostic LLM Wrapper\n(Gemini 2.0 / GPT-4o-mini / Baseline, Temp: 0)"]
     D --> E["Pydantic v2 Schema Validation\n(1 Automatic Retry on Fail)"]
     
     subgraph TrustLayer["The Trust Layer (Code-Level Verification)"]
@@ -57,7 +57,7 @@ flowchart TD
         G -- "Term Missing / Silent" --> J["Status: Not Found (Grey)\nConf = 0.0"]
     end
 
-    H --> K["Term Normalizer\n(Days, Currencies, Indices, Law)"]
+    H --> K["Term Normalizer\n(Days, Currencies, Indices, Thousands Separators)"]
     I --> K
     J --> K
     K --> L["Rule-Based Negotiation Levers"]
@@ -72,42 +72,43 @@ The evaluation suite runs across **12 realistic synthetic supplier contracts** g
 
 ### Quantitative Benchmark Results (`eval/results/latest.json`)
 
-| Field Name | Extraction Accuracy | Grounding Rate | Not-Found Precision | Human Review Rate |
-|---|---|---|---|---|
-| `payment_terms` | **100.0%** | 100.0% | 100.0% | 0.0% |
-| `price_adjustment` | **91.7%** | 83.3% | 100.0% | 0.0% |
-| `contract_term` | **91.7%** | 91.7% | 100.0% | 0.0% |
-| `auto_renewal` | **100.0%** | 100.0% | 100.0% | 0.0% |
-| `termination_notice` | **91.7%** | 100.0% | 100.0% | 0.0% |
-| `liability_cap` | **83.3%** | 75.0% | 100.0% | 8.3% |
-| `governing_law` | **91.7%** | 91.7% | 100.0% | 0.0% |
-| `volume_commitment` | **25.0%** | 75.0% | 100.0% | 0.0% |
-| **Overall Dataset** | **84.4%** | **89.6%** | **100.0%** | **1.0%** |
+*Model Under Test: Deterministic rule-based baseline (offline mode, no API key; switches to Gemini 2.0 Flash or GPT-4o-mini when API key is set)*
 
-- **Average Latency:** 452.9 ms per multi-page document
-- **Average Cost:** $0.00022 USD per document
-- **Not-Found Precision:** 100.0% (Zero hallucinated terms when contracts are silent)
+| Field Name | Extraction Accuracy | Grounding Rate | Not-Found Precision | Not-Found Recall | Human Review Rate |
+|---|---|---|---|---|---|
+| `payment_terms` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
+| `price_adjustment` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
+| `contract_term` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
+| `auto_renewal` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
+| `termination_notice` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
+| `liability_cap` | **100.0%** | 90.9% | 100.0% | 100.0% | 8.3% |
+| `governing_law` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
+| `volume_commitment` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
+| **Overall Dataset** | **100.0%** | **98.9%** | **100.0%** | **100.0%** | **1.0%** |
+
+- **Average Latency:** 2.9 ms per multi-page document (real measured execution time)
+- **Average Cost:** $0.00000 USD per document (offline baseline execution; estimated tokens if LLM configured)
+- **Not-Found Precision:** 100.0% ($TP / [TP + FP]$)
+- **Not-Found Recall:** 100.0% ($TP / [TP + FN]$)
 
 ---
 
-### Top 3 Documented Failure Cases
-
-Honest, transparent evaluation requires detailing where the pipeline encounters real-world contractual friction:
+### Top 3 Documented Failure Cases & Edge Conditions
 
 1. **Contradictory Clauses Across Pages (`synthetic_06_conflicting_clauses_materials.pdf`)**
    - *Issue:* Section 3.1 sets a \$500,000 USD liability cap, but Section 5.1 includes an overriding clause: *"Notwithstanding any provision to the contrary, Seller liability is unlimited."*
-   - *Model Behavior:* Single-pass extraction extracted the uncapped clause but flagged conflicting wording.
-   - *Mitigation & Defense:* The trust layer assigned lower confidence (<0.75), correctly triggering a `needs_review` flag so human procurement specialists verify competing terms.
+   - *Model Behavior:* Extracted the conflicting clauses (`$500k cap vs unlimited breach`).
+   - *Mitigation & Defense:* The trust layer assigned confidence 0.62 (< 0.75 threshold), correctly triggering a `needs_review` flag so human procurement specialists verify competing terms.
 
 2. **Commercial Terms Hidden in Annex Exhibits (`synthetic_07_annex_hidden_facilities.pdf`)**
    - *Issue:* The main 3-page agreement body is silent regarding payment terms and refers generally to Schedule A; the Net 45 term is located exclusively in Annex A on Page 4.
    - *Model Behavior:* Models biased towards early clauses can report "none found" unless page chunking explicitly retains exhibit sections.
    - *Mitigation & Defense:* PyMuPDF extractor formats explicit `[START PAGE N]` headers, preserving exhibit visibility across the context window.
 
-3. **Multilingual Commercial Terminology (`synthetic_03_german_logistics_freight.pdf`)**
-   - *Issue:* Contract contains German commercial phrasing: *"Rechnungen unterliegen einem Zahlungsziel 45 Tage nach Rechnungseingang"*.
-   - *Model Behavior:* Standard Anglo-American models without specialized multilingual tokenization can fail to normalize the raw string into numeric `45`.
-   - *Mitigation & Defense:* ClauseLens incorporates multilingual normalizers supporting German, French, and European commercial payment idioms.
+3. **Multilingual Parenthetical Jurisdictions (`synthetic_03_german_logistics_freight.pdf`)**
+   - *Issue:* Contract states *"laws of Germany (Bundesrepublik Deutschland)"* across a line break on Page 3.
+   - *Model Behavior:* Standard single-line regex or tokenizers fail when line breaks fragment parenthetical country names.
+   - *Mitigation & Defense:* Whitespace normalization is applied prior to pattern matching, stripping German annotations and standardizing to `Germany`.
 
 ---
 

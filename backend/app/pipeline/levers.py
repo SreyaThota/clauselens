@@ -124,3 +124,4 @@ def generate_negotiation_levers(fields: Dict[str, ExtractedField]) -> List[Negot
             ))
 
     return levers[:3]
+

@@ -12,3 +12,4 @@ def format_pages_for_llm(pages: List[PageText]) -> str:
         cleaned_text = p.text.strip()
         sections.append(f"--- START PAGE {p.page_number} ---\n{cleaned_text}\n--- END PAGE {p.page_number} ---")
     return "\n\n".join(sections)
+

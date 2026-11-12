@@ -61,7 +61,7 @@ CONTRACT_SPECS = [
             "contract_term": {"raw": "36 months", "normalized": "36 months", "quote": "The initial term of this Agreement shall be 36 months, commencing on February 1, 2024 and ending on January 31, 2027.", "page": 1, "status": "verified"},
             "auto_renewal": {"raw": "successive 12-month periods", "normalized": "true (12 months)", "quote": "This Agreement shall automatically renew for successive 12-month periods unless either party provides written notice of non-renewal.", "page": 1, "status": "verified"},
             "termination_notice": {"raw": "60 days", "normalized": 60, "quote": "Either party may terminate this Agreement without cause upon providing written notice of at least 60 days.", "page": 2, "status": "verified"},
-            "liability_cap": {"raw": "$1,000,000 USD", "normalized": "$1,000,000 USD", "quote": "Except for gross negligence or willful misconduct, each party's aggregate liability shall not exceed $1,000,000 USD under this Agreement.", "page": 3, "status": "verified"},
+            "liability_cap": {"raw": "$1,000,000 USD", "normalized": "1,000,000 USD", "quote": "Except for gross negligence or willful misconduct, each party's aggregate liability shall not exceed $1,000,000 USD under this Agreement.", "page": 3, "status": "verified"},
             "governing_law": {"raw": "State of Delaware", "normalized": "Delaware", "quote": "This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without regard to conflict of laws principles.", "page": 3, "status": "verified"},
             "volume_commitment": {"raw": "100 enterprise server nodes", "normalized": "100 enterprise server nodes", "quote": "Customer guarantees a minimum annual volume commitment of 100 enterprise server nodes throughout each contract year.", "page": 3, "status": "verified"}
         }
@@ -106,7 +106,7 @@ CONTRACT_SPECS = [
             "contract_term": {"raw": "24 months", "normalized": "24 months", "quote": "This subscription has an initial term of 24 months commencing on March 1, 2024.", "page": 1, "status": "verified"},
             "auto_renewal": {"raw": "consecutive 12-month periods", "normalized": "true (12 months)", "quote": "The subscription shall automatically renew for consecutive 12-month periods unless terminated in accordance with Section 4.", "page": 1, "status": "verified"},
             "termination_notice": {"raw": "ninety (90) days", "normalized": 90, "quote": "Either party may elect non-renewal or termination upon ninety (90) days prior written notice before the expiration of the current term.", "page": 3, "status": "verified"},
-            "liability_cap": {"raw": "$2,500,000 USD", "normalized": "$2,500,000 USD", "quote": "The total aggregate liability of either party for all claims arising out of this Agreement shall not exceed $2,500,000 USD.", "page": 3, "status": "verified"},
+            "liability_cap": {"raw": "$2,500,000 USD", "normalized": "2,500,000 USD", "quote": "The total aggregate liability of either party for all claims arising out of this Agreement shall not exceed $2,500,000 USD.", "page": 3, "status": "verified"},
             "governing_law": {"raw": "State of New York", "normalized": "New York", "quote": "This Agreement is governed by the laws of the State of New York, excluding its conflicts of law rules.", "page": 3, "status": "verified"},
             "volume_commitment": {"raw": "$120,000 USD per contract year", "normalized": "$120,000 USD per contract year", "quote": "Subscriber agrees to maintain a minimum spend of $120,000 USD per contract year across all operational subsidiaries.", "page": 2, "status": "verified"}
         }
@@ -193,7 +193,7 @@ CONTRACT_SPECS = [
             "contract_term": {"raw": "48 months", "normalized": "48 months", "quote": "The initial term of this Agreement shall be 48 months from the Effective Date.", "page": 1, "status": "verified"},
             "auto_renewal": {"raw": "shall not automatically renew", "normalized": "false", "quote": "This Agreement shall not automatically renew upon expiration of the initial term.", "page": 3, "status": "verified"},
             "termination_notice": {"raw": "60 days", "normalized": 60, "quote": "Either party may terminate for convenience upon written notice of at least 60 days.", "page": 4, "status": "verified"},
-            "liability_cap": {"raw": "$5,000,000 USD", "normalized": "$5,000,000 USD", "quote": "Each party's total aggregate liability under this agreement shall not exceed $5,000,000 USD.", "page": 4, "status": "verified"},
+            "liability_cap": {"raw": "$5,000,000 USD", "normalized": "5,000,000 USD", "quote": "Each party's total aggregate liability under this agreement shall not exceed $5,000,000 USD.", "page": 4, "status": "verified"},
             "governing_law": {"raw": "State of California", "normalized": "California", "quote": "This Agreement shall be governed by the laws of the State of California, without regard to conflicts principles.", "page": 4, "status": "verified"},
             "volume_commitment": {"raw": "10,000 accelerator units per calendar year", "normalized": "10,000 accelerator units per calendar year", "quote": "Buyer guarantees a minimum volume commitment of 10,000 accelerator units per calendar year.", "page": 2, "status": "verified"}
         }
@@ -326,7 +326,7 @@ CONTRACT_SPECS = [
             "contract_term": {"raw": "36 months", "normalized": "36 months", "quote": "The initial term of this Agreement shall be 36 months from execution date.", "page": 1, "status": "verified"},
             "auto_renewal": {"raw": "successive 12-month periods", "normalized": "true (12 months)", "quote": "The contract will automatically renew for successive 12-month periods.", "page": 1, "status": "verified"},
             "termination_notice": {"raw": "60 days", "normalized": 60, "quote": "Either party may terminate with written notice of at least 60 days.", "page": 2, "status": "verified"},
-            "liability_cap": {"raw": "$750,000 USD", "normalized": "$750,000 USD", "quote": "Total liability under this agreement shall not exceed $750,000 USD.", "page": 2, "status": "verified"},
+            "liability_cap": {"raw": "$750,000 USD", "normalized": "750,000 USD", "quote": "Total liability under this agreement shall not exceed $750,000 USD.", "page": 2, "status": "verified"},
             "governing_law": {"raw": "State of Illinois", "normalized": "Illinois", "quote": "This agreement is governed by the laws of the State of Illinois.", "page": 2, "status": "verified"},
             "volume_commitment": {"raw": "$350,000 USD per contract year", "normalized": "$350,000 USD per contract year", "quote": "Owner commits to a minimum spend of $350,000 USD per contract year for corporate campus maintenance.", "page": 4, "status": "verified"}
         }
@@ -409,7 +409,7 @@ CONTRACT_SPECS = [
             "contract_term": {"raw": "36 months", "normalized": "36 months", "quote": "The initial term of this Agreement shall be 36 months starting August 1, 2024.", "page": 1, "status": "verified"},
             "auto_renewal": {"raw": "consecutive 12-month periods", "normalized": "true (12 months)", "quote": "The contract will automatically renew for consecutive 12-month periods.", "page": 1, "status": "verified"},
             "termination_notice": {"raw": "90 days", "normalized": 90, "quote": "Disconnection for convenience requires written notice of at least 90 days prior to effective date.", "page": 3, "status": "verified"},
-            "liability_cap": {"raw": "$3,000,000 USD", "normalized": "$3,000,000 USD", "quote": "Carrier's total aggregate liability for circuit interruption shall not exceed $3,000,000 USD.", "page": 3, "status": "verified"},
+            "liability_cap": {"raw": "$3,000,000 USD", "normalized": "3,000,000 USD", "quote": "Carrier's total aggregate liability for circuit interruption shall not exceed $3,000,000 USD.", "page": 3, "status": "verified"},
             "governing_law": {"raw": "State of Washington", "normalized": "Washington", "quote": "This agreement is governed by the laws of the State of Washington.", "page": 3, "status": "verified"},
             "volume_commitment": {"raw": "10 Gbps dedicated continuous throughput", "normalized": "10 Gbps dedicated continuous throughput", "quote": "Customer commits to purchase at least 10 Gbps dedicated continuous throughput across the network.", "page": 2, "status": "verified"}
         }
@@ -491,7 +491,7 @@ CONTRACT_SPECS = [
             "contract_term": {"raw": "6 months", "normalized": "6 months", "quote": "The initial term of this Agreement shall be 6 months commencing October 1, 2024.", "page": 1, "status": "verified"},
             "auto_renewal": {"raw": "shall not automatically renew", "normalized": "false", "quote": "This contract shall not automatically renew and terminates upon conclusion of the 6-month term.", "page": 1, "status": "verified"},
             "termination_notice": {"raw": "15 days", "normalized": 15, "quote": "Host may cancel event services upon written notice of at least 15 days.", "page": 2, "status": "verified"},
-            "liability_cap": {"raw": "$100,000 USD", "normalized": "$100,000 USD", "quote": "Caterer's aggregate liability shall not exceed $100,000 USD for any food safety or property claims.", "page": 2, "status": "verified"},
+            "liability_cap": {"raw": "$100,000 USD", "normalized": "100,000 USD", "quote": "Caterer's aggregate liability shall not exceed $100,000 USD for any food safety or property claims.", "page": 2, "status": "verified"},
             "governing_law": {"raw": "State of Colorado", "normalized": "Colorado", "quote": "This agreement is governed by the laws of the State of Colorado.", "page": 2, "status": "verified"},
             "volume_commitment": {"raw": "500 meal covers per week", "normalized": "500 meal covers per week", "quote": "Host guarantees a minimum volume commitment of 500 meal covers per week.", "page": 1, "status": "verified"}
         }
@@ -532,7 +532,7 @@ CONTRACT_SPECS = [
             "contract_term": {"raw": "24 months", "normalized": "24 months", "quote": "The initial term of this Agreement shall be 24 months beginning November 1, 2024.", "page": 1, "status": "verified"},
             "auto_renewal": {"raw": "successive 12-month periods", "normalized": "true (12 months)", "quote": "The contract will automatically renew for successive 12-month periods.", "page": 1, "status": "verified"},
             "termination_notice": {"raw": "45 days", "normalized": 45, "quote": "Either party may terminate this agreement upon written notice of at least 45 days.", "page": 3, "status": "verified"},
-            "liability_cap": {"raw": "$2,000,000 USD", "normalized": "$2,000,000 USD", "quote": "Aggregate liability under this contract shall not exceed $2,000,000 USD.", "page": 3, "status": "verified"},
+            "liability_cap": {"raw": "$2,000,000 USD", "normalized": "2,000,000 USD", "quote": "Aggregate liability under this contract shall not exceed $2,000,000 USD.", "page": 3, "status": "verified"},
             "governing_law": {"raw": "State of Georgia", "normalized": "Georgia", "quote": "This agreement is governed by the laws of the State of Georgia.", "page": 3, "status": "verified"},
             "volume_commitment": {"raw": "1,200 patrol hours per month", "normalized": "1,200 patrol hours per month", "quote": "Client agrees to a minimum volume commitment of 1,200 patrol hours per month.", "page": 2, "status": "verified"}
         }
@@ -651,3 +651,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

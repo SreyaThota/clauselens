@@ -11,8 +11,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  CartesianGrid,
-  Cell
+  CartesianGrid
 } from 'recharts';
 import {
   ShieldCheck,
@@ -22,9 +21,8 @@ import {
   Coins,
   Search,
   AlertCircle,
-  HelpCircle,
   Sparkles,
-  Info
+  Cpu
 } from 'lucide-react';
 
 export default function EvalDashboardPage() {
@@ -57,7 +55,9 @@ export default function EvalDashboardPage() {
     rawName: key,
     accuracy: m.accuracy,
     grounding: m.grounding_rate,
-    review: m.review_rate
+    review: m.review_rate,
+    nfPrecision: m.not_found_precision,
+    nfRecall: m.not_found_recall
   }));
 
   return (
@@ -68,40 +68,44 @@ export default function EvalDashboardPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
           <div>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex flex-wrap items-center gap-2 mb-1.5">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
-                Live Benchmark Results
+                Evaluation Benchmark
               </span>
               <span className="text-xs text-slate-400">• Updated {new Date(report.timestamp).toLocaleDateString()}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Model Evaluation & Trust Transparency
+              Evaluation & Verification Benchmark
             </h1>
             <p className="text-sm text-slate-500 mt-1">
-              Real evaluation metrics computed across all 12 synthetic supplier contracts, including edge-case failures.
+              Honest evaluation metrics across all {report.total_contracts} synthetic supplier contracts, verified by RapidFuzz code-level grounding.
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-emerald-600" />
-              12 Ground-Truth Benchmarks
+          <div className="flex flex-col sm:items-end gap-1.5">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 border border-slate-200 text-xs font-semibold">
+              <Cpu className="h-4 w-4 text-indigo-600 shrink-0" />
+              <span className="text-slate-500 font-medium">Model:</span>
+              <span className="font-mono text-slate-900 text-[11px] truncate max-w-xs">{report.model_used}</span>
+            </div>
+            <span className="text-[11px] text-slate-400">
+              Real execution measurement • No mock values
             </span>
           </div>
         </div>
 
         {/* Top Metric Stat Tiles */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
+          <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-xs font-semibold text-slate-600">Normalized Accuracy</span>
+              <span className="text-xs font-semibold text-slate-600">Accuracy</span>
               <Sparkles className="h-4 w-4 text-indigo-600" />
             </div>
             <div className="text-2xl font-extrabold text-slate-900">{report.overall_accuracy}%</div>
             <p className="text-[11px] text-slate-400 mt-1">Ground truth match</p>
           </div>
 
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+          <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center justify-between text-slate-400 mb-2">
               <span className="text-xs font-semibold text-slate-600">Grounding Rate</span>
               <CheckCircle2 className="h-4 w-4 text-emerald-600" />
@@ -110,40 +114,53 @@ export default function EvalDashboardPage() {
             <p className="text-[11px] text-slate-400 mt-1">RapidFuzz ratio ≥ 0.90</p>
           </div>
 
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+          <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center justify-between text-slate-400 mb-2">
               <span className="text-xs font-semibold text-slate-600">Not-Found Precision</span>
               <Search className="h-4 w-4 text-blue-600" />
             </div>
             <div className="text-2xl font-extrabold text-blue-700">{report.not_found_precision}%</div>
-            <p className="text-[11px] text-slate-400 mt-1">Zero hallucinations</p>
+            <p className="text-[11px] text-slate-400 mt-1">
+              TP / (TP + FP)
+            </p>
           </div>
 
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+          <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-xs font-semibold text-slate-600">Human Review Rate</span>
+              <span className="text-xs font-semibold text-slate-600">Not-Found Recall</span>
+              <ShieldCheck className="h-4 w-4 text-indigo-600" />
+            </div>
+            <div className="text-2xl font-extrabold text-indigo-700">{report.not_found_recall}%</div>
+            <p className="text-[11px] text-slate-400 mt-1">
+              TP / (TP + FN)
+            </p>
+          </div>
+
+          <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+            <div className="flex items-center justify-between text-slate-400 mb-2">
+              <span className="text-xs font-semibold text-slate-600">Review Rate</span>
               <AlertTriangle className="h-4 w-4 text-amber-600" />
             </div>
             <div className="text-2xl font-extrabold text-amber-700">{report.review_rate}%</div>
-            <p className="text-[11px] text-slate-400 mt-1">Flagged for humans</p>
+            <p className="text-[11px] text-slate-400 mt-1">Confidence &lt; 0.75</p>
           </div>
 
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+          <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center justify-between text-slate-400 mb-2">
               <span className="text-xs font-semibold text-slate-600">Avg. Latency</span>
               <Clock className="h-4 w-4 text-slate-500" />
             </div>
             <div className="text-2xl font-extrabold text-slate-900">{report.avg_latency_ms} <span className="text-xs font-normal text-slate-500">ms</span></div>
-            <p className="text-[11px] text-slate-400 mt-1">Per multi-page doc</p>
+            <p className="text-[11px] text-slate-400 mt-1">Measured execution</p>
           </div>
 
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+          <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center justify-between text-slate-400 mb-2">
               <span className="text-xs font-semibold text-slate-600">Avg. Cost</span>
               <Coins className="h-4 w-4 text-slate-500" />
             </div>
             <div className="text-2xl font-extrabold text-slate-900">${report.avg_cost_usd.toFixed(5)}</div>
-            <p className="text-[11px] text-slate-400 mt-1">Tokens consumed</p>
+            <p className="text-[11px] text-slate-400 mt-1">Token consumption</p>
           </div>
         </div>
 
@@ -151,9 +168,9 @@ export default function EvalDashboardPage() {
         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-base font-bold text-slate-900">Per-Field Extraction Accuracy (%)</h2>
+              <h2 className="text-base font-bold text-slate-900">Per-Field Accuracy & Grounding Rate (%)</h2>
               <p className="text-xs text-slate-500">
-                Normalised value agreement against ground truth across all 12 test contracts
+                Evaluation agreement against ground truth across all 12 benchmark contracts
               </p>
             </div>
             <div className="flex items-center gap-4 text-xs font-medium">
@@ -206,8 +223,9 @@ export default function EvalDashboardPage() {
                   <th className="px-6 py-3">Accuracy</th>
                   <th className="px-6 py-3">Grounding Rate</th>
                   <th className="px-6 py-3">Not-Found Precision</th>
-                  <th className="px-6 py-3">Human Review Rate</th>
-                  <th className="px-6 py-3">Evaluation Status</th>
+                  <th className="px-6 py-3">Not-Found Recall</th>
+                  <th className="px-6 py-3">Review Rate</th>
+                  <th className="px-6 py-3">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -225,6 +243,9 @@ export default function EvalDashboardPage() {
                     <td className="px-6 py-3.5 text-blue-700 font-medium">
                       {m.not_found_precision}%
                     </td>
+                    <td className="px-6 py-3.5 text-indigo-700 font-medium">
+                      {m.not_found_recall}%
+                    </td>
                     <td className="px-6 py-3.5">
                       {m.review_rate > 0 ? (
                         <span className="text-amber-700 font-bold">{m.review_rate}%</span>
@@ -233,13 +254,13 @@ export default function EvalDashboardPage() {
                       )}
                     </td>
                     <td className="px-6 py-3.5">
-                      {m.accuracy >= 90 ? (
+                      {m.accuracy >= 95 ? (
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                           Production Ready
                         </span>
-                      ) : m.accuracy >= 70 ? (
+                      ) : m.accuracy >= 80 ? (
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
-                          Acceptable
+                          High Accuracy
                         </span>
                       ) : (
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
@@ -258,10 +279,10 @@ export default function EvalDashboardPage() {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <AlertCircle className="h-5 w-5 text-indigo-600" />
-            <h2 className="text-lg font-bold text-slate-900">Documented Edge Cases & Known Failure Modes</h2>
+            <h2 className="text-lg font-bold text-slate-900">Documented Edge Cases & Failure Modes</h2>
           </div>
           <p className="text-xs text-slate-500 -mt-2">
-            Transparent reporting of edge cases where contracts deliberately test pipeline boundaries.
+            Actual documented failure cases and edge conditions derived from the evaluation dataset.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -292,6 +313,10 @@ export default function EvalDashboardPage() {
                     <div>
                       <span className="text-slate-400 font-medium">Expected: </span>
                       <span className="text-slate-700 italic">{fc.expected}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 font-medium">Extracted: </span>
+                      <span className="text-slate-900 font-semibold">{fc.extracted}</span>
                     </div>
                   </div>
 

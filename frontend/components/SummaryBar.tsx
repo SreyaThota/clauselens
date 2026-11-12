@@ -117,3 +117,4 @@ export default function SummaryBar({ summary, filename, result }: SummaryBarProp
     </div>
   );
 }
+

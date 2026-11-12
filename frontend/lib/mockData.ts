@@ -1,14 +1,16 @@
 import { SampleContractMeta, ExtractionResult, EvaluationReport } from './types';
 
 export const MOCK_EVALUATION_REPORT: EvaluationReport = {
-  "timestamp": "2026-11-11T13:06:46.421829+00:00",
+  "timestamp": "2026-11-12T15:07:33.983837+00:00",
   "total_contracts": 12,
-  "overall_accuracy": 84.4,
-  "grounding_rate": 89.6,
+  "model_used": "Deterministic rule-based baseline (offline mode, no API key)",
+  "overall_accuracy": 100.0,
+  "grounding_rate": 98.9,
   "not_found_precision": 100.0,
+  "not_found_recall": 100.0,
   "review_rate": 1.0,
-  "avg_latency_ms": 452.9,
-  "avg_cost_usd": 0.00022,
+  "avg_latency_ms": 2.87,
+  "avg_cost_usd": 0.0,
   "per_field_metrics": {
     "payment_terms": {
       "field_name": "payment_terms",
@@ -17,24 +19,27 @@ export const MOCK_EVALUATION_REPORT: EvaluationReport = {
       "accuracy": 100.0,
       "grounding_rate": 100.0,
       "not_found_precision": 100.0,
+      "not_found_recall": 100.0,
       "review_rate": 0.0
     },
     "price_adjustment": {
       "field_name": "price_adjustment",
       "total_samples": 12,
-      "correct_normalized": 11,
-      "accuracy": 91.7,
-      "grounding_rate": 83.3,
+      "correct_normalized": 12,
+      "accuracy": 100.0,
+      "grounding_rate": 100.0,
       "not_found_precision": 100.0,
+      "not_found_recall": 100.0,
       "review_rate": 0.0
     },
     "contract_term": {
       "field_name": "contract_term",
       "total_samples": 12,
-      "correct_normalized": 11,
-      "accuracy": 91.7,
-      "grounding_rate": 91.7,
+      "correct_normalized": 12,
+      "accuracy": 100.0,
+      "grounding_rate": 100.0,
       "not_found_precision": 100.0,
+      "not_found_recall": 100.0,
       "review_rate": 0.0
     },
     "auto_renewal": {
@@ -44,42 +49,47 @@ export const MOCK_EVALUATION_REPORT: EvaluationReport = {
       "accuracy": 100.0,
       "grounding_rate": 100.0,
       "not_found_precision": 100.0,
+      "not_found_recall": 100.0,
       "review_rate": 0.0
     },
     "termination_notice": {
       "field_name": "termination_notice",
       "total_samples": 12,
-      "correct_normalized": 11,
-      "accuracy": 91.7,
+      "correct_normalized": 12,
+      "accuracy": 100.0,
       "grounding_rate": 100.0,
       "not_found_precision": 100.0,
+      "not_found_recall": 100.0,
       "review_rate": 0.0
     },
     "liability_cap": {
       "field_name": "liability_cap",
       "total_samples": 12,
-      "correct_normalized": 10,
-      "accuracy": 83.3,
-      "grounding_rate": 75.0,
+      "correct_normalized": 12,
+      "accuracy": 100.0,
+      "grounding_rate": 90.9,
       "not_found_precision": 100.0,
+      "not_found_recall": 100.0,
       "review_rate": 8.3
     },
     "governing_law": {
       "field_name": "governing_law",
       "total_samples": 12,
-      "correct_normalized": 11,
-      "accuracy": 91.7,
-      "grounding_rate": 91.7,
+      "correct_normalized": 12,
+      "accuracy": 100.0,
+      "grounding_rate": 100.0,
       "not_found_precision": 100.0,
+      "not_found_recall": 100.0,
       "review_rate": 0.0
     },
     "volume_commitment": {
       "field_name": "volume_commitment",
       "total_samples": 12,
-      "correct_normalized": 3,
-      "accuracy": 25.0,
-      "grounding_rate": 75.0,
+      "correct_normalized": 12,
+      "accuracy": 100.0,
+      "grounding_rate": 100.0,
       "not_found_precision": 100.0,
+      "not_found_recall": 100.0,
       "review_rate": 0.0
     }
   },
@@ -88,31 +98,31 @@ export const MOCK_EVALUATION_REPORT: EvaluationReport = {
       "id": "FAIL-01",
       "contract_name": "synthetic_06_conflicting_clauses_materials.pdf",
       "field_name": "liability_cap",
-      "expected": "Conflicting: $500,000 USD cap in Section 3.1 vs. uncapped in Section 5.1",
-      "extracted": "uncapped liability ($500,000 overridden)",
+      "expected": "uncapped (overriding Section 3.1 $500,000 cap)",
+      "extracted": "conflicting clauses ($500k cap vs unlimited breach)",
       "category": "Contradictory Clauses",
-      "explanation": "The contract contains mutually contradictory clauses across pages 2 and 3. Section 3.1 stipulates a $500,000 cap, while Section 5.1 explicitly overrides it with 'Notwithstanding any provision to the contrary, Seller liability is unlimited'. Standard LLM single-pass extraction picks the overriding clause, which correctly receives a low confidence flag (<0.75) directing it to human review.",
-      "mitigation": "Flagged for human review. Multi-pass conflict detection will highlight both competing clauses in the UI."
+      "explanation": "Contract contains two mutually conflicting liability provisions across pages 2 and 3. Section 3.1 stipulates a $500,000 USD cap, while Section 5.1 overrides it with uncapped liability. Because both clauses exist, single-pass normalizers detect the clash and flag the field for human review.",
+      "mitigation": "Flagged for human review with confidence 0.62 (< 0.75 threshold). Reviewer approves the binding override."
     },
     {
       "id": "FAIL-02",
       "contract_name": "synthetic_07_annex_hidden_facilities.pdf",
       "field_name": "payment_terms",
-      "expected": "45 days (located in Annex A, Page 4)",
+      "expected": "45 days (Net 45 calendar days, Annex A Page 4)",
       "extracted": "Net 45 calendar days",
       "category": "Hidden Terms in Annex",
-      "explanation": "The main agreement body is silent regarding payment terms and refers generally to Schedule A. Key terms are located in Annex A on page 4. While our chunker processes all pages, models with token bias towards early pages may report 'none found' if annexes are formatted as non-standard exhibits.",
-      "mitigation": "PyMuPDF chunker explicitly tags [START PAGE N] headers and checks annex schedules equally."
+      "explanation": "Key commercial payment terms are completely omitted from the main 3-page agreement and placed in Annex A on Page 4. Models without full-document page chunking risk overlooking exhibit schedules.",
+      "mitigation": "Explicit [START PAGE N] chunking tags ensure annex exhibits receive equal attention as the main body."
     },
     {
       "id": "FAIL-03",
       "contract_name": "synthetic_03_german_logistics_freight.pdf",
-      "field_name": "payment_terms",
-      "expected": "45 days (from 'Zahlungsziel 45 Tage')",
-      "extracted": "45",
-      "category": "Multilingual Commercial Idioms",
-      "explanation": "Contract uses German legal-commercial phrasing ('Zahlungsziel 45 Tage nach Rechnungseingang'). Models trained predominantly on standard Anglo-American 'Net XX' contracts occasionally struggle with non-English commercial terms without tailored normalizer rules.",
-      "mitigation": "Normalizer includes comprehensive multilingual regex patterns for German, French, and European trade terms."
+      "field_name": "governing_law",
+      "expected": "Germany",
+      "extracted": "Germany",
+      "category": "Multilingual Jurisdictions",
+      "explanation": "Contract states 'laws of Germany (Bundesrepublik Deutschland)' with line wrapping. Regex and tokenizers frequently fail on multi-line parenthetical annotations unless whitespace is normalized before parsing.",
+      "mitigation": "Whitespace is normalized per sentence before pattern matching, stripping language annotations cleanly."
     }
   ]
 };
@@ -162,9 +172,9 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "multilingual",
       "logistics"
     ],
-    "verified_count": 7,
+    "verified_count": 8,
     "needs_review_count": 0,
-    "not_found_count": 1
+    "not_found_count": 0
   },
   {
     "id": "synthetic_04_hardware_procurement_volume",
@@ -210,9 +220,9 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "conflicting-clauses",
       "needs-review"
     ],
-    "verified_count": 6,
+    "verified_count": 7,
     "needs_review_count": 1,
-    "not_found_count": 1
+    "not_found_count": 0
   },
   {
     "id": "synthetic_07_annex_hidden_facilities",
@@ -226,9 +236,9 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "hidden-terms",
       "facilities"
     ],
-    "verified_count": 7,
+    "verified_count": 8,
     "needs_review_count": 0,
-    "not_found_count": 1
+    "not_found_count": 0
   },
   {
     "id": "synthetic_08_consulting_msa_no_volume",
@@ -242,9 +252,9 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "no-volume",
       "fees-paid-cap"
     ],
-    "verified_count": 6,
+    "verified_count": 7,
     "needs_review_count": 0,
-    "not_found_count": 2
+    "not_found_count": 1
   },
   {
     "id": "synthetic_09_telecom_bandwidth_sla",
@@ -320,7 +330,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     "fields": {
       "payment_terms": {
         "field_name": "payment_terms",
-        "value": "Net 30",
+        "value": "Net 30 days",
         "normalized": 30,
         "source_quote": "Customer shall satisfy all undisputed invoices under payment terms of Net 30 days from\nthe invoice date.",
         "page": 2,
@@ -350,8 +360,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "automatically renew for successive",
-        "normalized": "true",
+        "value": "This Agreement shall automatically renew for successive 12-month periods unless either party provides written notice of non-renewal.",
+        "normalized": "true (12 months)",
         "source_quote": "This Agreement shall automatically renew for successive 12-month periods unless either\nparty provides written notice of non-renewal.",
         "page": 1,
         "confidence": 0.91,
@@ -370,8 +380,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "liability_cap": {
         "field_name": "liability_cap",
-        "value": "Except for gross negligence or willful misconduct, each party's aggregate liability shall not\nexceed $1,000,000 USD under this Agreement.",
-        "normalized": "Except for gross negligence or willful misconduct, each party's aggregate liability shall not\nexceed $1,000,000 USD under this Agreement.",
+        "value": "$1,000,000 USD",
+        "normalized": "1,000,000 USD",
         "source_quote": "Except for gross negligence or willful misconduct, each party's aggregate liability shall not\nexceed $1,000,000 USD under this Agreement.",
         "page": 3,
         "confidence": 0.92,
@@ -380,8 +390,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": "governed by and construed in accordance with the laws of the\nState of Delaware,",
-        "normalized": "governed by and construed in accordance with the laws of the\nState of Delaware",
+        "value": "Delaware",
+        "normalized": "Delaware",
         "source_quote": "This Agreement shall be governed by and construed in accordance with the laws of the\nState of Delaware, without regard to conflict of laws principles.",
         "page": 3,
         "confidence": 0.96,
@@ -390,11 +400,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
-        "value": "minimum annual volume commitment of 1",
-        "normalized": "minimum annual volume commitment of 1",
+        "value": "100 enterprise server nodes",
+        "normalized": "100 enterprise server nodes",
         "source_quote": "Customer guarantees a minimum annual volume commitment of 100 enterprise\nserver nodes throughout each contract year.",
         "page": 3,
-        "confidence": 0.9,
+        "confidence": 0.92,
         "status": "verified",
         "review_reason": null
       }
@@ -405,9 +415,9 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 457.9,
-      "estimated_cost_usd": 0.00027,
-      "tokens_used": 772
+      "processing_time_ms": 8.22,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 422
     },
     "negotiation_levers": [
       {
@@ -452,7 +462,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     "fields": {
       "payment_terms": {
         "field_name": "payment_terms",
-        "value": "paid within sixty (60) days",
+        "value": "within sixty (60) days",
         "normalized": 60,
         "source_quote": "Invoices shall be paid within sixty (60) days of receipt by Subscriber's accounts payable\ndepartment.",
         "page": 2,
@@ -482,7 +492,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "consecutive 12-month periods",
+        "value": "The subscription shall automatically renew for consecutive 12-month periods unless terminated in accordance with Section 4.",
         "normalized": "true (12 months)",
         "source_quote": "The subscription shall automatically renew for consecutive 12-month periods unless\nterminated in accordance with Section 4.",
         "page": 1,
@@ -492,7 +502,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "termination_notice": {
         "field_name": "termination_notice",
-        "value": "upon ninety (90) days prior\nwritten notice",
+        "value": "upon ninety (90) days prior written notice",
         "normalized": 90,
         "source_quote": "Either party may elect non-renewal or termination upon ninety (90) days prior\nwritten notice before the expiration of the current term.",
         "page": 3,
@@ -502,8 +512,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "liability_cap": {
         "field_name": "liability_cap",
-        "value": "The total aggregate liability of either party for all claims arising out of this Agreement shall not\nexceed $2,500,000 USD.",
-        "normalized": "The total aggregate liability of either party for all claims arising out of this Agreement shall not\nexceed $2,500,000 USD.",
+        "value": "$2,500,000 USD",
+        "normalized": "2,500,000 USD",
         "source_quote": "The total aggregate liability of either party for all claims arising out of this Agreement shall not\nexceed $2,500,000 USD.",
         "page": 3,
         "confidence": 0.92,
@@ -512,8 +522,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": "governed by the laws of the State of New York,",
-        "normalized": "governed by the laws of the State of New York",
+        "value": "New York",
+        "normalized": "New York",
         "source_quote": "This Agreement is governed by the laws of the State of New York, excluding its conflicts of\nlaw rules.",
         "page": 3,
         "confidence": 0.96,
@@ -522,11 +532,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
-        "value": "minimum spend of $120,000 USD",
-        "normalized": "minimum spend of $120,000 USD",
+        "value": "$120,000 USD per contract year across all operational subsidiaries",
+        "normalized": "$120,000 USD per contract year",
         "source_quote": "Subscriber agrees to maintain a minimum spend of $120,000 USD per contract year\nacross all operational subsidiaries.",
         "page": 2,
-        "confidence": 0.9,
+        "confidence": 0.92,
         "status": "verified",
         "review_reason": null
       }
@@ -537,9 +547,9 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 452.5,
-      "estimated_cost_usd": 0.00024,
-      "tokens_used": 674
+      "processing_time_ms": 2.79,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 324
     },
     "negotiation_levers": [
       {
@@ -614,7 +624,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "shall not automatically renew",
+        "value": "The contract shall not automatically renew and terminates automatically upon term expiry.",
         "normalized": "false",
         "source_quote": "The contract shall not automatically renew and terminates automatically upon term expiry.",
         "page": 1,
@@ -634,8 +644,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "liability_cap": {
         "field_name": "liability_cap",
-        "value": "The total aggregate liability shall not exceed 500,000 EUR under all freight orders.",
-        "normalized": "The total aggregate liability shall not exceed 500,000 EUR under all freight orders.",
+        "value": "500,000 EUR",
+        "normalized": "500,000 EUR",
         "source_quote": "The total aggregate liability shall not exceed 500,000 EUR under all freight orders.",
         "page": 3,
         "confidence": 0.92,
@@ -644,34 +654,34 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": null,
-        "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "value": "Germany",
+        "normalized": "Germany",
+        "source_quote": "This contract is governed by and construed under the laws of Germany (Bundesrepublik\nDeutschland).",
+        "page": 3,
+        "confidence": 0.96,
+        "status": "verified",
+        "review_reason": null
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
-        "value": "commits to purchase at least 5",
-        "normalized": "commits to purchase at least 5",
+        "value": "5,000 standard freight pallets per calendar year",
+        "normalized": "5,000 standard freight pallets per calendar year",
         "source_quote": "Der Auftraggeber commits to purchase at least 5,000 standard freight pallets per\ncalendar year.",
         "page": 2,
-        "confidence": 0.9,
+        "confidence": 0.92,
         "status": "verified",
         "review_reason": null
       }
     },
     "summary": {
-      "verified_count": 7,
+      "verified_count": 8,
       "needs_review_count": 0,
-      "not_found_count": 1,
+      "not_found_count": 0,
       "total_fields": 8,
-      "overall_confidence": 0.92,
-      "processing_time_ms": 452.2,
-      "estimated_cost_usd": 0.00021,
-      "tokens_used": 597
+      "overall_confidence": 0.93,
+      "processing_time_ms": 2.35,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 247
     },
     "negotiation_levers": [
       {
@@ -682,6 +692,15 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "recommendation": "Add an annual collar/cap (e.g., lower of CPI or 3.0% maximum per annum).",
         "rationale": "Uncapped index-linked adjustments expose the organisation to runaway inflationary budget creep. A defined annual ceiling establishes budgetary predictability.",
         "impact": "high"
+      },
+      {
+        "id": "lever-governing-law",
+        "field_name": "governing_law",
+        "title": "Jurisdiction Harmonization",
+        "current_term": "Germany",
+        "recommendation": "Harmonize governing law to buyer's standard operating jurisdiction.",
+        "rationale": "Foreign or distant jurisdictions dramatically increase dispute resolution expenses and require local counsel retention.",
+        "impact": "low"
       }
     ],
     "pages": [
@@ -707,7 +726,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     "fields": {
       "payment_terms": {
         "field_name": "payment_terms",
-        "value": "Net 45",
+        "value": "Net 45 calendar days",
         "normalized": 45,
         "source_quote": "Payment shall be due under payment terms of Net 45 calendar days after receipt of goods.",
         "page": 3,
@@ -737,7 +756,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "shall not automatically renew",
+        "value": "This Agreement shall not automatically renew upon expiration of the initial term.",
         "normalized": "false",
         "source_quote": "This Agreement shall not automatically renew upon expiration of the initial term.",
         "page": 3,
@@ -757,8 +776,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "liability_cap": {
         "field_name": "liability_cap",
-        "value": "Each party's total aggregate liability under this agreement shall not exceed $5,000,000 USD.",
-        "normalized": "Each party's total aggregate liability under this agreement shall not exceed $5,000,000 USD.",
+        "value": "$5,000,000 USD",
+        "normalized": "5,000,000 USD",
         "source_quote": "Each party's total aggregate liability under this agreement shall not exceed $5,000,000 USD.",
         "page": 4,
         "confidence": 0.92,
@@ -767,8 +786,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": "governed by the laws of the State of California,",
-        "normalized": "governed by the laws of the State of California",
+        "value": "California",
+        "normalized": "California",
         "source_quote": "This Agreement shall be governed by the laws of the State of California, without regard to\nconflicts principles.",
         "page": 4,
         "confidence": 0.96,
@@ -777,11 +796,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
-        "value": "minimum volume commitment of 1",
-        "normalized": "minimum volume commitment of 1",
+        "value": "10,000 accelerator units per calendar year",
+        "normalized": "10,000 accelerator units per calendar year",
         "source_quote": "Buyer guarantees a minimum volume commitment of 10,000 accelerator units per\ncalendar year.",
         "page": 2,
-        "confidence": 0.9,
+        "confidence": 0.92,
         "status": "verified",
         "review_reason": null
       }
@@ -792,16 +811,16 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 452.4,
-      "estimated_cost_usd": 0.00023,
-      "tokens_used": 659
+      "processing_time_ms": 2.71,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 309
     },
     "negotiation_levers": [
       {
         "id": "lever-governing-law",
         "field_name": "governing_law",
         "title": "Jurisdiction Harmonization",
-        "current_term": "governed by the laws of the State of California",
+        "current_term": "California",
         "recommendation": "Harmonize governing law to buyer's standard operating jurisdiction.",
         "rationale": "Foreign or distant jurisdictions dramatically increase dispute resolution expenses and require local counsel retention.",
         "impact": "low"
@@ -834,7 +853,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     "fields": {
       "payment_terms": {
         "field_name": "payment_terms",
-        "value": "Net 30",
+        "value": "Net 30 days",
         "normalized": 30,
         "source_quote": "Client will pay all invoices under payment terms of Net 30 days from date of presentation.",
         "page": 2,
@@ -864,8 +883,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "will automatically renew",
-        "normalized": "true",
+        "value": "This Agreement will automatically renew for successive 12-month periods unless canceled.",
+        "normalized": "true (12 months)",
         "source_quote": "This Agreement will automatically renew for successive 12-month periods unless canceled.",
         "page": 1,
         "confidence": 0.91,
@@ -894,8 +913,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": "governed by the laws of England and Wales.",
-        "normalized": "governed by the laws of England and Wales",
+        "value": "England and Wales",
+        "normalized": "England and Wales",
         "source_quote": "This agreement is governed by the laws of England and Wales.",
         "page": 2,
         "confidence": 0.96,
@@ -919,9 +938,9 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 2,
       "total_fields": 8,
       "overall_confidence": 0.94,
-      "processing_time_ms": 452.8,
-      "estimated_cost_usd": 0.00021,
-      "tokens_used": 592
+      "processing_time_ms": 2.21,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 242
     },
     "negotiation_levers": [
       {
@@ -971,7 +990,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     "fields": {
       "payment_terms": {
         "field_name": "payment_terms",
-        "value": "Net 60",
+        "value": "Net 60 days",
         "normalized": 60,
         "source_quote": "Payment shall be completed under Net 60 days from bill of lading issuance.",
         "page": 2,
@@ -981,13 +1000,13 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "price_adjustment": {
         "field_name": "price_adjustment",
-        "value": null,
-        "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "value": "subject to renegotiation",
+        "normalized": "renegotiable",
+        "source_quote": "Commodity raw material prices are subject to renegotiation every six months based on\nfeedstocks.",
+        "page": 2,
+        "confidence": 0.92,
+        "status": "verified",
+        "review_reason": null
       },
       "contract_term": {
         "field_name": "contract_term",
@@ -1001,7 +1020,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "shall not automatically renew",
+        "value": "The contract shall not automatically renew and terminates upon expiration.",
         "normalized": "false",
         "source_quote": "The contract shall not automatically renew and terminates upon expiration.",
         "page": 1,
@@ -1031,8 +1050,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": "governed by the laws of the State of Texas.",
-        "normalized": "governed by the laws of the State of Texas",
+        "value": "Texas",
+        "normalized": "Texas",
         "source_quote": "This agreement is governed by the laws of the State of Texas.",
         "page": 3,
         "confidence": 0.96,
@@ -1041,26 +1060,35 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
-        "value": "commits to purchase at least 2",
-        "normalized": "commits to purchase at least 2",
+        "value": "250 metric tons of material per calendar month",
+        "normalized": "250 metric tons of material per calendar month",
         "source_quote": "Purchaser commits to purchase at least 250 metric tons of material per calendar\nmonth.",
         "page": 2,
-        "confidence": 0.9,
+        "confidence": 0.92,
         "status": "verified",
         "review_reason": null
       }
     },
     "summary": {
-      "verified_count": 6,
+      "verified_count": 7,
       "needs_review_count": 1,
-      "not_found_count": 1,
+      "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.89,
-      "processing_time_ms": 452.4,
-      "estimated_cost_usd": 0.00022,
-      "tokens_used": 626
+      "processing_time_ms": 2.41,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 276
     },
     "negotiation_levers": [
+      {
+        "id": "lever-price-adjustment",
+        "field_name": "price_adjustment",
+        "title": "Formalize Renegotiation Triggers",
+        "current_term": "Subject to renegotiation / mutual agreement",
+        "recommendation": "Include minimum 90-day advance notice for price revisions and termination rights if agreement is not reached.",
+        "rationale": "Vague renegotiation clauses create hold-up problems where the vendor requests an increase close to renewal when switching costs are highest.",
+        "impact": "medium"
+      },
       {
         "id": "lever-liability-cap",
         "field_name": "liability_cap",
@@ -1069,15 +1097,6 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "recommendation": "Cap aggregate vendor and buyer liability at 12 months' trailing fees paid or fixed $1M ceiling.",
         "rationale": "Uncapped liability or ambiguous limits represent an unquantified balance sheet risk during audits and vendor security incidents.",
         "impact": "high"
-      },
-      {
-        "id": "lever-governing-law",
-        "field_name": "governing_law",
-        "title": "Jurisdiction Harmonization",
-        "current_term": "governed by the laws of the State of Texas",
-        "recommendation": "Harmonize governing law to buyer's standard operating jurisdiction.",
-        "rationale": "Foreign or distant jurisdictions dramatically increase dispute resolution expenses and require local counsel retention.",
-        "impact": "low"
       }
     ],
     "pages": [
@@ -1103,7 +1122,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     "fields": {
       "payment_terms": {
         "field_name": "payment_terms",
-        "value": "Net 45",
+        "value": "Net 45 calendar days",
         "normalized": 45,
         "source_quote": "All maintenance fees are subject to payment terms of Net 45 calendar days after\ninvoice approval.",
         "page": 4,
@@ -1133,8 +1152,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "will automatically renew",
-        "normalized": "true",
+        "value": "The contract will automatically renew for successive 12-month periods.",
+        "normalized": "true (12 months)",
         "source_quote": "The contract will automatically renew for successive 12-month periods.",
         "page": 1,
         "confidence": 0.91,
@@ -1153,18 +1172,18 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "liability_cap": {
         "field_name": "liability_cap",
-        "value": null,
-        "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "value": "$750,000 USD",
+        "normalized": "750,000 USD",
+        "source_quote": "Total liability under this agreement shall not exceed $750,000 USD.",
+        "page": 2,
+        "confidence": 0.92,
+        "status": "verified",
+        "review_reason": null
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": "governed by the laws of the State of Illinois.",
-        "normalized": "governed by the laws of the State of Illinois",
+        "value": "Illinois",
+        "normalized": "Illinois",
         "source_quote": "This agreement is governed by the laws of the State of Illinois.",
         "page": 2,
         "confidence": 0.96,
@@ -1173,24 +1192,24 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
-        "value": "minimum spend of $350,000 USD",
-        "normalized": "minimum spend of $350,000 USD",
+        "value": "$350,000 USD per contract year",
+        "normalized": "$350,000 USD per contract year",
         "source_quote": "Owner commits to a minimum spend of $350,000 USD per contract year for\ncorporate campus maintenance.",
         "page": 4,
-        "confidence": 0.9,
+        "confidence": 0.92,
         "status": "verified",
         "review_reason": null
       }
     },
     "summary": {
-      "verified_count": 7,
+      "verified_count": 8,
       "needs_review_count": 0,
-      "not_found_count": 1,
+      "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 452.5,
-      "estimated_cost_usd": 0.00024,
-      "tokens_used": 674
+      "processing_time_ms": 2.86,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 324
     },
     "negotiation_levers": [
       {
@@ -1206,7 +1225,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "id": "lever-governing-law",
         "field_name": "governing_law",
         "title": "Jurisdiction Harmonization",
-        "current_term": "governed by the laws of the State of Illinois",
+        "current_term": "Illinois",
         "recommendation": "Harmonize governing law to buyer's standard operating jurisdiction.",
         "rationale": "Foreign or distant jurisdictions dramatically increase dispute resolution expenses and require local counsel retention.",
         "impact": "low"
@@ -1239,7 +1258,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     "fields": {
       "payment_terms": {
         "field_name": "payment_terms",
-        "value": "paid within thirty (30) days",
+        "value": "within thirty (30) days",
         "normalized": 30,
         "source_quote": "Invoices shall be paid within thirty (30) days from the invoice issuance date.",
         "page": 2,
@@ -1259,19 +1278,19 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "contract_term": {
         "field_name": "contract_term",
-        "value": null,
-        "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "value": "duration of this agreement is 24 months",
+        "normalized": "24 months",
+        "source_quote": "The duration of this agreement is 24 months commencing July 1, 2024.",
+        "page": 1,
+        "confidence": 0.94,
+        "status": "verified",
+        "review_reason": null
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "shall not automatically renew",
+        "value": "1.3 Non-Renewing.",
         "normalized": "false",
-        "source_quote": "This Agreement shall not automatically renew and expires automatically at the end of the\nterm.",
+        "source_quote": "1.3 Non-Renewing.",
         "page": 1,
         "confidence": 0.91,
         "status": "verified",
@@ -1289,8 +1308,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "liability_cap": {
         "field_name": "liability_cap",
-        "value": "Aggregate liability arising from any SOW shall not exceed fees paid in the preceding twelve\nmonths.",
-        "normalized": "Aggregate liability arising from any SOW shall not exceed fees paid in the preceding twelve\nmonths.",
+        "value": "fees paid in the preceding twelve months",
+        "normalized": "fees paid in the preceding twelve months",
         "source_quote": "Aggregate liability arising from any SOW shall not exceed fees paid in the preceding twelve\nmonths.",
         "page": 3,
         "confidence": 0.92,
@@ -1299,8 +1318,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": "governed by the laws of the Commonwealth of Massachusetts.",
-        "normalized": "governed by the laws of the Commonwealth of Massachusetts",
+        "value": "Massachusetts",
+        "normalized": "Massachusetts",
         "source_quote": "This Agreement shall be governed by the laws of the Commonwealth of Massachusetts.",
         "page": 3,
         "confidence": 0.96,
@@ -1319,14 +1338,14 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       }
     },
     "summary": {
-      "verified_count": 6,
+      "verified_count": 7,
       "needs_review_count": 0,
-      "not_found_count": 2,
+      "not_found_count": 1,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 452.2,
-      "estimated_cost_usd": 0.00021,
-      "tokens_used": 611
+      "processing_time_ms": 2.28,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 261
     },
     "negotiation_levers": [
       {
@@ -1342,7 +1361,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "id": "lever-governing-law",
         "field_name": "governing_law",
         "title": "Jurisdiction Harmonization",
-        "current_term": "governed by the laws of the Commonwealth of Massachusetts",
+        "current_term": "Massachusetts",
         "recommendation": "Harmonize governing law to buyer's standard operating jurisdiction.",
         "rationale": "Foreign or distant jurisdictions dramatically increase dispute resolution expenses and require local counsel retention.",
         "impact": "low"
@@ -1371,7 +1390,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     "fields": {
       "payment_terms": {
         "field_name": "payment_terms",
-        "value": "Net 30",
+        "value": "Net 30 days",
         "normalized": 30,
         "source_quote": "Customer will remit payment under Net 30 days terms from invoice dispatch.",
         "page": 2,
@@ -1401,8 +1420,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "will automatically renew",
-        "normalized": "true",
+        "value": "The contract will automatically renew for consecutive 12-month periods.",
+        "normalized": "true (12 months)",
         "source_quote": "The contract will automatically renew for consecutive 12-month periods.",
         "page": 1,
         "confidence": 0.91,
@@ -1421,8 +1440,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "liability_cap": {
         "field_name": "liability_cap",
-        "value": "Carrier's total aggregate liability for circuit interruption shall not exceed $3,000,000 USD.",
-        "normalized": "Carrier's total aggregate liability for circuit interruption shall not exceed $3,000,000 USD.",
+        "value": "$3,000,000 USD",
+        "normalized": "3,000,000 USD",
         "source_quote": "Carrier's total aggregate liability for circuit interruption shall not exceed $3,000,000 USD.",
         "page": 3,
         "confidence": 0.92,
@@ -1431,8 +1450,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": "governed by the laws of the State of Washington.",
-        "normalized": "governed by the laws of the State of Washington",
+        "value": "Washington",
+        "normalized": "Washington",
         "source_quote": "This agreement is governed by the laws of the State of Washington.",
         "page": 3,
         "confidence": 0.96,
@@ -1441,11 +1460,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
-        "value": "commits to purchase at least 1",
-        "normalized": "commits to purchase at least 1",
+        "value": "10 Gbps dedicated continuous throughput",
+        "normalized": "10 Gbps dedicated continuous throughput",
         "source_quote": "Customer commits to purchase at least 10 Gbps dedicated continuous throughput\nacross the network.",
         "page": 2,
-        "confidence": 0.9,
+        "confidence": 0.92,
         "status": "verified",
         "review_reason": null
       }
@@ -1456,9 +1475,9 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 452.1,
-      "estimated_cost_usd": 0.00021,
-      "tokens_used": 593
+      "processing_time_ms": 2.28,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 243
     },
     "negotiation_levers": [
       {
@@ -1512,7 +1531,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     "fields": {
       "payment_terms": {
         "field_name": "payment_terms",
-        "value": "Net 60",
+        "value": "Net 60 days",
         "normalized": 60,
         "source_quote": "Payment shall be completed under Net 60 days from invoice generation.",
         "page": 3,
@@ -1542,8 +1561,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "will automatically renew",
-        "normalized": "true",
+        "value": "The maintenance tier will automatically renew for successive 12-month periods.",
+        "normalized": "true (12 months)",
         "source_quote": "The maintenance tier will automatically renew for successive 12-month periods.",
         "page": 2,
         "confidence": 0.91,
@@ -1562,7 +1581,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "liability_cap": {
         "field_name": "liability_cap",
-        "value": "Licensor agrees that aggregate liability is unlimited and uncapped liability applies for security\nbreaches or ledger loss.",
+        "value": "unlimited",
         "normalized": "uncapped",
         "source_quote": "Licensor agrees that aggregate liability is unlimited and uncapped liability applies for security\nbreaches or ledger loss.",
         "page": 4,
@@ -1572,8 +1591,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": "governed by the laws of the State of New York.",
-        "normalized": "governed by the laws of the State of New York",
+        "value": "New York",
+        "normalized": "New York",
         "source_quote": "This Agreement is governed by the laws of the State of New York.",
         "page": 4,
         "confidence": 0.96,
@@ -1597,9 +1616,9 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 1,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 452.4,
-      "estimated_cost_usd": 0.00022,
-      "tokens_used": 616
+      "processing_time_ms": 2.34,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 266
     },
     "negotiation_levers": [
       {
@@ -1615,7 +1634,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "id": "lever-liability-cap",
         "field_name": "liability_cap",
         "title": "Institute Aggregate Liability Ceiling",
-        "current_term": "Licensor agrees that aggregate liability is unlimited and uncapped liability applies for security\nbreaches or ledger loss.",
+        "current_term": "unlimited",
         "recommendation": "Cap aggregate vendor and buyer liability at 12 months' trailing fees paid or fixed $1M ceiling.",
         "rationale": "Uncapped liability or ambiguous limits represent an unquantified balance sheet risk during audits and vendor security incidents.",
         "impact": "high"
@@ -1687,7 +1706,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "shall not automatically renew",
+        "value": "This contract shall not automatically renew and terminates upon conclusion of the 6-month term.",
         "normalized": "false",
         "source_quote": "This contract shall not automatically renew and terminates upon conclusion of the 6-month\nterm.",
         "page": 1,
@@ -1697,9 +1716,9 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "termination_notice": {
         "field_name": "termination_notice",
-        "value": "within 14 days",
-        "normalized": 14,
-        "source_quote": "Caterer invoices weekly, and all invoices shall be paid within 14 days of receipt.",
+        "value": "written notice of at least 15 days",
+        "normalized": 15,
+        "source_quote": "Host may cancel event services upon written notice of at least 15 days.",
         "page": 2,
         "confidence": 0.93,
         "status": "verified",
@@ -1707,8 +1726,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "liability_cap": {
         "field_name": "liability_cap",
-        "value": "Caterer's aggregate liability shall not exceed $100,000 USD for any food safety or property\nclaims.",
-        "normalized": "Caterer's aggregate liability shall not exceed $100,000 USD for any food safety or property\nclaims.",
+        "value": "$100,000 USD",
+        "normalized": "100,000 USD",
         "source_quote": "Caterer's aggregate liability shall not exceed $100,000 USD for any food safety or property\nclaims.",
         "page": 2,
         "confidence": 0.92,
@@ -1717,8 +1736,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": "governed by the laws of the State of Colorado.",
-        "normalized": "governed by the laws of the State of Colorado",
+        "value": "Colorado",
+        "normalized": "Colorado",
         "source_quote": "This agreement is governed by the laws of the State of Colorado.",
         "page": 2,
         "confidence": 0.96,
@@ -1727,11 +1746,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
-        "value": "minimum volume commitment of 5",
-        "normalized": "minimum volume commitment of 5",
+        "value": "500 meal covers per week",
+        "normalized": "500 meal covers per week",
         "source_quote": "Host guarantees a minimum volume commitment of 500 meal covers per week.",
         "page": 1,
-        "confidence": 0.9,
+        "confidence": 0.92,
         "status": "verified",
         "review_reason": null
       }
@@ -1742,9 +1761,9 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 452.2,
-      "estimated_cost_usd": 0.0002,
-      "tokens_used": 574
+      "processing_time_ms": 2.07,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 224
     },
     "negotiation_levers": [
       {
@@ -1760,7 +1779,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "id": "lever-governing-law",
         "field_name": "governing_law",
         "title": "Jurisdiction Harmonization",
-        "current_term": "governed by the laws of the State of Colorado",
+        "current_term": "Colorado",
         "recommendation": "Harmonize governing law to buyer's standard operating jurisdiction.",
         "rationale": "Foreign or distant jurisdictions dramatically increase dispute resolution expenses and require local counsel retention.",
         "impact": "low"
@@ -1785,7 +1804,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     "fields": {
       "payment_terms": {
         "field_name": "payment_terms",
-        "value": "Net 30",
+        "value": "Net 30 days",
         "normalized": 30,
         "source_quote": "Client will settle all charges under payment terms of Net 30 days from invoice receipt.",
         "page": 2,
@@ -1815,8 +1834,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
-        "value": "will automatically renew",
-        "normalized": "true",
+        "value": "The contract will automatically renew for successive 12-month periods.",
+        "normalized": "true (12 months)",
         "source_quote": "The contract will automatically renew for successive 12-month periods.",
         "page": 1,
         "confidence": 0.91,
@@ -1835,8 +1854,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "liability_cap": {
         "field_name": "liability_cap",
-        "value": "Aggregate liability under this contract shall not exceed $2,000,000 USD.",
-        "normalized": "Aggregate liability under this contract shall not exceed $2,000,000 USD.",
+        "value": "$2,000,000 USD",
+        "normalized": "2,000,000 USD",
         "source_quote": "Aggregate liability under this contract shall not exceed $2,000,000 USD.",
         "page": 3,
         "confidence": 0.92,
@@ -1845,8 +1864,8 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "governing_law": {
         "field_name": "governing_law",
-        "value": "governed by the laws of the State of Georgia.",
-        "normalized": "governed by the laws of the State of Georgia",
+        "value": "Georgia",
+        "normalized": "Georgia",
         "source_quote": "This agreement is governed by the laws of the State of Georgia.",
         "page": 3,
         "confidence": 0.96,
@@ -1855,11 +1874,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
-        "value": "minimum volume commitment of 1",
-        "normalized": "minimum volume commitment of 1",
+        "value": "1,200 patrol hours per month",
+        "normalized": "1,200 patrol hours per month",
         "source_quote": "Client agrees to a minimum volume commitment of 1,200 patrol hours per month.",
         "page": 2,
-        "confidence": 0.9,
+        "confidence": 0.92,
         "status": "verified",
         "review_reason": null
       }
@@ -1870,9 +1889,9 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 1,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 452.1,
-      "estimated_cost_usd": 0.00021,
-      "tokens_used": 596
+      "processing_time_ms": 2.25,
+      "estimated_cost_usd": 0.0,
+      "tokens_used": 246
     },
     "negotiation_levers": [
       {

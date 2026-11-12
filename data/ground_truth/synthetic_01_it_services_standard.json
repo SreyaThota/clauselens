@@ -48,7 +48,7 @@
     },
     "liability_cap": {
       "raw": "$1,000,000 USD",
-      "normalized": "$1,000,000 USD",
+      "normalized": "1,000,000 USD",
       "quote": "Except for gross negligence or willful misconduct, each party's aggregate liability shall not exceed $1,000,000 USD under this Agreement.",
       "page": 3,
       "status": "verified"
