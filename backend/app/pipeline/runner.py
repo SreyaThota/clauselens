@@ -1,6 +1,7 @@
 from __future__ import annotations
 import time
 import os
+import re
 from typing import Dict, List, Optional, Tuple
 from .schemas import (
     ExtractionResult,
@@ -26,6 +27,39 @@ FIELD_NAMES = [
     "governing_law",
     "volume_commitment",
 ]
+
+# Related keywords for suspicious not-found detection in contract text
+SUSPICIOUS_KEYWORDS: Dict[str, List[str]] = {
+    "auto_renewal": ["renew", "renewal", "automatic"],
+    "governing_law": ["governing law", "governed by", "jurisdiction"],
+    "contract_term": ["term", "duration", "effective date"],
+    "termination_notice": ["notice", "terminate", "termination"],
+    "liability_cap": ["liability", "cap", "limit"],
+    "payment_terms": ["payment", "net", "invoice"],
+    "volume_commitment": ["volume", "minimum", "units", "quantity"],
+    "price_adjustment": ["price", "adjust", "index"],
+}
+
+def find_suspicious_not_found_evidence(field_name: str, pages: List[PageText]) -> Optional[Tuple[str, int]]:
+    """
+    Scans contract pages for related keywords when a field is extracted as 'none found'.
+    Returns (matching_sentence, page_number) if suspicious related text exists in the document.
+    """
+    keywords = SUSPICIOUS_KEYWORDS.get(field_name, [])
+    if not keywords:
+        return None
+
+    for page in pages:
+        for raw_s in re.split(r"(?<=[.!?\n])\s+", page.text):
+            s_clean = " ".join(raw_s.split()).strip()
+            if len(s_clean) < 10:
+                continue
+            s_lower = s_clean.lower()
+            for kw in keywords:
+                pattern = r"\b" + re.escape(kw) + r"\b"
+                if re.search(pattern, s_lower):
+                    return s_clean, page.page_number
+    return None
 
 def process_raw_extraction(
     raw: RawLLMExtraction,
@@ -62,17 +96,33 @@ def process_raw_extraction(
         )
 
         if is_empty:
-            field = ExtractedField(
-                field_name=name,
-                value=None,
-                normalized="none found",
-                source_quote=None,
-                page=None,
-                confidence=0.0,
-                status="not_found",
-                review_reason="Term not present in the contract clauses."
-            )
-            not_found_count += 1
+            suspicious_match = find_suspicious_not_found_evidence(name, pages)
+            if suspicious_match:
+                ev_sentence, ev_page = suspicious_match
+                field = ExtractedField(
+                    field_name=name,
+                    value=None,
+                    normalized="none found",
+                    source_quote=ev_sentence,
+                    page=ev_page,
+                    confidence=0.35,
+                    status="needs_review",
+                    review_reason="Not found, but related text exists"
+                )
+                needs_review_count += 1
+                confidence_sum += 0.35
+            else:
+                field = ExtractedField(
+                    field_name=name,
+                    value=None,
+                    normalized="none found",
+                    source_quote=None,
+                    page=None,
+                    confidence=0.0,
+                    status="not_found",
+                    review_reason="Term not present in the contract clauses."
+                )
+                not_found_count += 1
             fields[name] = field
             continue
 

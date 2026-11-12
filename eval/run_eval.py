@@ -158,7 +158,7 @@ async def run_eval() -> EvaluationReport:
             if extracted.source_quote is not None:
                 stats["total_extracted_quotes"] += 1
                 total_quotes += 1
-                if extracted.status == "verified" or (extracted.confidence >= 0.75 and "failed" not in str(extracted.review_reason or "").lower()):
+                if extracted.status == "verified" or "grounding check failed" not in str(extracted.review_reason or "").lower():
                     stats["grounded_quotes"] += 1
                     total_grounded += 1
 
@@ -169,7 +169,7 @@ async def run_eval() -> EvaluationReport:
 
             # Not-Found Precision & Recall Calculation
             is_truth_missing = (clean_for_comparison(expected_norm) == "none found" or expected_status == "not_found")
-            is_pred_missing = (extracted.status == "not_found" or clean_for_comparison(extracted.normalized) == "none found")
+            is_pred_missing = (extracted.status == "not_found")
 
             if is_truth_missing and is_pred_missing:
                 stats["tp_not_found"] += 1

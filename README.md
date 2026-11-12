@@ -60,11 +60,11 @@ ClauseLens is an open-source commercial contract intelligence system that automa
 | "Synthetic contracts, 18 documents. Results show the pipeline end to end, not that extraction is solved."  |
 +-------------------------------------------------------------------------------------------------------------+
 | [ Accuracy ]    [ Grounding ]   [ NF Precision ]   [ NF Recall ]   [ Review Rate ]  [ Latency ]  [ Cost ]   |
-|    86.8%            99.1%            33.3%            100.0%             0.7%         6.15 ms    $0.00000   |
+|    86.8%            100.0%           100.0%            44.4%            16.7%         2.87 ms    $0.00000   |
 +-------------------------------------------------------------------------------------------------------------+
 | PIPELINE COMPARISON                                                                                         |
 | Engine                       Accuracy  Grounding  NF Prec  NF Recall  Review  Latency  Cost/Doc  Status     |
-| Deterministic Baseline (Off)    86.8%      99.1%    33.3%     100.0%    0.7%   6.15ms  $0.00000  Evaluated  |
+| Deterministic Baseline (Off)    86.8%     100.0%   100.0%      44.4%   16.7%   2.87ms  $0.00000  Evaluated  |
 | LLM Pipeline (Gemini/OpenAI)        —          —        —          —       —        —         —  not run*   |
 | *No API key configured in environment. Deterministic baseline evaluated across all 18 documents.            |
 +-------------------------------------------------------------------------------------------------------------+
@@ -87,23 +87,23 @@ Evaluation conducted against **18 hand-written, frozen synthetic contracts** (14
 | Field Name | Extraction Accuracy | Grounding Rate | Not-Found Precision | Not-Found Recall | Review Rate |
 |---|---|---|---|---|---|
 | `payment_terms` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
-| `price_adjustment` | **100.0%** | 100.0% | 100.0% | 100.0% | 0.0% |
-| `contract_term` | **72.2%** | 100.0% | 0.0% | 100.0% | 0.0% |
-| `auto_renewal` | **88.9%** | 100.0% | 33.3% | 100.0% | 0.0% |
-| `termination_notice` | **83.3%** | 100.0% | 0.0% | 100.0% | 0.0% |
-| `liability_cap` | **83.3%** | 92.9% | 50.0% | 100.0% | 5.6% |
-| `governing_law` | **77.8%** | 100.0% | 0.0% | 100.0% | 0.0% |
-| `volume_commitment` | **88.9%** | 100.0% | 66.7% | 100.0% | 0.0% |
-| **Overall Dataset** | **86.8%** | **99.1%** | **33.3%** | **100.0%** | **0.7%** |
+| `price_adjustment` | **100.0%** | 100.0% | 100.0% | 50.0% | 5.6% |
+| `contract_term` | **72.2%** | 100.0% | 100.0% | 100.0% | 27.8% |
+| `auto_renewal` | **88.9%** | 100.0% | 100.0% | 100.0% | 11.1% |
+| `termination_notice` | **83.3%** | 100.0% | 100.0% | 100.0% | 16.7% |
+| `liability_cap` | **83.3%** | 100.0% | 100.0% | 50.0% | 22.2% |
+| `governing_law` | **77.8%** | 100.0% | 100.0% | 100.0% | 22.2% |
+| `volume_commitment` | **88.9%** | 100.0% | 100.0% | 25.0% | 27.8% |
+| **Overall Dataset** | **86.8%** | **100.0%** | **100.0%** | **44.4%** | **16.7%** |
 
 ### Execution Metrics
 - **Total Evaluated Contracts:** 18 documents (144 commercial fields)
-- **Overall Normalization Accuracy:** 86.8%
-- **Verbatim Grounding Rate:** 99.1% (RapidFuzz ratio ≥ 0.90 against cited page)
-- **Not-Found Precision:** 33.3% ($TP / [TP + FP]$)
-- **Not-Found Recall:** 100.0% ($TP / [TP + FN]$)
-- **Human Review Flag Rate:** 0.7% (confidence < 0.75 or grounding mismatch)
-- **Average Measured Latency:** 6.15 ms per document
+- **Overall Normalization Accuracy:** 86.8% (unchanged)
+- **Verbatim Grounding Rate:** 100.0% (RapidFuzz ratio ≥ 0.90 against cited page)
+- **Not-Found Precision:** 100.0% ($TP / [TP + FP]$)
+- **Not-Found Recall:** 44.4% ($TP / [TP + FN]$)
+- **Human Review Flag Rate:** 16.7% (confidence < 0.75, ungrounded, or suspicious not-found)
+- **Average Measured Latency:** 2.87 ms per document
 - **Average Cost:** $0.00000 USD (offline execution)
 - **Real-LLM Step 4:** Skipped because neither `GEMINI_API_KEY` nor `OPENAI_API_KEY` is configured in the environment.
 
@@ -113,9 +113,10 @@ Evaluation conducted against **18 hand-written, frozen synthetic contracts** (14
 
 > **"Synthetic contracts, 18 documents. Results show the pipeline end to end, not that extraction is solved."**
 
-1. **Deterministic Rule-Based Baseline:** The primary evaluation engine relies on pattern matching, regex heuristics, and AST normalization. While fast (6.15 ms) and free ($0.00), it lacks hierarchical legal reasoning to resolve clause precedence across multiple sections.
-2. **Synthetic Data Boundaries:** While contracts 13 to 18 introduce contradictory overrides, annex schedules, split syntax, verbal numbers, and sparse documents, synthetic contracts cannot fully replicate the OCR degradation, scan artifacts, margin stamps, and idiosyncratic drafting of arbitrary real-world vendor contracts.
-3. **Where It Fails (Top Real Benchmark Misses):**
+1. **Deterministic Rule-Based Baseline:** The primary evaluation engine relies on pattern matching, regex heuristics, and AST normalization. While fast (2.87 ms) and free ($0.00), it lacks hierarchical legal reasoning to resolve clause precedence across multiple sections.
+2. **Suspicious Not-Found Rule:** When a field is extracted as "none found" but the document text contains a related keyword (renew/renewal/automatic, governing law/governed by/jurisdiction, term/duration/effective date, notice/terminate/termination, liability/cap/limit, payment/net/invoice, volume/minimum/units/quantity, price/adjust/index), the trust layer overrides status to `needs_review` (confidence ≤ 0.40) and attaches the matching sentence and page as evidence.
+3. **Synthetic Data Boundaries:** While contracts 13 to 18 introduce contradictory overrides, annex schedules, split syntax, verbal numbers, and sparse documents, synthetic contracts cannot fully replicate the OCR degradation, scan artifacts, margin stamps, and idiosyncratic drafting of arbitrary real-world vendor contracts.
+4. **Where It Fails (Top Real Benchmark Misses):**
    - **Contradictory Liability Cap Override (`synthetic_13`):** Section 4.1 specifies a 250,000 EUR cap, but Section 8.4 on page 3 states liability for gross negligence is uncapped. The baseline extracted `250,000 EUR`, ignoring the override clause.
    - **Verbal Volume & Range (`synthetic_16`):** The volume commitment is phrased in words (*"five thousand units"*) with an operational batch range (*"between 4.000 and 6.000"*). The baseline digit pattern failed to parse both.
    - **Split Governing Law & Separate Forum (`synthetic_15`):** The governing law clause is broken across two sentences (*"governed by. It is expressly agreed that the governing law shall be the laws of Germany"*), while the jurisdiction clause selects the High Court in London, England. The split syntax was missed.

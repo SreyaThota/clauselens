@@ -50,3 +50,21 @@ def test_verify_field_grounding_detects_wrong_page():
     assert actual_page == 2
     assert "actually found on page 2" in warning
 
+def test_suspicious_not_found_detection():
+    from backend.app.pipeline.runner import find_suspicious_not_found_evidence
+    pages = [
+        PageText(page_number=1, text="This contract contains provisions regarding early termination and notice of 30 days.")
+    ]
+    ev = find_suspicious_not_found_evidence("termination_notice", pages)
+    assert ev is not None
+    assert ev[1] == 1
+    assert "notice" in ev[0].lower() or "termination" in ev[0].lower()
+
+def test_suspicious_not_found_no_match():
+    from backend.app.pipeline.runner import find_suspicious_not_found_evidence
+    pages = [
+        PageText(page_number=1, text="Only general definitions and confidentiality clauses are included here.")
+    ]
+    ev = find_suspicious_not_found_evidence("liability_cap", pages)
+    assert ev is None
+

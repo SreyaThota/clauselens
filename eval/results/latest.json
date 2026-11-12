@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-11-12T17:06:02.764494+00:00",
+  "timestamp": "2026-11-12T18:20:04.775891+00:00",
   "total_contracts": 18,
   "model_used": "Deterministic rule-based baseline (offline mode, no API key)",
   "overall_accuracy": 86.8,
-  "grounding_rate": 99.1,
-  "not_found_precision": 33.3,
-  "not_found_recall": 100.0,
-  "review_rate": 0.7,
-  "avg_latency_ms": 6.15,
+  "grounding_rate": 100.0,
+  "not_found_precision": 100.0,
+  "not_found_recall": 44.4,
+  "review_rate": 16.7,
+  "avg_latency_ms": 2.87,
   "avg_cost_usd": 0.0,
   "per_field_metrics": {
     "payment_terms": {
@@ -27,8 +27,8 @@
       "accuracy": 100.0,
       "grounding_rate": 100.0,
       "not_found_precision": 100.0,
-      "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "not_found_recall": 50.0,
+      "review_rate": 5.6
     },
     "contract_term": {
       "field_name": "contract_term",
@@ -36,9 +36,9 @@
       "correct_normalized": 13,
       "accuracy": 72.2,
       "grounding_rate": 100.0,
-      "not_found_precision": 0.0,
+      "not_found_precision": 100.0,
       "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "review_rate": 27.8
     },
     "auto_renewal": {
       "field_name": "auto_renewal",
@@ -46,9 +46,9 @@
       "correct_normalized": 16,
       "accuracy": 88.9,
       "grounding_rate": 100.0,
-      "not_found_precision": 33.3,
+      "not_found_precision": 100.0,
       "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "review_rate": 11.1
     },
     "termination_notice": {
       "field_name": "termination_notice",
@@ -56,19 +56,19 @@
       "correct_normalized": 15,
       "accuracy": 83.3,
       "grounding_rate": 100.0,
-      "not_found_precision": 0.0,
+      "not_found_precision": 100.0,
       "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "review_rate": 16.7
     },
     "liability_cap": {
       "field_name": "liability_cap",
       "total_samples": 18,
       "correct_normalized": 15,
       "accuracy": 83.3,
-      "grounding_rate": 92.9,
-      "not_found_precision": 50.0,
-      "not_found_recall": 100.0,
-      "review_rate": 5.6
+      "grounding_rate": 100.0,
+      "not_found_precision": 100.0,
+      "not_found_recall": 50.0,
+      "review_rate": 22.2
     },
     "governing_law": {
       "field_name": "governing_law",
@@ -76,9 +76,9 @@
       "correct_normalized": 14,
       "accuracy": 77.8,
       "grounding_rate": 100.0,
-      "not_found_precision": 0.0,
+      "not_found_precision": 100.0,
       "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "review_rate": 22.2
     },
     "volume_commitment": {
       "field_name": "volume_commitment",
@@ -86,9 +86,9 @@
       "correct_normalized": 16,
       "accuracy": 88.9,
       "grounding_rate": 100.0,
-      "not_found_precision": 66.7,
-      "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "not_found_precision": 100.0,
+      "not_found_recall": 25.0,
+      "review_rate": 27.8
     }
   },
   "failure_cases": [

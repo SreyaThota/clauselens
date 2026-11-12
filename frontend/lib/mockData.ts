@@ -1,15 +1,15 @@
 import { SampleContractMeta, ExtractionResult, EvaluationReport } from './types';
 
 export const MOCK_EVALUATION_REPORT: EvaluationReport = {
-  "timestamp": "2026-11-12T17:06:02.764494+00:00",
+  "timestamp": "2026-11-12T18:20:04.775891+00:00",
   "total_contracts": 18,
   "model_used": "Deterministic rule-based baseline (offline mode, no API key)",
   "overall_accuracy": 86.8,
-  "grounding_rate": 99.1,
-  "not_found_precision": 33.3,
-  "not_found_recall": 100.0,
-  "review_rate": 0.7,
-  "avg_latency_ms": 6.15,
+  "grounding_rate": 100.0,
+  "not_found_precision": 100.0,
+  "not_found_recall": 44.4,
+  "review_rate": 16.7,
+  "avg_latency_ms": 2.87,
   "avg_cost_usd": 0.0,
   "per_field_metrics": {
     "payment_terms": {
@@ -29,8 +29,8 @@ export const MOCK_EVALUATION_REPORT: EvaluationReport = {
       "accuracy": 100.0,
       "grounding_rate": 100.0,
       "not_found_precision": 100.0,
-      "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "not_found_recall": 50.0,
+      "review_rate": 5.6
     },
     "contract_term": {
       "field_name": "contract_term",
@@ -38,9 +38,9 @@ export const MOCK_EVALUATION_REPORT: EvaluationReport = {
       "correct_normalized": 13,
       "accuracy": 72.2,
       "grounding_rate": 100.0,
-      "not_found_precision": 0.0,
+      "not_found_precision": 100.0,
       "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "review_rate": 27.8
     },
     "auto_renewal": {
       "field_name": "auto_renewal",
@@ -48,9 +48,9 @@ export const MOCK_EVALUATION_REPORT: EvaluationReport = {
       "correct_normalized": 16,
       "accuracy": 88.9,
       "grounding_rate": 100.0,
-      "not_found_precision": 33.3,
+      "not_found_precision": 100.0,
       "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "review_rate": 11.1
     },
     "termination_notice": {
       "field_name": "termination_notice",
@@ -58,19 +58,19 @@ export const MOCK_EVALUATION_REPORT: EvaluationReport = {
       "correct_normalized": 15,
       "accuracy": 83.3,
       "grounding_rate": 100.0,
-      "not_found_precision": 0.0,
+      "not_found_precision": 100.0,
       "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "review_rate": 16.7
     },
     "liability_cap": {
       "field_name": "liability_cap",
       "total_samples": 18,
       "correct_normalized": 15,
       "accuracy": 83.3,
-      "grounding_rate": 92.9,
-      "not_found_precision": 50.0,
-      "not_found_recall": 100.0,
-      "review_rate": 5.6
+      "grounding_rate": 100.0,
+      "not_found_precision": 100.0,
+      "not_found_recall": 50.0,
+      "review_rate": 22.2
     },
     "governing_law": {
       "field_name": "governing_law",
@@ -78,9 +78,9 @@ export const MOCK_EVALUATION_REPORT: EvaluationReport = {
       "correct_normalized": 14,
       "accuracy": 77.8,
       "grounding_rate": 100.0,
-      "not_found_precision": 0.0,
+      "not_found_precision": 100.0,
       "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "review_rate": 22.2
     },
     "volume_commitment": {
       "field_name": "volume_commitment",
@@ -88,9 +88,9 @@ export const MOCK_EVALUATION_REPORT: EvaluationReport = {
       "correct_normalized": 16,
       "accuracy": 88.9,
       "grounding_rate": 100.0,
-      "not_found_precision": 66.7,
-      "not_found_recall": 100.0,
-      "review_rate": 0.0
+      "not_found_precision": 100.0,
+      "not_found_recall": 25.0,
+      "review_rate": 27.8
     }
   },
   "failure_cases": [
@@ -365,8 +365,8 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "renegotiable"
     ],
     "verified_count": 6,
-    "needs_review_count": 0,
-    "not_found_count": 2
+    "needs_review_count": 2,
+    "not_found_count": 0
   },
   {
     "id": "synthetic_06_conflicting_clauses_materials",
@@ -413,8 +413,8 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "fees-paid-cap"
     ],
     "verified_count": 7,
-    "needs_review_count": 0,
-    "not_found_count": 1
+    "needs_review_count": 1,
+    "not_found_count": 0
   },
   {
     "id": "synthetic_09_telecom_bandwidth_sla",
@@ -445,8 +445,8 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "banking"
     ],
     "verified_count": 7,
-    "needs_review_count": 0,
-    "not_found_count": 1
+    "needs_review_count": 1,
+    "not_found_count": 0
   },
   {
     "id": "synthetic_11_catering_hospitality_short_term",
@@ -477,8 +477,8 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "services"
     ],
     "verified_count": 7,
-    "needs_review_count": 0,
-    "not_found_count": 1
+    "needs_review_count": 1,
+    "not_found_count": 0
   },
   {
     "id": "synthetic_13_contradictory_cap_equipment",
@@ -493,8 +493,8 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "heavy-equipment"
     ],
     "verified_count": 7,
-    "needs_review_count": 0,
-    "not_found_count": 1
+    "needs_review_count": 1,
+    "not_found_count": 0
   },
   {
     "id": "synthetic_14_annex_only_payment_terms",
@@ -509,8 +509,8 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "silent-main-body"
     ],
     "verified_count": 3,
-    "needs_review_count": 0,
-    "not_found_count": 5
+    "needs_review_count": 5,
+    "not_found_count": 0
   },
   {
     "id": "synthetic_15_split_governing_law_diff_jurisdiction",
@@ -525,8 +525,8 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "conflicting-jurisdiction"
     ],
     "verified_count": 6,
-    "needs_review_count": 0,
-    "not_found_count": 2
+    "needs_review_count": 2,
+    "not_found_count": 0
   },
   {
     "id": "synthetic_16_volume_words_and_range",
@@ -541,8 +541,8 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "range-volume"
     ],
     "verified_count": 5,
-    "needs_review_count": 0,
-    "not_found_count": 3
+    "needs_review_count": 3,
+    "not_found_count": 0
   },
   {
     "id": "synthetic_17_conditional_auto_renewal",
@@ -557,8 +557,8 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "cybersecurity"
     ],
     "verified_count": 4,
-    "needs_review_count": 0,
-    "not_found_count": 4
+    "needs_review_count": 4,
+    "not_found_count": 0
   },
   {
     "id": "synthetic_18_sparse_letter_agreement_missing_fields",
@@ -573,8 +573,8 @@ export const MOCK_SAMPLES: SampleContractMeta[] = [
       "missing-fields"
     ],
     "verified_count": 1,
-    "needs_review_count": 0,
-    "not_found_count": 7
+    "needs_review_count": 3,
+    "not_found_count": 4
   }
 ];
 
@@ -671,7 +671,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 41.87,
+      "processing_time_ms": 10.36,
       "estimated_cost_usd": 0.0,
       "tokens_used": 422
     },
@@ -803,7 +803,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 2.88,
+      "processing_time_ms": 3.12,
       "estimated_cost_usd": 0.0,
       "tokens_used": 324
     },
@@ -935,7 +935,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 2.46,
+      "processing_time_ms": 2.61,
       "estimated_cost_usd": 0.0,
       "tokens_used": 247
     },
@@ -1067,7 +1067,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 2.81,
+      "processing_time_ms": 2.7,
       "estimated_cost_usd": 0.0,
       "tokens_used": 309
     },
@@ -1161,11 +1161,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "liability_cap",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "3.2 Liability.",
+        "page": 2,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "governing_law": {
         "field_name": "governing_law",
@@ -1181,20 +1181,20 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "volume_commitment",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "1.4 Volume.",
+        "page": 1,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       }
     },
     "summary": {
       "verified_count": 6,
-      "needs_review_count": 0,
-      "not_found_count": 2,
+      "needs_review_count": 2,
+      "not_found_count": 0,
       "total_fields": 8,
-      "overall_confidence": 0.94,
-      "processing_time_ms": 2.26,
+      "overall_confidence": 0.79,
+      "processing_time_ms": 2.14,
       "estimated_cost_usd": 0.0,
       "tokens_used": 242
     },
@@ -1218,13 +1218,13 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "impact": "medium"
       },
       {
-        "id": "lever-auto-renewal",
-        "field_name": "auto_renewal",
-        "title": "Auto-Renewal Trap Mitigation",
-        "current_term": "Auto-renews; Termination notice: 30",
-        "recommendation": "Require explicit affirmative notice before renewal, or expand termination opt-out window to 60 days.",
-        "rationale": "Evergreen auto-renewal clauses lock procurement teams into obsolete pricing and unused licenses if missed during quarterly contract reviews.",
-        "impact": "medium"
+        "id": "lever-liability-cap",
+        "field_name": "liability_cap",
+        "title": "Institute Aggregate Liability Ceiling",
+        "current_term": "Uncapped / Silent",
+        "recommendation": "Cap aggregate vendor and buyer liability at 12 months' trailing fees paid or fixed $1M ceiling.",
+        "rationale": "Uncapped liability or ambiguous limits represent an unquantified balance sheet risk during audits and vendor security incidents.",
+        "impact": "high"
       }
     ],
     "pages": [
@@ -1331,7 +1331,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.86,
-      "processing_time_ms": 2.58,
+      "processing_time_ms": 2.31,
       "estimated_cost_usd": 0.0,
       "tokens_used": 276
     },
@@ -1463,7 +1463,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 2.82,
+      "processing_time_ms": 2.75,
       "estimated_cost_usd": 0.0,
       "tokens_used": 324
     },
@@ -1586,20 +1586,20 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "volume_commitment",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "2.4 No Minimum Commitment.",
+        "page": 2,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       }
     },
     "summary": {
       "verified_count": 7,
-      "needs_review_count": 0,
-      "not_found_count": 1,
+      "needs_review_count": 1,
+      "not_found_count": 0,
       "total_fields": 8,
-      "overall_confidence": 0.93,
-      "processing_time_ms": 2.35,
+      "overall_confidence": 0.86,
+      "processing_time_ms": 2.45,
       "estimated_cost_usd": 0.0,
       "tokens_used": 261
     },
@@ -1731,7 +1731,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 2.31,
+      "processing_time_ms": 2.29,
       "estimated_cost_usd": 0.0,
       "tokens_used": 243
     },
@@ -1859,20 +1859,20 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "volume_commitment",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "2.2 Volume.",
+        "page": 2,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       }
     },
     "summary": {
       "verified_count": 7,
-      "needs_review_count": 0,
-      "not_found_count": 1,
+      "needs_review_count": 1,
+      "not_found_count": 0,
       "total_fields": 8,
-      "overall_confidence": 0.93,
-      "processing_time_ms": 2.59,
+      "overall_confidence": 0.86,
+      "processing_time_ms": 2.4,
       "estimated_cost_usd": 0.0,
       "tokens_used": 266
     },
@@ -2017,7 +2017,7 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
       "not_found_count": 0,
       "total_fields": 8,
       "overall_confidence": 0.93,
-      "processing_time_ms": 2.16,
+      "processing_time_ms": 2.12,
       "estimated_cost_usd": 0.0,
       "tokens_used": 224
     },
@@ -2072,11 +2072,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "price_adjustment",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "2.3 Price Adjustment.",
+        "page": 2,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "contract_term": {
         "field_name": "contract_term",
@@ -2141,11 +2141,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     },
     "summary": {
       "verified_count": 7,
-      "needs_review_count": 0,
-      "not_found_count": 1,
+      "needs_review_count": 1,
+      "not_found_count": 0,
       "total_fields": 8,
-      "overall_confidence": 0.93,
-      "processing_time_ms": 2.29,
+      "overall_confidence": 0.86,
+      "processing_time_ms": 2.3,
       "estimated_cost_usd": 0.0,
       "tokens_used": 246
     },
@@ -2214,11 +2214,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "contract_term",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "ARTICLE 1: LEASE TERM & OPERATIONAL SCOPE 1.1 Equipment Lease Term.",
+        "page": 1,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
@@ -2273,11 +2273,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     },
     "summary": {
       "verified_count": 7,
-      "needs_review_count": 0,
-      "not_found_count": 1,
+      "needs_review_count": 1,
+      "not_found_count": 0,
       "total_fields": 8,
-      "overall_confidence": 0.93,
-      "processing_time_ms": 2.84,
+      "overall_confidence": 0.86,
+      "processing_time_ms": 2.88,
       "estimated_cost_usd": 0.0,
       "tokens_used": 394
     },
@@ -2346,51 +2346,51 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "contract_term",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "SECTION 1: APPOINTMENT AND TERM 1.1 Engagement.",
+        "page": 1,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "1.3 Auto-Renewal.",
+        "page": 1,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "termination_notice": {
         "field_name": "termination_notice",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "This Agreement shall automatically renew for additional 12-month terms unless either party gives written notice of termination.",
+        "page": 1,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "liability_cap": {
         "field_name": "liability_cap",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "SECTION 4: LIABILITY LIMITATIONS & JURISDICTION 4.1 Liability Cap.",
+        "page": 2,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "governing_law": {
         "field_name": "governing_law",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "SECTION 4: LIABILITY LIMITATIONS & JURISDICTION 4.1 Liability Cap.",
+        "page": 2,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
@@ -2405,15 +2405,34 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     },
     "summary": {
       "verified_count": 3,
-      "needs_review_count": 0,
-      "not_found_count": 5,
+      "needs_review_count": 5,
+      "not_found_count": 0,
       "total_fields": 8,
-      "overall_confidence": 0.93,
-      "processing_time_ms": 3.09,
+      "overall_confidence": 0.57,
+      "processing_time_ms": 3.15,
       "estimated_cost_usd": 0.0,
       "tokens_used": 419
     },
-    "negotiation_levers": [],
+    "negotiation_levers": [
+      {
+        "id": "lever-liability-cap",
+        "field_name": "liability_cap",
+        "title": "Institute Aggregate Liability Ceiling",
+        "current_term": "Uncapped / Silent",
+        "recommendation": "Cap aggregate vendor and buyer liability at 12 months' trailing fees paid or fixed $1M ceiling.",
+        "rationale": "Uncapped liability or ambiguous limits represent an unquantified balance sheet risk during audits and vendor security incidents.",
+        "impact": "high"
+      },
+      {
+        "id": "lever-governing-law",
+        "field_name": "governing_law",
+        "title": "Jurisdiction Harmonization",
+        "current_term": "none found",
+        "recommendation": "Harmonize governing law to buyer's standard operating jurisdiction.",
+        "rationale": "Foreign or distant jurisdictions dramatically increase dispute resolution expenses and require local counsel retention.",
+        "impact": "low"
+      }
+    ],
     "pages": [
       {
         "page_number": 1,
@@ -2459,11 +2478,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "contract_term",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "CLAUSE 1: CHARTER DURATION & EXTENSIONS 1.1 Charter Term.",
+        "page": 1,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
@@ -2499,11 +2518,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "governing_law",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "This Charter Agreement and any non-contractual obligations shall be governed by.",
+        "page": 3,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
@@ -2518,11 +2537,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     },
     "summary": {
       "verified_count": 6,
-      "needs_review_count": 0,
-      "not_found_count": 2,
+      "needs_review_count": 2,
+      "not_found_count": 0,
       "total_fields": 8,
-      "overall_confidence": 0.93,
-      "processing_time_ms": 2.76,
+      "overall_confidence": 0.78,
+      "processing_time_ms": 2.72,
       "estimated_cost_usd": 0.0,
       "tokens_used": 366
     },
@@ -2630,40 +2649,40 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "liability_cap",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "CLAUSELENS SYNTHETIC CONTRACT BENCHMARK - SYNTHETIC_16_VOLUME_WORDS_AND_RANGE - PAGE 3 OF 3 SECTION 5: WARRANTY AND LIABILITY LIMITATION 5.1 Liability Cap.",
+        "page": 3,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "governing_law": {
         "field_name": "governing_law",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "SECTION 6: APPLICABLE LAW 6.1 Governing Law.",
+        "page": 3,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "CLAUSELENS SYNTHETIC CONTRACT BENCHMARK - SYNTHETIC_16_VOLUME_WORDS_AND_RANGE - PAGE 2 OF 3 SECTION 3: PRODUCTION CAPACITY & VOLUME TARGETS 3.1 Baseline Quota in Words.",
+        "page": 2,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       }
     },
     "summary": {
       "verified_count": 5,
-      "needs_review_count": 0,
-      "not_found_count": 3,
+      "needs_review_count": 3,
+      "not_found_count": 0,
       "total_fields": 8,
-      "overall_confidence": 0.93,
-      "processing_time_ms": 2.66,
+      "overall_confidence": 0.71,
+      "processing_time_ms": 2.75,
       "estimated_cost_usd": 0.0,
       "tokens_used": 300
     },
@@ -2675,6 +2694,15 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "current_term": "Index-linked price adjustment",
         "recommendation": "Add an annual collar/cap (e.g., lower of CPI or 3.0% maximum per annum).",
         "rationale": "Uncapped index-linked adjustments expose the organisation to runaway inflationary budget creep. A defined annual ceiling establishes budgetary predictability.",
+        "impact": "high"
+      },
+      {
+        "id": "lever-liability-cap",
+        "field_name": "liability_cap",
+        "title": "Institute Aggregate Liability Ceiling",
+        "current_term": "Uncapped / Silent",
+        "recommendation": "Cap aggregate vendor and buyer liability at 12 months' trailing fees paid or fixed $1M ceiling.",
+        "rationale": "Uncapped liability or ambiguous limits represent an unquantified balance sheet risk during audits and vendor security incidents.",
         "impact": "high"
       },
       {
@@ -2732,31 +2760,31 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "contract_term",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "SECTION 1: TERM & CONDITIONAL RENEWAL 1.1 Initial Subscription Term.",
+        "page": 1,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "SECTION 1: TERM & CONDITIONAL RENEWAL 1.1 Initial Subscription Term.",
+        "page": 1,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "termination_notice": {
         "field_name": "termination_notice",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "This agreement automatically renews for successive 12-month periods unless notice of termination is delivered 90 days before expiration, except that in the first term auto-renewal shall not apply without affirmative written opt-in by Subscriber.",
+        "page": 1,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "liability_cap": {
         "field_name": "liability_cap",
@@ -2782,20 +2810,20 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "volume_commitment",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "SECTION 4: SECURITY CAPACITY COMMITMENTS 4.1 Volume Commitment.",
+        "page": 2,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       }
     },
     "summary": {
       "verified_count": 4,
-      "needs_review_count": 0,
-      "not_found_count": 4,
+      "needs_review_count": 4,
+      "not_found_count": 0,
       "total_fields": 8,
-      "overall_confidence": 0.94,
-      "processing_time_ms": 2.75,
+      "overall_confidence": 0.64,
+      "processing_time_ms": 3.06,
       "estimated_cost_usd": 0.0,
       "tokens_used": 309
     },
@@ -2864,11 +2892,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "contract_term",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "TERM AND DURATION The duration of this Letter Agreement shall be exactly 12 months commencing on January 1, 2025 and expiring automatically on December 31, 2025.",
+        "page": 1,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "auto_renewal": {
         "field_name": "auto_renewal",
@@ -2884,11 +2912,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "termination_notice",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "CANCELLATION NOTICE Either party may terminate this letter agreement at any time upon giving 30 days prior written notice.",
+        "page": 2,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "liability_cap": {
         "field_name": "liability_cap",
@@ -2904,11 +2932,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "field_name": "governing_law",
         "value": null,
         "normalized": "none found",
-        "source_quote": null,
-        "page": null,
-        "confidence": 0.0,
-        "status": "not_found",
-        "review_reason": "Term not present in the contract clauses."
+        "source_quote": "GOVERNING JURISDICTION This Agreement shall be construed and governed in all respects by the laws of the State of New York.",
+        "page": 2,
+        "confidence": 0.35,
+        "status": "needs_review",
+        "review_reason": "Not found, but related text exists"
       },
       "volume_commitment": {
         "field_name": "volume_commitment",
@@ -2923,11 +2951,11 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
     },
     "summary": {
       "verified_count": 1,
-      "needs_review_count": 0,
-      "not_found_count": 7,
+      "needs_review_count": 3,
+      "not_found_count": 4,
       "total_fields": 8,
-      "overall_confidence": 0.95,
-      "processing_time_ms": 2.28,
+      "overall_confidence": 0.5,
+      "processing_time_ms": 2.57,
       "estimated_cost_usd": 0.0,
       "tokens_used": 216
     },
@@ -2940,6 +2968,15 @@ export const MOCK_RESULTS: Record<string, ExtractionResult> = {
         "recommendation": "Negotiate Net 60 or Net 90 payment terms with 1.5% prompt payment discount.",
         "rationale": "Current term is Net 30. Extending to Net 60 preserves cash flow and aligns with standard enterprise procurement benchmarks without disrupting supplier operations.",
         "impact": "high"
+      },
+      {
+        "id": "lever-governing-law",
+        "field_name": "governing_law",
+        "title": "Jurisdiction Harmonization",
+        "current_term": "none found",
+        "recommendation": "Harmonize governing law to buyer's standard operating jurisdiction.",
+        "rationale": "Foreign or distant jurisdictions dramatically increase dispute resolution expenses and require local counsel retention.",
+        "impact": "low"
       }
     ],
     "pages": [

@@ -365,6 +365,9 @@ export default function EvalDashboardPage() {
             <p className="text-xs text-slate-500 mt-1">
               Real misses from the 18-contract benchmark evaluation. Demonstrates where the deterministic baseline reaches its architectural boundary.
             </p>
+            <p className="text-xs text-indigo-800 bg-indigo-50 border border-indigo-200 p-2.5 rounded-lg mt-2 font-medium">
+              <span className="font-bold">Suspicious Not-Found Rule:</span> When a field is extracted as &quot;none found&quot; but related commercial keywords exist in the contract text, the trust layer automatically sets status to &quot;needs_review&quot; (confidence ≤ 0.40) and cites the matching sentence and page.
+            </p>
           </div>
 
           {/* Top Real Misses by Severity Table */}
