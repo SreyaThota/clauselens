@@ -53,7 +53,7 @@ export default function FieldCard({ field, isSelected, onSelect, onUpdateField }
       ...field,
       status: 'verified',
       confidence: 1.0,
-      review_reason: 'Approved by human reviewer'
+      review_reason: 'Approved by reviewer'
     });
   };
 
@@ -65,7 +65,7 @@ export default function FieldCard({ field, isSelected, onSelect, onUpdateField }
       value: editValue,
       status: 'verified',
       confidence: 1.0,
-      review_reason: 'Manually edited and verified by reviewer'
+      review_reason: 'Manually edited and verified'
     });
     setIsEditing(false);
   };
@@ -73,191 +73,179 @@ export default function FieldCard({ field, isSelected, onSelect, onUpdateField }
   const getStatusBadge = () => {
     if (isVerified) {
       return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-[#0D9488] border border-teal-200">
+          <CheckCircle2 className="h-3.5 w-3.5 text-[#0D9488]" />
           Verified
         </span>
       );
     }
     if (isNeedsReview) {
       return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-300 animate-pulse">
-          <AlertTriangle className="h-3.5 w-3.5 text-rose-600" />
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-[#D97706] border border-amber-300">
+          <AlertTriangle className="h-3.5 w-3.5 text-[#D97706]" />
           Needs Review
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">
+      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
         <MinusCircle className="h-3.5 w-3.5 text-slate-400" />
         Not Found
       </span>
     );
   };
 
-  const getConfidenceBarColor = (score: number) => {
-    if (score >= 0.85) return 'bg-emerald-500';
-    if (score >= 0.70) return 'bg-amber-500';
-    return 'bg-rose-500';
-  };
-
   return (
     <div
-      onClick={() => {
-        onSelect();
-        setExpanded(!expanded);
-      }}
-      className={`rounded-xl border transition-all cursor-pointer ${
+      onClick={onSelect}
+      className={`rounded-xl border p-4 transition-all cursor-pointer bg-white ${
         isSelected
-          ? 'border-indigo-500 ring-2 ring-indigo-100 bg-white shadow-md'
-          : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-xs'
+          ? 'border-[#0D9488] ring-2 ring-teal-100'
+          : isNeedsReview
+          ? 'border-amber-300 bg-amber-50/20'
+          : 'border-slate-200 hover:border-slate-300'
       }`}
     >
-      <div className="p-4">
-        {/* Card Header */}
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <div>
-            <div className="flex items-center gap-2">
-              <h4 className="text-sm font-bold text-slate-900">{meta.label}</h4>
-              {getStatusBadge()}
-            </div>
-            <p className="text-[11px] text-slate-500">{meta.desc}</p>
-          </div>
+      {/* Header */}
+      <div className="flex items-start justify-between gap-3 mb-2">
+        <div>
+          <h4 className="text-sm font-bold text-[#0F172A]">{meta.label}</h4>
+          <p className="text-[11px] text-slate-500">{meta.desc}</p>
+        </div>
+        {getStatusBadge()}
+      </div>
 
-          <div className="flex items-center gap-1">
+      {/* Extracted Value Display / Edit */}
+      <div className="mt-2 mb-3">
+        {isEditing ? (
+          <div className="flex items-center gap-2 mt-1">
+            <input
+              type="text"
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              className="flex-1 px-2.5 py-1 text-xs border border-slate-300 rounded-md bg-white text-[#0F172A] focus:outline-none focus:border-[#0D9488]"
+              autoFocus
+            />
             <button
-              type="button"
-              className="p-1 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+              onClick={handleSaveEdit}
+              className="p-1.5 rounded-md bg-[#0D9488] text-white hover:bg-teal-700 transition"
+              title="Save"
             >
-              {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              <Save className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsEditing(false);
+              }}
+              className="p-1.5 rounded-md bg-slate-100 text-slate-600 hover:bg-slate-200 transition"
+              title="Cancel"
+            >
+              <X className="h-3.5 w-3.5" />
             </button>
           </div>
-        </div>
-
-        {/* Normalized & Raw Values Display */}
-        <div className="mt-3 flex items-center justify-between gap-4">
-          <div className="flex-1">
-            <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block mb-0.5">
-              Normalized Term
+        ) : (
+          <div className="flex items-center justify-between">
+            <span
+              className={`text-sm font-semibold ${
+                isNotFound ? 'text-slate-400 italic' : 'text-[#0F172A]'
+              }`}
+            >
+              {field.normalized !== null && field.normalized !== undefined
+                ? String(field.normalized)
+                : 'none found'}
             </span>
-            {isEditing ? (
-              <div className="flex items-center gap-2 mt-1" onClick={(e) => e.stopPropagation()}>
-                <input
-                  type="text"
-                  value={editValue}
-                  onChange={(e) => setEditValue(e.target.value)}
-                  className="px-2 py-1 text-xs border border-indigo-300 rounded font-semibold text-slate-900 focus:outline-hidden focus:ring-1 focus:ring-indigo-500"
-                />
-                <button
-                  onClick={handleSaveEdit}
-                  className="p-1 bg-emerald-600 text-white rounded hover:bg-emerald-700"
-                  title="Save"
-                >
-                  <Save className="h-3.5 w-3.5" />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsEditing(false);
-                  }}
-                  className="p-1 bg-slate-200 text-slate-600 rounded hover:bg-slate-300"
-                  title="Cancel"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <span
-                  className={`text-sm font-bold ${
-                    isNotFound ? 'text-slate-400 italic' : 'text-slate-900'
-                  }`}
-                >
-                  {field.normalized !== null ? String(field.normalized) : 'None found'}
-                </span>
-                {field.page && (
-                  <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-1.5 py-0.2 rounded">
-                    Page {field.page}
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Confidence Indicator */}
-          {!isNotFound && (
-            <div className="w-24 shrink-0 text-right">
-              <div className="flex justify-between items-center text-[10px] font-bold text-slate-500 mb-1">
-                <span>Confidence</span>
-                <span>{Math.round(field.confidence * 100)}%</span>
-              </div>
-              <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                <div
-                  className={`h-full ${getConfidenceBarColor(field.confidence)}`}
-                  style={{ width: `${Math.round(field.confidence * 100)}%` }}
-                />
-              </div>
+            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+              <span>Confidence:</span>
+              <span
+                className={`font-semibold ${
+                  isNeedsReview
+                    ? 'text-[#D97706]'
+                    : isVerified
+                    ? 'text-[#0D9488]'
+                    : 'text-slate-500'
+                }`}
+              >
+                {Math.round(field.confidence * 100)}%
+              </span>
             </div>
+          </div>
+        )}
+      </div>
+
+      {/* Review Alert if Needs Review */}
+      {isNeedsReview && field.review_reason && (
+        <div className="mb-3 p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-xs text-[#0F172A]">
+          <div className="flex items-center gap-1.5 font-bold text-[#D97706] mb-1">
+            <AlertTriangle className="h-3.5 w-3.5" />
+            <span>Reason for review</span>
+          </div>
+          <p className="text-slate-700">{field.review_reason}</p>
+        </div>
+      )}
+
+      {/* Quote / Citation */}
+      {field.source_quote && (
+        <div className="p-2.5 rounded-lg bg-[#F1F5F9] border border-slate-200 text-xs text-slate-700 mb-3">
+          <div className="flex items-center justify-between text-[11px] text-slate-500 mb-1">
+            <span className="flex items-center gap-1 font-semibold text-[#0F172A]">
+              <FileSearch className="h-3.5 w-3.5 text-[#0D9488]" />
+              Page {field.page || 1} Quote:
+            </span>
+            <span className="text-[10px] text-slate-500">
+              Grounding: {Math.round((field.grounding_ratio || 1.0) * 100)}%
+            </span>
+          </div>
+          <p className="italic font-serif text-[#0F172A] line-clamp-2">
+            &quot;{field.source_quote}&quot;
+          </p>
+        </div>
+      )}
+
+      {/* Actions: Approve / Edit */}
+      <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded(!expanded);
+          }}
+          className="text-xs text-slate-500 hover:text-[#0F172A] flex items-center gap-1"
+        >
+          {expanded ? (
+            <>
+              Less details <ChevronUp className="h-3 w-3" />
+            </>
+          ) : (
+            <>
+              More details <ChevronDown className="h-3 w-3" />
+            </>
+          )}
+        </button>
+
+        <div className="flex items-center gap-2">
+          {!isEditing && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsEditing(true);
+              }}
+              className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-slate-600 hover:text-[#0F172A] hover:bg-slate-100 transition"
+            >
+              <Edit2 className="h-3 w-3" />
+              Correct
+            </button>
+          )}
+          {isNeedsReview && (
+            <button
+              onClick={handleApprove}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-semibold bg-[#0D9488] text-white hover:bg-teal-700 transition"
+            >
+              <Check className="h-3 w-3" />
+              Approve
+            </button>
           )}
         </div>
-
-        {/* Warning Callout for Needs Review */}
-        {isNeedsReview && field.review_reason && (
-          <div className="mt-3 p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-900 flex items-start gap-2">
-            <AlertTriangle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
-            <div>
-              <span className="font-bold">Human Review Flag: </span>
-              <span>{field.review_reason}</span>
-            </div>
-          </div>
-        )}
-
-        {/* Expanded Source Quote & Review Actions */}
-        {expanded && (
-          <div className="mt-4 pt-3 border-t border-slate-100 text-xs space-y-3">
-            {field.source_quote ? (
-              <div>
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 mb-1">
-                  <span className="flex items-center gap-1 text-slate-700">
-                    <FileSearch className="h-3.5 w-3.5 text-indigo-600" />
-                    Exact Source Quote (Page {field.page}):
-                  </span>
-                  <span className="text-emerald-700 font-medium">Grounding Verified (≥ 90%)</span>
-                </div>
-                <blockquote className="p-2.5 rounded-md bg-slate-50 border-l-2 border-indigo-500 text-slate-700 font-serif italic text-xs leading-relaxed">
-                  &quot;{field.source_quote}&quot;
-                </blockquote>
-              </div>
-            ) : (
-              <p className="text-slate-400 italic">No source clause present in contract clauses.</p>
-            )}
-
-            {/* Action Buttons for Review */}
-            {isNeedsReview && !isEditing && (
-              <div className="flex items-center gap-2 pt-2" onClick={(e) => e.stopPropagation()}>
-                <button
-                  onClick={handleApprove}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-xs"
-                >
-                  <Check className="h-3.5 w-3.5" />
-                  Approve Term
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsEditing(true);
-                  }}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 transition"
-                >
-                  <Edit2 className="h-3.5 w-3.5" />
-                  Correct / Edit Value
-                </button>
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
 }
-

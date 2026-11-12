@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { PageText } from '../lib/types';
-import { FileText, Search, ChevronLeft, ChevronRight, ExternalLink, Copy, Check } from 'lucide-react';
+import { FileText, ChevronLeft, ChevronRight, Copy, Check } from 'lucide-react';
 
 interface PdfTextViewerProps {
   pages: PageText[];
@@ -50,7 +50,7 @@ export default function PdfTextViewer({
   // Helper to render page text with the selected quote highlighted
   const renderHighlightedContent = (text: string, quote?: string | null) => {
     if (!quote || !quote.trim()) {
-      return <div className="whitespace-pre-wrap font-serif text-slate-800 leading-relaxed text-sm">{text}</div>;
+      return <div className="whitespace-pre-wrap font-serif text-[#0F172A] leading-relaxed text-xs sm:text-sm">{text}</div>;
     }
 
     const cleanQuote = quote.trim();
@@ -59,7 +59,6 @@ export default function PdfTextViewer({
     const idx = textLower.indexOf(cleanLower);
 
     if (idx === -1) {
-      // If exact substring isn't found due to minor whitespace, try matching first 25 chars
       const prefix = cleanQuote.slice(0, Math.min(25, cleanQuote.length)).toLowerCase();
       const pIdx = textLower.indexOf(prefix);
       if (pIdx !== -1) {
@@ -67,11 +66,11 @@ export default function PdfTextViewer({
         const match = text.slice(pIdx, pIdx + cleanQuote.length);
         const after = text.slice(pIdx + cleanQuote.length);
         return (
-          <div className="whitespace-pre-wrap font-serif text-slate-800 leading-relaxed text-sm">
+          <div className="whitespace-pre-wrap font-serif text-[#0F172A] leading-relaxed text-xs sm:text-sm">
             {before}
             <mark
               ref={highlightRef}
-              className="bg-indigo-100 text-indigo-950 font-medium px-1 py-0.5 rounded border border-indigo-300 ring-2 ring-indigo-400"
+              className="bg-teal-100 text-teal-950 font-medium px-1 py-0.5 rounded border border-teal-300 ring-2 ring-[#0D9488]"
             >
               {match}
             </mark>
@@ -79,7 +78,7 @@ export default function PdfTextViewer({
           </div>
         );
       }
-      return <div className="whitespace-pre-wrap font-serif text-slate-800 leading-relaxed text-sm">{text}</div>;
+      return <div className="whitespace-pre-wrap font-serif text-[#0F172A] leading-relaxed text-xs sm:text-sm">{text}</div>;
     }
 
     const before = text.slice(0, idx);
@@ -87,11 +86,11 @@ export default function PdfTextViewer({
     const after = text.slice(idx + cleanQuote.length);
 
     return (
-      <div className="whitespace-pre-wrap font-serif text-slate-800 leading-relaxed text-sm">
+      <div className="whitespace-pre-wrap font-serif text-[#0F172A] leading-relaxed text-xs sm:text-sm">
         {before}
         <mark
           ref={highlightRef}
-          className="bg-indigo-100 text-indigo-950 font-medium px-1.5 py-0.5 rounded border border-indigo-300 ring-2 ring-indigo-400 shadow-sm"
+          className="bg-teal-100 text-teal-950 font-medium px-1.5 py-0.5 rounded border border-teal-300 ring-2 ring-[#0D9488]"
         >
           {match}
         </mark>
@@ -101,115 +100,70 @@ export default function PdfTextViewer({
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-100 rounded-xl border border-slate-200 overflow-hidden shadow-inner">
-      {/* Document Top Bar */}
-      <div className="px-4 py-3 bg-white border-b border-slate-200 flex items-center justify-between">
-        <div className="flex items-center gap-2 truncate">
-          <FileText className="h-4 w-4 text-indigo-600 shrink-0" />
-          <span className="text-xs font-bold text-slate-900 truncate" title={filename}>
+    <div className="bg-white rounded-xl border border-slate-200 flex flex-col h-full overflow-hidden">
+      {/* Document Toolbar */}
+      <div className="px-4 py-3 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <FileText className="h-4 w-4 text-[#0D9488]" />
+          <span className="text-xs font-bold text-[#0F172A] truncate max-w-[200px] sm:max-w-xs">
             {filename}
           </span>
-          <span className="text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold shrink-0">
-            {pages.length} {pages.length === 1 ? 'Page' : 'Pages'}
-          </span>
         </div>
 
+        {/* Page navigation controls */}
         <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-0.5">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage <= 1}
+              className="p-1 rounded text-slate-500 hover:text-[#0F172A] disabled:opacity-30 disabled:cursor-not-allowed transition"
+              title="Previous Page"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+            </button>
+            <span className="text-xs font-semibold px-2 text-[#0F172A]">
+              Page {currentPage} of {pages.length}
+            </span>
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(pages.length, p + 1))}
+              disabled={currentPage >= pages.length}
+              className="p-1 rounded text-slate-500 hover:text-[#0F172A] disabled:opacity-30 disabled:cursor-not-allowed transition"
+              title="Next Page"
+            >
+              <ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1 text-xs text-slate-600 hover:text-slate-900 px-2 py-1 rounded hover:bg-slate-100 transition"
-            title="Copy page text"
+            className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#0F172A] hover:bg-slate-100 transition"
+            title="Copy Page Text"
           >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
-            <span className="hidden sm:inline">{copied ? 'Copied' : 'Copy Page'}</span>
+            {copied ? <Check className="h-3.5 w-3.5 text-[#0D9488]" /> : <Copy className="h-3.5 w-3.5" />}
           </button>
         </div>
       </div>
 
-      {/* Page Tabs */}
-      <div className="px-4 py-2 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2 overflow-x-auto">
-        <div className="flex items-center gap-1.5">
-          {pages.map((p) => {
-            const isSelected = p.page_number === currentPage;
-            const hasQuote = selectedPage === p.page_number;
-            return (
-              <button
-                key={p.page_number}
-                onClick={() => setCurrentPage(p.page_number)}
-                className={`px-3 py-1 text-xs font-semibold rounded-md transition relative ${
-                  isSelected
-                    ? 'bg-indigo-600 text-white shadow-xs'
-                    : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'
-                }`}
-              >
-                Page {p.page_number}
-                {hasQuote && !isSelected && (
-                  <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-indigo-500 animate-ping" />
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="flex items-center gap-1 text-xs text-slate-500 shrink-0">
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-            disabled={currentPage <= 1}
-            className="p-1 rounded hover:bg-slate-200 disabled:opacity-40 transition"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <span>
-            {currentPage} / {pages.length}
-          </span>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.min(pages.length, prev + 1))}
-            disabled={currentPage >= pages.length}
-            className="p-1 rounded hover:bg-slate-200 disabled:opacity-40 transition"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
+      {/* Page Content Display */}
+      <div className="flex-1 p-6 overflow-y-auto bg-white">
+        {activePageObj ? (
+          renderHighlightedContent(activePageObj.text, selectedQuote)
+        ) : (
+          <div className="text-center text-xs text-slate-400 py-12">
+            No page text available.
+          </div>
+        )}
       </div>
 
-      {/* Selected Quote Banner */}
-      {selectedQuote && (
-        <div className="bg-indigo-50/90 border-b border-indigo-200 px-4 py-2 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2 truncate">
-            <Search className="h-3.5 w-3.5 text-indigo-600 shrink-0" />
-            <span className="font-semibold text-indigo-900">Locating Citation:</span>
-            <span className="text-indigo-700 truncate italic">&quot;{selectedQuote}&quot;</span>
-          </div>
-          <span className="font-bold text-indigo-800 text-[11px] shrink-0 ml-2">
-            Page {selectedPage || currentPage}
-          </span>
-        </div>
-      )}
-
-      {/* Document Page Content (Rendered Paper) */}
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex justify-center">
-        <div className="w-full max-w-2xl bg-white rounded-lg shadow-sm border border-slate-300 p-8 min-h-[500px]">
-          <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono border-b border-slate-100 pb-2 mb-6">
-            <span>CLAUSELENS VERIFIED DOCUMENT READER</span>
-            <span>PAGE {currentPage} OF {pages.length}</span>
-          </div>
-
-          {activePageObj ? (
-            renderHighlightedContent(
-              activePageObj.text,
-              selectedPage === currentPage ? selectedQuote : null
-            )
-          ) : (
-            <div className="text-center text-slate-400 py-12">No page text available.</div>
-          )}
-
-          <div className="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400">
-            <span>ClauseLens Grounding Verification • RapidFuzz ratio ≥ 0.90</span>
-            <span>Page {currentPage}</span>
-          </div>
-        </div>
+      {/* Footer info strip */}
+      <div className="px-4 py-2 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-[11px] text-slate-500">
+        <span>Extracted via PyMuPDF</span>
+        {selectedQuote ? (
+          <span className="text-[#0D9488] font-semibold">Active Citation Highlighted</span>
+        ) : (
+          <span>Click any field to view citation</span>
+        )}
       </div>
     </div>
   );
 }
-

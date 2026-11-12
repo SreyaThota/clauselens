@@ -9,6 +9,7 @@ export interface ExtractedField {
   confidence: number;
   status: FieldStatus;
   review_reason?: string | null;
+  grounding_ratio?: number;
 }
 
 export interface NegotiationLever {
